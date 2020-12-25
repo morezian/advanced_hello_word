@@ -2,11 +2,11 @@ from .stock import *
 from datetime import datetime
 class Filter:
     BAD = -20
-    WEAK = -3
+    WEAK = -7
     NORMAL = 0
     GOOD = 2
-    STRONG = 4
-    SUPER = 7
+    STRONG = 5
+    SUPER = 8
     def __init__(self, stock:Stock):
         self.__stock = stock
         self.__filter_name = [Filter.BAD, Filter.WEAK, Filter.NORMAL, Filter.GOOD, Filter.STRONG, Filter.SUPER]
@@ -36,7 +36,7 @@ class Filter:
     def buy_power_ratio (self, is_real, is_interval):
         buy_sell_status =  self.__get_buy_sell_status(is_real, is_interval)
         ratio = buy_sell_status.get_human_buy_ratio_power()
-        cmp_list = [0.6, 0.9, 1.2, 1.5, 1.8]
+        cmp_list = [0.7, 0.9, 1.1, 1.4, 1.8]
         ans = self.__filter_smaller(ratio, cmp_list)
         return ans
 
@@ -44,7 +44,7 @@ class Filter:
     def avg_buy_per_code (self, is_real, is_interval):
         buy_sell_status =  self.__get_buy_sell_status(is_real, is_interval)
         per_code = buy_sell_status.get_average_buy_per_code_in_million_base()
-        cmp_list = [10, 15, 20, 25, 30]
+        cmp_list = [10, 18, 20, 25, 30]
         ans = self.__filter_smaller(per_code, cmp_list)
         return ans
 
@@ -55,7 +55,7 @@ class Filter:
         time_duration_second = buy_sell_status.end_time_stamp - buy_sell_status.start_time_stamp
         time_duration_minute = time_duration_second // 60
         if time_duration_minute <= 10:
-            cmp_list = [1, 5, 10, 16, 25]
+            cmp_list = [2, 10, 15, 20, 30]
         elif time_duration_minute <= 45:
             cmp_list = [5, 15, 30, 70, 150]
         elif time_duration_minute <= 120:

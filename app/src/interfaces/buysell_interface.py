@@ -46,7 +46,9 @@ class BuySellStatus:
 
 
     def __get_average_money_per_code (self, vol, trade_price, count):
-        ans =  (vol*trade_price)/(count + 0.00000000001)
+        if count <= 0:
+            count = 1
+        ans =  (vol*trade_price)/(count)
 
         return ans
 
@@ -83,6 +85,11 @@ class BuySellStatus:
     @property
     def max_day_price_in_percent (self):
         return self.__get_price_in_percent(self.max_day_price)
+
+    @property
+    def first_trade_in_percent(self):
+        return self.__get_price_in_percent(self.first_trade)
+
 
     def __get_average_price (self, other):
         if self.vol +other.vol == 0:

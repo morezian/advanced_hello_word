@@ -23,7 +23,7 @@ class IntervalBuy:
 
         if len (self.interval_buy_sell_status_queue_dict [key]) > 0:
             if len (self.interval_buy_sell_status_queue_dict [key]) >= self.__interval_buy_sell_status_queue_max_length or \
-                self.interval_buy_sell_status_queue_dict [key] [0].end_time + self.__max_previous_second < current_buy_sell_status.end_time:
+                self.interval_buy_sell_status_queue_dict [key] [0].end_time_stamp + self.__max_previous_second < current_buy_sell_status.end_time_stamp:
                 self.interval_buy_sell_status_queue_dict[key].popleft()
 
         currnet_inteval_buy_sell_status = current_buy_sell_status - self.current_buy_sell_status_dict [key]

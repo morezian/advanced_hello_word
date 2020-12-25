@@ -16,7 +16,7 @@ class FiliterAndLoad:
 
     def get_score (self, f:Filter, is_real, is_interval):
         ans = (f.human_buy_count(is_real, is_interval) + f.avg_buy_per_code(is_real, is_interval) + \
-              f.buy_power_ratio(is_real, is_interval) + f.trade_price())/4
+              2*f.buy_power_ratio(is_real, is_interval) + f.trade_price())/5
         return ans
 
 

@@ -60,8 +60,8 @@ def set_logging_config(log_configs, logger_name=__name__):
     log_handler_type = log_configs.get('log_handler')
     if isinstance(log_handler_type, str):
         log_handler_type = [log_handler_type]
-    if 'console' in log_handler_type:
-        enable_console_handler = True
+    #if 'console' in log_handler_type:
+    enable_console_handler = True
     if enable_console_handler:
         __create_console_handler(level=level, format=format)
 

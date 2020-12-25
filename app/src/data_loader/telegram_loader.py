@@ -1,6 +1,6 @@
 import requests
 import urllib.parse
-
+from requests_futures.sessions import FuturesSession
 from app.src.stock.stock import *
 from app.src.stock.filter import *
 from collections import OrderedDict
@@ -16,7 +16,7 @@ class TelegramLoader:
         power_ratio = buy_sell_status.get_human_buy_ratio_power()
         power_ratio = format(power_ratio, ".2f")
         buy_per_code = buy_sell_status.get_average_buy_per_code_in_million_base()
-        buy_per_code = f"{buy_per_code}M"
+        buy_per_code = f"{int(buy_per_code)}M"
         buy_count = buy_sell_status.human_buy_count
         return f"[{power_ratio}, {buy_per_code}, {buy_count}]"
 
@@ -43,13 +43,13 @@ class TelegramLoader:
 
         rows = OrderedDict({
          "نام": f"#{stock.name}",
-        "ح": self.__gp(buy_sell_status ["all"]),
-        "لح": self.__gp(interval_buy_sell_status ["all"][-1]),
-        "وح": self.__gp(buy_sell_status ["real"]),
-        "لوح": self.__gp(interval_buy_sell_status ["real"][-1]),
+        "تابلو کل": self.__gp(buy_sell_status ["all"]),
+        "تابلو اخیر": self.__gp(interval_buy_sell_status ["all"][-1]),
+        "واقعی کل": self.__gp(buy_sell_status ["real"]),
+        "وافعی اخیر": self.__gp(interval_buy_sell_status ["real"][-1]),
         trade_em + "معامله": format(trade_price, "0.2f"),
         final_em + "پایانی": format(final_price, "0.2f"),
-        "اولین": buy_sell_status["all"].first_trade
+        "اولین": format(buy_sell_status["all"].first_trade_in_percent, "0.2f")
         })
 
         final_str = ""
@@ -61,7 +61,11 @@ class TelegramLoader:
     def load_stock (self, stock:Stock):
         string_stock = urllib.parse.quote(self.__get_string_stock(stock))
         url = f'https://api.telegram.org/bot' + str(self.__token) + '/sendMessage?text=' + string_stock + '&chat_id=' + str(self.__id)
-        requests.get(url)
+
+        session = FuturesSession()
+        session.get(url)
+
+        #requests.get(url)
 
 
 
