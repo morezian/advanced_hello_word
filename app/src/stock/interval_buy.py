@@ -37,7 +37,8 @@ class IntervalBuy:
 
     def set_current_buy_sell_status (self, current_buy_sell_status):
         self.__add_current_buy_sell_status(current_buy_sell_status, True)
-        self.__add_current_buy_sell_status(current_buy_sell_status, False)
+        is_signigicant = self.__add_current_buy_sell_status(current_buy_sell_status, False)
+        return is_signigicant
 
 
 
@@ -54,7 +55,7 @@ class IntervalBuy:
         for i in range(n):
             current = self.interval_buy_sell_status_queue_dict[key][n - i - 1]
             cusum += current
-            if current.start_time + self.__retrieve_previous_seconds_list [j] < time():
+            if current.start_time_stamp + self.__retrieve_previous_seconds_list [j] < time():
                 ans.append(cusum)
                 j+=1
                 if j == len (self.__retrieve_previous_seconds_list):

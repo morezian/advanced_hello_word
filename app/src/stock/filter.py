@@ -1,7 +1,7 @@
 from .stock import *
 from datetime import datetime
 class Filter:
-    BAD = -7
+    BAD = -20
     WEAK = -3
     NORMAL = 0
     GOOD = 2

@@ -51,11 +51,14 @@ class FiliterAndLoad:
         last_buy_sell_status = self.__stock_name2last_sent_buy_sell_status.get(stock.name)
         if last_buy_sell_status:
             interval_stock = current_buy_sell_status - last_buy_sell_status
-            if interval_stock.is_significant() == False:
-                return []
-        last_time_stamp = self.__stock_name2last_sent_timestamp.get (stock.name)
-        if time() - last_time_stamp < self.__MIN_SECOND_BETWEEN_SENTS:
+        else:
+            interval_stock = current_buy_sell_status
+        if interval_stock.is_significant() == False:
             return []
+        last_time_stamp = self.__stock_name2last_sent_timestamp.get (stock.name)
+        if last_time_stamp:
+            if time() - last_time_stamp < self.__MIN_SECOND_BETWEEN_SENTS:
+                return []
         f = Filter(stock)
         max_score_level, avg_score_level = self.get_total_strength(f)
         if max_score_level == Filter.SUPER:

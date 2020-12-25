@@ -1,5 +1,4 @@
 from app.src.interfaces.buysell_interface import BuySellStatus
-
 from .interval_buy import *
 
 class Stock:
@@ -29,5 +28,3 @@ class Stock:
         is_significant = self.__interval_buy.set_current_buy_sell_status(current_buy_sell_status)
         self.__is_significant = is_significant
 
-    def filter_and_load (self):
-        pass

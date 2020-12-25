@@ -22,7 +22,7 @@ class TelegramLoader:
 
     def __get_string_stock (self, stock:Stock):
         buy_sell_status = stock.current_buy_sell_status_dict
-        interval_buy_sell_status = stock.interval_list_dict
+        interval_buy_sell_status = stock.current_interval_buy_sell_status_dict
         em_red = "🟥"
         em_green = "🟩"
         em_blue = "🟦"
@@ -44,9 +44,9 @@ class TelegramLoader:
         rows = OrderedDict({
          "نام": f"#{stock.name}",
         "ح": self.__gp(buy_sell_status ["all"]),
-        "لح": self.__gp(interval_buy_sell_status ["all"]),
+        "لح": self.__gp(interval_buy_sell_status ["all"][-1]),
         "وح": self.__gp(buy_sell_status ["real"]),
-        "لوح": self.__gp(interval_buy_sell_status ["real"]),
+        "لوح": self.__gp(interval_buy_sell_status ["real"][-1]),
         trade_em + "معامله": format(trade_price, "0.2f"),
         final_em + "پایانی": format(final_price, "0.2f"),
         "اولین": buy_sell_status["all"].first_trade
