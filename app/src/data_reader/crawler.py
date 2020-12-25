@@ -103,8 +103,8 @@ def __get_buy_sell_status(list_of_string_numbers) -> BuySellStatus:
                             vol= int(list_of_string_numbers[names.get('vol')]),
                             final_price= int(list_of_string_numbers[names.get('closed_price')]),
                             first_trade= int(list_of_string_numbers[names.get('first_price')]),
-                            min_day_price=int(list_of_string_numbers[names.get('min_valid_price')]),
-                            max_day_price=int(list_of_string_numbers[names.get('max_valid_price')]),
+                            min_day_price=float(list_of_string_numbers[names.get('min_valid_price')]),
+                            max_day_price=float(list_of_string_numbers[names.get('max_valid_price')]),
                             start_time_stamp= get_today_market_opening_time(),
                             end_time_stamp= int(time.time())
                             )
