@@ -2,7 +2,7 @@ from app.src.stock.stock import *
 from app.src.data_reader.crawler import crawl_data
 from app.src.data_reader.history_crawler import get_stock_name2history
 
-stock_name2history = get_stock_name2history()
+stock_name2history = {}#get_stock_name2history()
 stock_name2stock_obj = {}
 
 
