@@ -1,4 +1,5 @@
 from app.src.interfaces.buysell_interface import BuySellStatus
+
 from .interval_buy import *
 
 class Stock:
@@ -23,3 +24,4 @@ class Stock:
         self.__interval_buy.set_current_buy_sell_status(current_buy_sell_status)
 
     def filter_and_load (self):
+        pass
