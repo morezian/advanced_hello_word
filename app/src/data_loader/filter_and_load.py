@@ -1,6 +1,8 @@
 from app.src.stock.filter import *
 from app.src.data_loader.csv_loader import *
 from app.src.data_loader.telegram_loader import *
+from collections import defaultdict
+
 
 class FiliterAndLoad:
     def __init__(self):
@@ -11,6 +13,7 @@ class FiliterAndLoad:
         self.__stock_name2last_sent_timestamp = {}
         self.__stock_name2last_sent_buy_sell_status = {}
         self.__MIN_SECOND_BETWEEN_SENTS = 30
+        self.__stock2loader_list = {}
 
 
 
@@ -38,10 +41,11 @@ class FiliterAndLoad:
         self.get_score(f, False, True),
         self.get_score(f, True, False),
         self.get_score(f, True, True)]
+        max_score = max(score_list)
         score_level_list = [self.get_score_level(score) for score in score_list]
         max_score_level = max (score_level_list)
         avg_score_level = self.get_score_level (sum (score_list)/len (score_list))
-        return max_score_level, avg_score_level
+        return max_score_level, avg_score_level, max_score
 
 
 
@@ -60,7 +64,8 @@ class FiliterAndLoad:
             if time() - last_time_stamp < self.__MIN_SECOND_BETWEEN_SENTS:
                 return []
         f = Filter(stock)
-        max_score_level, avg_score_level = self.get_total_strength(f)
+        max_score_level, avg_score_level, max_score = self.get_total_strength(f)
+        stock.score = max_score
         if max_score_level == Filter.SUPER:
             loader_list.append (self.__super_tel_loader)
         elif max_score_level == Filter.STRONG:
@@ -75,9 +80,20 @@ class FiliterAndLoad:
 
 
 
-    def run (self, stock):
+    def update_loader (self, stock):
         loader_list = self.__get_loader_list(stock)
-        for loader in loader_list:
-            loader.load_stock(stock)
+        self.__stock2loader_list [stock] = loader_list
 
 
+    def load (self):
+        loader2stock_list = defaultdict (list)
+        for stock, loader_list in self.__stock2loader_list.items():
+            for loader in loader_list:
+                loader2stock_list [loader].append(stock)
+
+        for loader, stock_list in loader2stock_list.items():
+            stock_list.sort()
+            for stock in stock_list:
+                loader.load_stock(stock)
+
+        self.__stock2loader_list = {}

@@ -6,6 +6,9 @@ from app.src.loggers.file_logger import *
 from time import time
 from datetime import datetime
 
+TESTING = False
+
+
 load_data = FiliterAndLoad()
 
 
@@ -14,7 +17,7 @@ stock_name2stock_obj = {}
 
 
 while True:
-    if datetime.now().hour != 9: continue
+    if not TESTING and datetime.now().hour != 9: continue
     while (datetime.now().hour != 13):
         data_list = crawl_data()
         #start_time = time ()
@@ -25,8 +28,9 @@ while True:
             stock = stock_name2stock_obj[data.name]
             stock.update(data.current_buy_sell_status)
             #print("updated")
-            load_data.run(stock)
+            load_data.update_loader(stock)
         #print("loaded")
+        load_data.load()
 
 
     #print(f"processed {len(data_list)} records in {int (time() - start_time)} seconds")

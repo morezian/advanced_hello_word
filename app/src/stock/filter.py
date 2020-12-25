@@ -73,11 +73,11 @@ class Filter:
         if price_in_rial == buy_sell_status.max_day_price:
             return -100000
         domain = buy_sell_status.max_day_price_in_percent
-        if price_in_percent + domain <=1:
+        if price_in_percent + domain <=2:
             return Filter.SUPER
-        elif price_in_percent + domain <=3:
+        elif price_in_percent + domain <=3.5:
             return Filter.STRONG
-        elif price_in_percent + domain <=5:
+        elif price_in_percent + domain <=5.5:
             return Filter.GOOD
         elif price_in_percent + domain <=7:
             return Filter.NORMAL

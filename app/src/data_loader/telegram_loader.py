@@ -41,15 +41,23 @@ class TelegramLoader:
         if final_price > trade_price:
             final_em = em_down
 
+        min_touched_price = buy_sell_status["all"].min_day_touced_in_percent
+        max_touched_price = buy_sell_status["all"].max_day_touced_in_percent
+
+
+        namad_emoji = "🏭"
+
         rows = OrderedDict({
-         "نام": f"#{stock.name}",
-        "تابلو کل": self.__gp(buy_sell_status ["all"]),
-        "تابلو اخیر": self.__gp(interval_buy_sell_status ["all"][-1]),
-        "واقعی کل": self.__gp(buy_sell_status ["real"]),
-        "وافعی اخیر": self.__gp(interval_buy_sell_status ["real"][-1]),
-        trade_em + "معامله": format(trade_price, "0.2f"),
-        final_em + "پایانی": format(final_price, "0.2f"),
-        "اولین": format(buy_sell_status["all"].first_trade_in_percent, "0.2f")
+         namad_emoji + "name": f"#{stock.name}",
+        "board": self.__gp(buy_sell_status ["all"]),
+        "brecent": self.__gp(interval_buy_sell_status ["all"][-1]),
+        "real": self.__gp(buy_sell_status ["real"]),
+        "rrecent": self.__gp(interval_buy_sell_status ["real"][-1]),
+        trade_em + "trade": format(trade_price, "0.2f"),
+        final_em + "final": format(final_price, "0.2f"),
+        "range": f"[{format(min_touched_price, '0.2f')}, {format(max_touched_price, '0.2f')}]",
+        "opening": format(buy_sell_status["all"].first_trade_in_percent, "0.2f"),
+        "score": stock.score
         })
 
         final_str = ""
