@@ -22,7 +22,4 @@ class Stock:
     def update(self, current_buy_sell_status):
         self.__interval_buy.set_current_buy_sell_status(current_buy_sell_status)
 
-
-    def filter(self):
-
-    def load (self):
+    def filter_and_load (self):
