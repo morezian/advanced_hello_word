@@ -1,15 +1,15 @@
 from .stock import *
 from datetime import datetime
 class Filter:
-    BAD = 0
-    WEAK = 1
-    NORMAL = 2
-    GOOD = 3
+    BAD = -20
+    WEAK = -3
+    NORMAL = 0
+    GOOD = 2
     STRONG = 4
-    SUPER = 5
+    SUPER = 7
     def __init__(self, stock:Stock):
         self.__stock = stock
-
+        self.__filter_name = [Filter.BAD, Filter.WEAK, Filter.NORMAL, Filter.GOOD, Filter.STRONG, Filter.SUPER]
 
     def __get_key (self, is_real):
         if is_real == True:
@@ -29,7 +29,7 @@ class Filter:
     def __filter_smaller (self, input, cmp_list):
         for i in range (len (cmp_list)):
             if input < cmp_list [i]:
-                return i
+                return self.__filter_name[i]
         return len (cmp_list)
 
 
@@ -55,13 +55,13 @@ class Filter:
         time_duration_second = buy_sell_status.end_time_stamp - buy_sell_status.start_time_stamp
         time_duration_minute = time_duration_second // 60
         if time_duration_minute <= 10:
-            cmp_list = [1, 5, 8, 15, 20]
+            cmp_list = [1, 5, 10, 16, 25]
         elif time_duration_minute <= 45:
-            cmp_list = [5, 15, 20, 30, 50]
+            cmp_list = [5, 15, 30, 70, 150]
         elif time_duration_minute <= 120:
-            cmp_list = [10, 30, 60, 125, 250]
+            cmp_list = [20, 60, 120, 280, 600]
         else:
-            cmp_list = [20, 60, 120, 250, 500]
+            cmp_list = [40, 90, 200, 450, 1000]
         ans = self.__filter_smaller(count, cmp_list)
         return ans
 
@@ -71,7 +71,7 @@ class Filter:
         price_in_percent = buy_sell_status.trade_price_in_percent
         price_in_rial = buy_sell_status.trade_price
         if price_in_rial == buy_sell_status.max_day_price:
-            return Filter.BAD
+            return -100000
         domain = buy_sell_status.max_day_price_in_percent
         if price_in_percent + domain <=1:
             return Filter.SUPER

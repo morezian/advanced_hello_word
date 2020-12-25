@@ -5,7 +5,7 @@ from app.src.stock.stock import *
 class CsvLoader:
     def __init__(self):
         file_path = str(int(time()))
-        in_file = open(f'{file_path}.csv', 'wt')
+        in_file = open(f'app/data/{file_path}.csv', 'wt')
         self._writer = csv.writer(in_file)
         col_name_list = ["name", "time_stamp", "trade_price", "final_price", "human_buy_count", "human_buy_vol","human_sell_count", "human_sell_vol" ,
                          "civil_buy_count", "civil_buy_vol", "civil_sell_count", "civil_sell_vol", "first_trade"
@@ -31,6 +31,6 @@ class CsvLoader:
         return [name, time_stamp, trade_price, final_price, human_buy_count, human_buy_vol, human_sell_count, human_sell_vol,
                 civil_buy_count, civil_buy_vol, civil_sell_count, civi_sell_vol, first_trade]
 
-    def laod_stock (self, stock:Stock):
+    def load_stock (self, stock:Stock):
         values = self.__get_values(stock)
         self._writer.writerow (values)

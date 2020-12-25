@@ -1,8 +1,12 @@
 from app.src.stock.stock import *
 from app.src.data_reader.crawler import crawl_data
 from app.src.data_reader.history_crawler import get_stock_name2history
+from app.src.data_loader.filter_and_load import *
 
-stock_name2history = get_stock_name2history()
+load_data = FiliterAndLoad()
+
+
+stock_name2history = {}#get_stock_name2history()
 stock_name2stock_obj = {}
 
 
@@ -16,4 +20,4 @@ while True:
             stock_name2stock_obj[data.name] = stock
         stock = stock_name2stock_obj[data.name]
         stock.update(data.current_buy_sell_status)
-        stock.filter_and_load()
+        load_data.run(stock)

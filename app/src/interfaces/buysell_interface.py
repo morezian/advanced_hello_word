@@ -58,16 +58,18 @@ class BuySellStatus:
     def get_human_buy_ratio_power(self):
         human_buy_power = self.__get_average_money_per_code(self.human_buy_vol, self.trade_price, self.human_buy_count)
         human_sell_power = self.__get_average_money_per_code(self.human_sell_vol, self.trade_price, self.human_buy_count)
-        ans = human_buy_power/human_sell_power
+        ans = human_buy_power/(human_sell_power + 0.0000001)
         MAX_POWER_RATIO = 1000
         ans = min (ans, MAX_POWER_RATIO)
         return ans
 
 
     def __get_price_in_percent (self, price):
-        zero = (self.max_day_price + self.min_day_price) // 2
+        zero_price = (self.max_day_price + self.min_day_price) // 2
         #domain = (1 - (self.min_day_price / zero)) * 100 #4.98
-        ans = price / zero - 1
+        if zero_price == 0:
+            return 0
+        ans = price / zero_price - 1
         return ans *100
 
 
