@@ -7,6 +7,7 @@ class Stock:
         self.name = name
         self.stock_history = stock_history
         self.__interval_buy = IntervalBuy(retrieve_prevois_second_list,max_interval_list_length)
+        self.__is_significant = False
 
     @property
     def current_buy_sell_status_dict (self):
@@ -19,9 +20,14 @@ class Stock:
     def interval_list_dict (self):
         return self.__interval_buy.interval_buy_sell_status_queue_dict
 
+    @property
+    def is_significant (self):
+        return self.__is_significant
+
 
     def update(self, current_buy_sell_status):
-        self.__interval_buy.set_current_buy_sell_status(current_buy_sell_status)
+        is_significant = self.__interval_buy.set_current_buy_sell_status(current_buy_sell_status)
+        self.__is_significant = is_significant
 
     def filter_and_load (self):
         pass

@@ -27,11 +27,12 @@ class IntervalBuy:
                 self.interval_buy_sell_status_queue_dict[key].popleft()
 
         currnet_inteval_buy_sell_status = current_buy_sell_status - self.current_buy_sell_status_dict [key]
-        if current_buy_sell_status.is_significant():
+        is_significant = current_buy_sell_status.is_significant()
+        if is_significant:
             if (not is_real) or current_buy_sell_status.is_real():
                 self.interval_buy_sell_status_queue_dict [key].append(currnet_inteval_buy_sell_status)
                 self.current_buy_sell_status_dict [key] = current_buy_sell_status
-
+        return is_significant
 
 
     def set_current_buy_sell_status (self, current_buy_sell_status):

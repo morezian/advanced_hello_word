@@ -17,7 +17,7 @@ class BuySellStatus:
     #
     def __init__(self, trade_price=0, final_price=0, vol=0, human_buy_vol=0,human_buy_count=0, human_sell_vol=0, human_sell_count=0,
                  civil_buy_vol=0, civil_buy_count=0, civil_sell_vol=0, civil_sell_count=0, first_trade = 0,
-                 start_time_stamp=0, end_time_stamp=0):
+                 start_time_stamp=0, end_time_stamp=0, min_day_price = 0, max_day_price = 0):
 
         self.human_buy_vol = human_buy_vol
         self.human_buy_count = human_buy_count
@@ -33,6 +33,8 @@ class BuySellStatus:
         self.final_price = final_price
         self.start_time_stamp = start_time_stamp
         self.end_time_stamp = end_time_stamp
+        self.min_day_price = min_day_price
+        self.max_day_price = max_day_price
         self.__MIL_RIAL = 10 ** 7
 
 
@@ -83,8 +85,11 @@ class BuySellStatus:
         first_trade = max (self.first_trade, other.first_trade)
         start_time_stamp = other.end_time_stamp
         end_time_stamp = self.end_time_stamp
+        min_day_price = self.min_day_price
+        max_day_price =self.max_day_price
         return BuySellStatus(trade_price, final_price, vol, human_buy_vol,human_buy_count, human_sell_vol, human_sell_count,
-                 civil_buy_vol, civil_buy_count, civil_sell_vol, civil_sell_count, first_trade, start_time_stamp, end_time_stamp)
+                 civil_buy_vol, civil_buy_count, civil_sell_vol, civil_sell_count, first_trade, start_time_stamp, end_time_stamp,
+                             min_day_price, max_day_price)
 
 
     def __add__ (self, other):
@@ -102,8 +107,11 @@ class BuySellStatus:
         first_trade = max (self.first_trade, other.first_trade)
         start_time_stamp = other.end_time_stamp
         end_time_stamp = self.end_time_stamp
+        min_day_price = self.min_day_price
+        max_day_price =self.max_day_price
         return BuySellStatus(trade_price, final_price, vol, human_buy_vol,human_buy_count, human_sell_vol, human_sell_count,
-                 civil_buy_vol, civil_buy_count, civil_sell_vol, civil_sell_count, first_trade, start_time_stamp, end_time_stamp)
+                 civil_buy_vol, civil_buy_count, civil_sell_vol, civil_sell_count, first_trade, start_time_stamp, end_time_stamp,
+                             min_day_price, max_day_price)
 
 
     def is_significant (self):
