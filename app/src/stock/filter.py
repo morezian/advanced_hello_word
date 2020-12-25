@@ -66,6 +66,23 @@ class Filter:
         return ans
 
 
+    def trade_price (self):
+        buy_sell_status =  self.__get_buy_sell_status(False, False)
+        price_in_percent = buy_sell_status.trade_price_in_percent
+        price_in_rial = buy_sell_status.trade_price
+        if price_in_rial == buy_sell_status.max_day_price:
+            return Filter.BAD
+        domain = buy_sell_status.max_day_price_in_percent
+        if price_in_percent + domain <=1:
+            return Filter.SUPER
+        elif price_in_percent + domain <=3:
+            return Filter.STRONG
+        elif price_in_percent + domain <=5:
+            return Filter.GOOD
+        elif price_in_percent + domain <=7:
+            return Filter.NORMAL
+        else:
+            return Filter.WEAK
 
     def filter_event (self, is_real, is_interval):
         key = self.__get_key(is_real)

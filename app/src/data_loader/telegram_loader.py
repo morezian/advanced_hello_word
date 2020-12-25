@@ -2,6 +2,10 @@ import requests
 import urllib.parse
 
 from app.src.stock.stock import *
+from app.src.stock.filter import *
+from collections import OrderedDict
+
+
 class TelegramLoader:
     def __init__(self, token, id):
         self.__token = token
@@ -25,25 +29,39 @@ class TelegramLoader:
         em_up = "⤴️"
         em_down = "⤵️"
         trade_em = em_green
-        trade_price = buy_sell_status["all"].trade_price
-        if trade_price <= -0.3:
+        f = Filter(stock)
+        trade_price_filter = f.trade_price()
+        if trade_price_filter == Filter.SUPER:
+            trade_em = em_blue
+        elif trade_price_filter == Filter.STRONG:
+            trade_em = em_red
+        trade_price = buy_sell_status["all"].trade_price_in_percent
+        final_price = buy_sell_status["all"].final_price_in_percent
+        final_em = em_up
+        if final_price > trade_price:
+            final_em = em_down
 
-        rows = {
+        rows = OrderedDict({
          "نام": f"#{stock.name}",
         "ح": self.__gp(buy_sell_status ["all"]),
         "لح": self.__gp(interval_buy_sell_status ["all"]),
         "وح": self.__gp(buy_sell_status ["real"]),
         "لوح": self.__gp(interval_buy_sell_status ["real"]),
-        "معامله": buy_sell_status["all"].trade_price,
-        "پایانی": buy_sell_status["all"].final_price,
+        trade_em + "معامله": format(trade_price, "0.2f"),
+        final_em + "پایانی": format(final_price, "0.2f"),
         "اولین": buy_sell_status["all"].first_trade
-        }
+        })
+
+        final_str = ""
+        for key, value in rows.items():
+            final_str +=  f"{key}: {value}\n"
+        return final_str
 
 
     def load_stock (self, stock:Stock):
         string_stock = urllib.parse.quote(self.__get_string_stock(stock))
         url = f'https://api.telegram.org/bot' + str(self.__token) + '/sendMessage?text=' + string_stock + '&chat_id=' + str(self.__id)
-        resp = requests.get(url)
+        requests.get(url)
 
 
 

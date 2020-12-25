@@ -64,6 +64,24 @@ class BuySellStatus:
         return ans
 
 
+    def __get_price_in_percent (self, price):
+        zero = (self.max_day_price + self.min_day_price) // 2
+        #domain = (1 - (self.min_day_price / zero)) * 100 #4.98
+        ans = price / zero - 1
+        return ans *100
+
+
+
+    @property
+    def  trade_price_in_percent(self):
+        return self.__get_price_in_percent(self.trade_price)
+    @property
+    def final_price_in_percent(self):
+        return self.__get_price_in_percent(self.final_price)
+    @property
+    def max_day_price_in_percent (self):
+        return self.__get_price_in_percent(self.max_day_price)
+
     def __get_average_price (self, other):
         if self.vol +other.vol == 0:
             return 0
