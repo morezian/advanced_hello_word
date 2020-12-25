@@ -2,6 +2,7 @@ import requests
 from app.src.loggers.file_logger import logger
 from app.src.stock.stock import BuySellStatus
 import time
+from app.src.data_reader.trash_symbols import trash_symbols
 from datetime import datetime
 
 names = {'UNK':  3,
@@ -31,7 +32,6 @@ names = {'UNK':  3,
          'civil_sell_count': 27 ,
          'human_sell_vol': 28 ,
          'civil_sell_vol':29}
-
 class Symbol:
     def __init__(self,name,latin_name,unique_id,current_buy_sell_status):
         self.name: str = name
@@ -74,6 +74,7 @@ def __load_tables():
         except Exception as e:
             logger.error(e)
     watcher_table = [x.split(',') for x in watcher_table]
+    watcher_table = [i for i in watcher_table if i[0] not in trash_symbols]
     symbols_human_civil_trading_status = [str(x).split(',') for x in symbols_human_civil_trading_status]
     return watcher_table,symbols_human_civil_trading_status
 
