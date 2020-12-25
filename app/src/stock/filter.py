@@ -36,7 +36,7 @@ class Filter:
     def buy_power_ratio (self, is_real, is_interval):
         buy_sell_status =  self.__get_buy_sell_status(is_real, is_interval)
         ratio = buy_sell_status.get_human_buy_ratio_power()
-        cmp_list = [0.7, 0.9, 1.1, 1.4, 1.8]
+        cmp_list = [0.7, 0.95, 1.15, 1.4, 1.8]
         ans = self.__filter_smaller(ratio, cmp_list)
         return ans
 
