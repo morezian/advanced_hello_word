@@ -61,7 +61,7 @@ class BuySellStatus:
 
     def get_human_buy_ratio_power(self):
         human_buy_power = self.__get_average_money_per_code(self.human_buy_vol, self.trade_price, self.human_buy_count)
-        human_sell_power = self.__get_average_money_per_code(self.human_sell_vol, self.trade_price, self.human_buy_count)
+        human_sell_power = self.__get_average_money_per_code(self.human_sell_vol, self.trade_price, self.human_sell_count)
         ans = human_buy_power/(human_sell_power + 0.0000001)
         MAX_POWER_RATIO = 1000
         ans = min (ans, MAX_POWER_RATIO)

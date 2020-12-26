@@ -7,6 +7,7 @@ class Stock:
         self.stock_history = stock_history
         self.__interval_buy = IntervalBuy(retrieve_prevois_second_list,max_interval_list_length)
         self.__is_significant = False
+        self.score = 0
 
     @property
     def current_buy_sell_status_dict (self):
@@ -28,3 +29,6 @@ class Stock:
         is_significant = self.__interval_buy.set_current_buy_sell_status(current_buy_sell_status)
         self.__is_significant = is_significant
 
+
+    def __lt__(self, other):
+        return self.score < other.score
