@@ -14,7 +14,7 @@ stock_name2stock_obj = {}
 
 
 while True:
-    if datetime.now().hour != 9: continue
+    if datetime.now().hour < 9: continue
     while (datetime.now().hour != 13):
         data_list = crawl_data()
         #start_time = time ()

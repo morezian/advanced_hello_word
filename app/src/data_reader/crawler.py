@@ -68,7 +68,10 @@ def __load_tables():
             try:
                 watcher_table = watcher_table.text.split('@@')[1].split(';')
             except:
-                watcher_table = watcher_table.text.split('0.2%,')[1].split(';')
+                try:
+                    watcher_table = watcher_table.text.split('0.2%,')[1].split(';')
+                except:
+                    watcher_table = watcher_table.text.split('@')[2].split(';')
             symbols_human_civil_trading_status = symbols_human_civil_trading_status.text.split(';')
             break
         except Exception as e:
