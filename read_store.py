@@ -33,7 +33,7 @@ while True:
             stock.update(data.current_buy_sell_status)
             #print("updated")
             load_data.update_loader(stock)
-            print ("2update")
+            #print ("2update")
 
         #print("loaded")
         load_data.load()
