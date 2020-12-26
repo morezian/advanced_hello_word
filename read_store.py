@@ -19,8 +19,9 @@ stock_name2stock_obj = {}
 while True:
     if not TESTING and datetime.now().hour != 9: continue
     while (datetime.now().hour != 13):
+        start_time = time( )
         data_list = crawl_data()
-        print ("1read**************")
+        print (f"1read in {time () - start_time} seconds")
         #start_time = time ()
         for data in data_list:
             if data.name == "غزر":
@@ -32,11 +33,12 @@ while True:
             stock.update(data.current_buy_sell_status)
             #print("updated")
             load_data.update_loader(stock)
-            print ("2update")
+            #print ("2update")
 
         #print("loaded")
         load_data.load()
         print ("3load**************")
+        #sleep(10)
 
 
     #print(f"processed {len(data_list)} records in {int (time() - start_time)} seconds")
