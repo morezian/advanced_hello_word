@@ -6,7 +6,7 @@ from app.src.loggers.file_logger import *
 from time import time, sleep
 from datetime import datetime
 
-TESTING = True
+TESTING = False
 
 
 load_data = FiliterAndLoad()
