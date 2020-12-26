@@ -3,7 +3,7 @@ from app.src.data_reader.crawler import crawl_data
 from app.src.data_reader.history_crawler import get_stock_name2history
 from app.src.data_loader.filter_and_load import *
 from app.src.loggers.file_logger import *
-from time import time
+from time import time, sleep
 from datetime import datetime
 
 TESTING = True
@@ -37,6 +37,7 @@ while True:
         #print("loaded")
         load_data.load()
         print ("3load**************")
+        sleep(10)
 
 
     #print(f"processed {len(data_list)} records in {int (time() - start_time)} seconds")
