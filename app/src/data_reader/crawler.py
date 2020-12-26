@@ -65,8 +65,8 @@ def crawl_data ()->list:
 def __load_tables():
     while True:
         try:
-            watcher_table = session.get('http://www.tsetmc.com/tsev2/data/MarketWatchPlus.aspx?h=0&r=0')
-            symbols_human_civil_trading_status = session.get('http://www.tsetmc.com/tsev2/data/ClientTypeAll.aspx')
+            watcher_table = session.get('http://www.tsetmc.com/tsev2/data/MarketWatchPlus.aspx?h=0&r=0',timeout=10)
+            symbols_human_civil_trading_status = session.get('http://www.tsetmc.com/tsev2/data/ClientTypeAll.aspx',timeout = 10)
             watcher_table = watcher_table.result()
             symbols_human_civil_trading_status = symbols_human_civil_trading_status.result()
             try:
