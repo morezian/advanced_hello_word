@@ -6,7 +6,7 @@ from app.src.loggers.file_logger import *
 from time import time
 from datetime import datetime
 
-TESTING = False
+TESTING = True
 
 
 load_data = FiliterAndLoad()
@@ -22,6 +22,8 @@ while True:
         data_list = crawl_data()
         #start_time = time ()
         for data in data_list:
+            if data.name == "غزر":
+                x = 2
             if data.name not in stock_name2stock_obj:
                 stock = Stock(data.name, retrieve_prevois_second_list= [5*60], max_interval_list_length= 1000, stock_history=stock_name2history.get (data.name))
                 stock_name2stock_obj[data.name] = stock
