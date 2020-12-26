@@ -2,11 +2,12 @@ from app.src.interfaces.buysell_interface import BuySellStatus
 from .interval_buy import *
 
 class Stock:
-    def __init__(self, name, retrieve_prevois_second_list, max_interval_list_length,stock_history = None):
+    def __init__(self, name, latin_name ,retrieve_prevois_second_list, max_interval_list_length,stock_history = None):
         self.name = name
         self.stock_history = stock_history
         self.__interval_buy = IntervalBuy(retrieve_prevois_second_list,max_interval_list_length)
         self.__is_significant = False
+        self.latin_name = latin_name
         self.score = 0
 
     @property

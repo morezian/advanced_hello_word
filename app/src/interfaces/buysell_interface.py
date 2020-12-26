@@ -141,12 +141,12 @@ class BuySellStatus:
         civil_buy_count=self.civil_buy_count + other.civil_buy_count
         civil_sell_vol=self.civil_sell_vol + other. civil_sell_vol
         civil_sell_count=self.civil_sell_count + other.civil_sell_count
-        vol = self.vol - other.vol
+        vol = self.vol + other.vol
         trade_price = self.__get_average_price(other)
         final_price = max (self.final_price, other.final_price)
-        first_trade = max (self.first_trade, other.first_trade)
-        start_time_stamp = other.end_time_stamp
-        end_time_stamp = self.end_time_stamp
+        first_trade = self.first_trade
+        start_time_stamp = min (self.start_time_stamp, other.start_time_stamp)
+        end_time_stamp = max (self.end_time_stamp, other.end_time_stamp)
         min_day_price = self.min_day_price
         max_day_price =self.max_day_price
         min_day_touched_price = self.min_day_touched_price
@@ -158,7 +158,7 @@ class BuySellStatus:
 
     def is_significant (self):
         money_moved =  self.__get_moved_money_in_million_base()
-        if money_moved >= 100: # larger tharn 100 million toman
+        if money_moved >= 50: # larger tharn 50 million toman
             return True
         return False
 

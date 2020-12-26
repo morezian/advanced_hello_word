@@ -31,6 +31,7 @@ class CsvLoader:
         return [name, time_stamp, trade_price, final_price, human_buy_count, human_buy_vol, human_sell_count, human_sell_vol,
                 civil_buy_count, civil_buy_vol, civil_sell_count, civi_sell_vol, first_trade]
 
-    def load_stock (self, stock:Stock):
-        values = self.__get_values(stock)
-        self._writer.writerow (values)
+    def load_stock_list (self, stock_list):
+        for stock in stock_list:
+            values = self.__get_values(stock)
+            self._writer.writerow (values)

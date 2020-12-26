@@ -8,8 +8,8 @@ class FiliterAndLoad:
     def __init__(self):
         self.__csv_loader = CsvLoader()
         self.__all_tel_loader = TelegramLoader(token="1483369722:AAFQJOLnQeKZd5QjRD4wiI6pfAqoOu-m0Rk", id ="-444966767")
-        self.__super_tel_loader =TelegramLoader(token="1370460089:AAHda25aodvumQO98eR50tnvVouohJ3_VlY", id="-412898183")
-        self.__strong_tel_loader = TelegramLoader(token="1486040039:AAEDA2JVfpu14VbCWhYdV8mShlyYYoGHPrU", id="-408293635")
+        self.__super_tel_loader =TelegramLoader(token="1370460089:AAHda25aodvumQO98eR50tnvVouohJ3_VlY", id="-412898183", is_special = True)
+        self.__strong_tel_loader = TelegramLoader(token="1486040039:AAEDA2JVfpu14VbCWhYdV8mShlyYYoGHPrU", id="-408293635", is_special = True)
         self.__stock_name2last_sent_timestamp = {}
         self.__stock_name2last_sent_buy_sell_status = {}
         self.__MIN_SECOND_BETWEEN_SENTS = 30
@@ -19,7 +19,7 @@ class FiliterAndLoad:
 
     def get_score (self, f:Filter, is_real, is_interval):
         ans = (f.human_buy_count(is_real, is_interval) + 1.5*f.avg_buy_per_code(is_real, is_interval) + \
-              2*f.buy_power_ratio(is_real, is_interval) + f.trade_price())/5.5
+              2*f.buy_power_ratio(is_real, is_interval) + 0.5*f.trade_price())/5
         return ans
 
 
@@ -93,7 +93,13 @@ class FiliterAndLoad:
 
         for loader, stock_list in loader2stock_list.items():
             stock_list.sort()
-            for stock in stock_list:
-                loader.load_stock(stock)
+            print (len (stock_list))
+            Factor = 10
+            for i in range (len (stock_list)//Factor +1):
+                tmp_list = stock_list[i*Factor:min((i+1)*Factor, len(stock_list))]
+                if len (tmp_list):
+                    loader.load_stock_list (tmp_list)
+                #for stock in stock_list:
+                #    loader.load_stock(stock)
 
         self.__stock2loader_list = {}

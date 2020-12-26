@@ -21,13 +21,11 @@ while True:
     while (datetime.now().hour != 13):
         start_time = time( )
         data_list = crawl_data()
-        print (f"1read in {time () - start_time} seconds")
+        print (f"read in {time () - start_time} seconds")
         #start_time = time ()
         for data in data_list:
-            if data.name == "غزر":
-                x = 2
             if data.name not in stock_name2stock_obj:
-                stock = Stock(data.name, retrieve_prevois_second_list= [5*60], max_interval_list_length= 1000, stock_history=stock_name2history.get (data.name))
+                stock = Stock(data.name, latin_name = data.latin_name, retrieve_prevois_second_list= [5*60], max_interval_list_length= 1000, stock_history=stock_name2history.get (data.name))
                 stock_name2stock_obj[data.name] = stock
             stock = stock_name2stock_obj[data.name]
             stock.update(data.current_buy_sell_status)
@@ -37,7 +35,6 @@ while True:
 
         #print("loaded")
         load_data.load()
-        print ("3load**************")
         #sleep(10)
 
 

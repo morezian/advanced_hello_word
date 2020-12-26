@@ -4,12 +4,14 @@ from requests_futures.sessions import FuturesSession
 from app.src.stock.stock import *
 from app.src.stock.filter import *
 from collections import OrderedDict
-
+from time import sleep
 
 class TelegramLoader:
-    def __init__(self, token, id):
+    def __init__(self, token, id, is_special = False):
         self.__token = token
         self.__id = id
+        self.__session = FuturesSession()
+        self.is_special = is_special
 
 
     def __gp (self, buy_sell_status:BuySellStatus):
@@ -31,9 +33,9 @@ class TelegramLoader:
         trade_em = em_green
         f = Filter(stock)
         trade_price_filter = f.trade_price()
-        if trade_price_filter == Filter.SUPER:
+        if trade_price_filter >= Filter.STRONG:
             trade_em = em_blue
-        elif trade_price_filter == Filter.STRONG:
+        elif trade_price_filter >= Filter.GOOD:
             trade_em = em_red
         trade_price = buy_sell_status["all"].trade_price_in_percent
         final_price = buy_sell_status["all"].final_price_in_percent
@@ -48,7 +50,7 @@ class TelegramLoader:
         namad_emoji = "🏭"
 
         rows = OrderedDict({
-         namad_emoji + "name": f"#{stock.name}",
+         namad_emoji + "name": f"#_{stock.name}",
         "board": self.__gp(buy_sell_status ["all"]),
         "brecent": self.__gp(interval_buy_sell_status ["all"][-1]),
         "real": self.__gp(buy_sell_status ["real"]),
@@ -57,7 +59,8 @@ class TelegramLoader:
         final_em + "final": format(final_price, "0.2f"),
         "range": f"[{format(min_touched_price, '0.2f')}, {format(max_touched_price, '0.2f')}]",
         "opening": format(buy_sell_status["all"].first_trade_in_percent, "0.2f"),
-        "score": stock.score
+        "score": format(stock.score, "0.1f"),
+        "link": f"https://mobile.emofid.com/stock-details/{stock.latin_name}"
         })
 
         final_str = ""
@@ -66,15 +69,27 @@ class TelegramLoader:
         return final_str
 
 
-    def load_stock (self, stock:Stock):
-        string_stock = urllib.parse.quote(self.__get_string_stock(stock))
+    def __get_string_stock_list (self, stock_list):
+        ans = [urllib.parse.quote(self.__get_string_stock(stock)) for stock in stock_list]
+        return "\n".join(ans)
+
+    def load_stock_list (self, stock_list):
+        string_stock = self.__get_string_stock_list(stock_list)#urllib.parse.quote(self.__get_string_stock(stock))
         url = f'https://api.telegram.org/bot' + str(self.__token) + '/sendMessage?text=' + string_stock + '&chat_id=' + str(self.__id)
-
-        session = FuturesSession()
-        session.get(url)
-
+        #requests.get(url)
+        #self.__session = FuturesSession()
+        if self.is_special == False and 1 == 2:
+            self.__session.get(url,hooks={'response': self.response_hook})
+            #sleep(1)
+        else:
+            resp = requests.get(url)
+            #print (resp)
         #requests.get(url)
 
+    def response_hook(self, resp, *args, **kwargs):
+        # parse the json storing the result on the response object
+        resp.data = resp.json()
+        print (str(resp.data))
 
 
 
