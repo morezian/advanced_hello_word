@@ -1,10 +1,12 @@
 import requests
 from app.src.loggers.file_logger import logger
 from app.src.stock.stock import BuySellStatus
+from requests_futures.sessions import FuturesSession
 import time
 from app.src.data_reader.trash_symbols import trash_symbols
 from datetime import datetime
 
+session = FuturesSession()
 names = {'UNK':  3,
          'first_price': 4 ,
          'closed_price': 5 ,
@@ -63,8 +65,10 @@ def crawl_data ()->list:
 def __load_tables():
     while True:
         try:
-            watcher_table = requests.get('http://www.tsetmc.com/tsev2/data/MarketWatchPlus.aspx?h=0&r=0')
-            symbols_human_civil_trading_status = requests.get('http://www.tsetmc.com/tsev2/data/ClientTypeAll.aspx')
+            watcher_table = session.get('http://www.tsetmc.com/tsev2/data/MarketWatchPlus.aspx?h=0&r=0')
+            symbols_human_civil_trading_status = session.get('http://www.tsetmc.com/tsev2/data/ClientTypeAll.aspx')
+            watcher_table = watcher_table.result()
+            symbols_human_civil_trading_status = symbols_human_civil_trading_status.result()
             try:
                 watcher_table = watcher_table.text.split('@@')[1].split(';')
             except:

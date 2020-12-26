@@ -37,7 +37,6 @@ while True:
         #print("loaded")
         load_data.load()
         print ("3load**************")
-        sleep(10)
 
 
     #print(f"processed {len(data_list)} records in {int (time() - start_time)} seconds")
