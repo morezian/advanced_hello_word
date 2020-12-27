@@ -27,7 +27,7 @@ class FiliterAndLoad:
     def get_score_level (slef, score):
         if score >= Filter.STRONG:
             return Filter.SUPER
-        if score >= Filter.GOOD+0.5:
+        if score >= Filter.GOOD+1.2:
             return Filter.STRONG
         if score >= Filter.NORMAL:
             return Filter.GOOD

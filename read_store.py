@@ -7,7 +7,7 @@ from time import time, sleep
 from datetime import datetime
 from app.src.data_reader.vip_stock_reader import *
 
-TESTING = True
+TESTING = False
 
 
 
