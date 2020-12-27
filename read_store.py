@@ -5,19 +5,19 @@ from app.src.data_loader.filter_and_load import *
 from app.src.loggers.file_logger import *
 from time import time, sleep
 from datetime import datetime
+from app.src.data_reader.vip_stock_reader import *
 
-TESTING = False
+TESTING = True
 
-
-load_data = FiliterAndLoad()
-
-
-stock_name2history = {}#get_stock_name2history()
-stock_name2stock_obj = {}
 
 
 while True:
     if not TESTING and datetime.now().hour != 9: continue
+    #initialzie paramters
+    load_data = FiliterAndLoad()
+    stock_name2history = {}
+    stock_name2stock_obj = {}
+
     while (datetime.now().hour != 13):
         start_time = time( )
         data_list = crawl_data()
@@ -30,12 +30,10 @@ while True:
             stock = stock_name2stock_obj[data.name]
             stock.update(data.current_buy_sell_status)
             #print("updated")
-            load_data.update_loader(stock)
+        vip_stock_list = get_vip_stock_list(stock_name2stock_obj)
+        for _, stock in stock_name2stock_obj.items():
+            load_data.update_loader(stock, vip_stock_list)
             #print ("2update")
 
         #print("loaded")
         load_data.load()
-        #sleep(10)
-
-
-    #print(f"processed {len(data_list)} records in {int (time() - start_time)} seconds")

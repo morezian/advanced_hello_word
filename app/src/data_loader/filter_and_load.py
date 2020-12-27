@@ -10,6 +10,7 @@ class FiliterAndLoad:
         self.__all_tel_loader = TelegramLoader(token="1483369722:AAFQJOLnQeKZd5QjRD4wiI6pfAqoOu-m0Rk", id ="-444966767")
         self.__super_tel_loader =TelegramLoader(token="1370460089:AAHda25aodvumQO98eR50tnvVouohJ3_VlY", id="-412898183", is_special = True)
         self.__strong_tel_loader = TelegramLoader(token="1486040039:AAEDA2JVfpu14VbCWhYdV8mShlyYYoGHPrU", id="-408293635", is_special = True)
+        self.__vip_loader = TelegramLoader (token="1433676948:AAGJuVmoDH9jsdPYJ1-iEi3JK3Bivl3HhzM", id="-348825048", is_special=True)
         self.__stock_name2last_sent_timestamp = {}
         self.__stock_name2last_sent_buy_sell_status = {}
         self.__MIN_SECOND_BETWEEN_SENTS = 30
@@ -26,7 +27,7 @@ class FiliterAndLoad:
     def get_score_level (slef, score):
         if score >= Filter.STRONG:
             return Filter.SUPER
-        if score >= Filter.GOOD:
+        if score >= Filter.GOOD+0.5:
             return Filter.STRONG
         if score >= Filter.NORMAL:
             return Filter.GOOD
@@ -39,8 +40,9 @@ class FiliterAndLoad:
     def get_total_strength (self, f:Filter):
         score_list = [self.get_score(f,False, False),
         self.get_score(f, False, True),
-        self.get_score(f, True, False),
-        self.get_score(f, True, True)]
+        #self.get_score(f, True, False),
+        #self.get_score(f, True, True)
+        ]
         max_score = max(score_list)
         score_level_list = [self.get_score_level(score) for score in score_list]
         max_score_level = max (score_level_list)
@@ -49,7 +51,7 @@ class FiliterAndLoad:
 
 
 
-    def __get_loader_list(self, stock:Stock):
+    def __get_loader_list(self, stock:Stock, vip_stock_list):
         loader_list = []
         current_buy_sell_status = stock.current_buy_sell_status_dict["all"]
         last_buy_sell_status = self.__stock_name2last_sent_buy_sell_status.get(stock.name)
@@ -73,6 +75,8 @@ class FiliterAndLoad:
         elif max_score_level == Filter.GOOD:
             loader_list.append(self.__all_tel_loader)
         loader_list.append(self.__csv_loader)
+        if stock in vip_stock_list:
+            loader_list.append(self.__vip_loader)
         self.__stock_name2last_sent_buy_sell_status[stock.name] = current_buy_sell_status
         self.__stock_name2last_sent_timestamp[stock.name] = time()
         return loader_list
@@ -80,8 +84,8 @@ class FiliterAndLoad:
 
 
 
-    def update_loader (self, stock):
-        loader_list = self.__get_loader_list(stock)
+    def update_loader (self, stock, vip_stock_list):
+        loader_list = self.__get_loader_list(stock, vip_stock_list)
         self.__stock2loader_list [stock] = loader_list
 
 
