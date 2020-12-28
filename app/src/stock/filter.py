@@ -38,6 +38,7 @@ class Filter:
         ratio = buy_sell_status.get_human_buy_ratio_power()
         cmp_list = [0.7, 1, 1.15, 1.4, 1.8]
         ans = self.__filter_smaller(ratio, cmp_list)
+        #print (f"buy power ration is {ans}")
         return ans
 
 
@@ -46,6 +47,7 @@ class Filter:
         per_code = buy_sell_status.get_average_buy_per_code_in_million_base()
         cmp_list = [12, 18, 20, 25, 30]
         ans = self.__filter_smaller(per_code, cmp_list)
+        #print (f"avg buy per code is {ans}")
         return ans
 
 
@@ -54,6 +56,7 @@ class Filter:
         count = buy_sell_status.human_buy_count
         time_duration_second = buy_sell_status.end_time_stamp - buy_sell_status.start_time_stamp
         time_duration_minute = time_duration_second // 60
+        print (is_interval, time_duration_minute)
         if time_duration_minute <= 10:
             cmp_list = [3, 10, 20, 35, 55]
         elif time_duration_minute <= 45:
@@ -63,6 +66,7 @@ class Filter:
         else:
             cmp_list = [40, 90, 180, 450, 1000]
         ans = self.__filter_smaller(count, cmp_list)
+        #print (f"human buyt count is {ans}")
         return ans
 
 
@@ -79,18 +83,78 @@ class Filter:
         y = (high-low)/(2*domain)
         ans = price_in_percent*y +domain*y - high
         ans = -ans
-        #print (price_in_percent, domain, low, high, ans,)
+        #print (f"trade price is {ans}")
         return ans
-        # if price_in_percent + domain <=2:
-        #     return Filter.SUPER
-        # elif price_in_percent + domain <=3.5:
-        #     return Filter.STRONG
-        # elif price_in_percent + domain <=5.5:
-        #     return Filter.GOOD
-        # elif price_in_percent + domain <=7:
-        #     return Filter.NORMAL
-        # else:
-        #     return Filter.WEAK
+
+
+
+    def recent_to_board_buy_power_ratio(self):
+        recent_buy_sell = self.__get_buy_sell_status(is_real=False, is_interval=True)
+        board_buy_sell = self.__get_buy_sell_status(is_real=False, is_interval=False)
+        board_power = board_buy_sell.get_human_buy_ratio_power()
+        recent_power = recent_buy_sell.get_human_buy_ratio_power()
+        input = recent_power / (board_power + 0.0000000001)
+        cmp_list = [0.4, 0.7, 1, 1.1, 1.3, 1.6]
+        ans = self.__filter_smaller(input, cmp_list)
+        #print (f"recent power is {ans}")
+        return ans
+
+
+    def recent_to_board_vol(self):
+        recent_buy_sell = self.__get_buy_sell_status(is_real=False, is_interval=True)
+        board_buy_sell = self.__get_buy_sell_status(is_real=False, is_interval=False)
+        board_vol = board_buy_sell.vol
+        recent_vol = recent_buy_sell.vol
+        board_time = board_buy_sell.end_time_stamp - board_buy_sell.start_time_stamp
+        recent_time = recent_buy_sell.end_time_stamp - recent_buy_sell.start_time_stamp
+        input = (recent_vol / (board_vol+0.0000001))*(board_time/(recent_time+0.00000001))
+        cmp_list = [0.4, 0.7, 0.9, 1.1, 1.5, 2.2]
+        ans = self.__filter_smaller(input, cmp_list)
+        #print (f"recent vol is {ans}")
+
+        return ans
+
+
+
+
+
+
+    def __get_score (self):
+        is_real = False
+        is_interval = False
+        ans = 2*(self.human_buy_count(is_real, is_interval) + 1.5*self.avg_buy_per_code(is_real, is_interval) + \
+              2*self.buy_power_ratio(is_real, is_interval))/4.5
+        is_interval = True
+        ans+= 3*((self.human_buy_count(is_real, is_interval) + 1.5*self.avg_buy_per_code(is_real, is_interval) + \
+              2*self.buy_power_ratio(is_real, is_interval)))/4.5
+        ans += self.trade_price()
+        ans += self.recent_to_board_buy_power_ratio()
+        ans += self.recent_to_board_vol()
+        ans = ans / 7.5
+        return ans
+
+
+    def __get_score_level (slef, score):
+        if score >= Filter.STRONG-0.2:
+            return Filter.SUPER
+        if score >= Filter.GOOD+1:
+            return Filter.STRONG
+        if score >= Filter.NORMAL:
+            return Filter.GOOD
+        if score >= Filter.WEAK:
+            return Filter.NORMAL
+        else:
+            return Filter.WEAK
+
+
+    def get_total_strength (self):
+        score = self.__get_score()
+        score_level = self.__get_score_level(score)
+        self.__stock.score = score
+        #print (f"total score is {score}")
+        return score, score_level
+
+
 
     def filter_event (self, is_real, is_interval):
         key = self.__get_key(is_real)

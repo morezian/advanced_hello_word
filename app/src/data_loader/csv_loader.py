@@ -33,7 +33,7 @@ class CsvLoader:
         first_trade = buy_sell_status.first_trade
         min_day_price = buy_sell_status.min_day_price
         max_day_price = buy_sell_status.max_day_price
-        min_day_touched_price = buy_sell_status.min_day_touced_in_percent
+        min_day_touched_price = buy_sell_status.min_day_touched_price
         max_day_touched_price = buy_sell_status.max_day_touched_price
         vol = buy_sell_status.vol
         return [name, time_stamp, trade_price, final_price, human_buy_count, human_buy_vol, human_sell_count, human_sell_vol,

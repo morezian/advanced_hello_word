@@ -87,19 +87,19 @@ def show_power_price(buy_sell_status_list: [BuySellStatus]):
     price_list = [buy_sell_status.trade_price for buy_sell_status in buy_sell_status_list]
     buy_power_list = [buy_sell_status.get_human_buy_ratio_power() for buy_sell_status in buy_sell_status_list]
 
-    price_list = normal_list(price_list)
-    buy_power_list = normal_list(buy_power_list)
-    simple_plot(time_list, [price_list, buy_power_list], ["price", "buy_power"], title = "Petaier, price")
+    #price_list = normal_list(price_list)
+    #buy_power_list = normal_list(buy_power_list)
+    simple_plot(time_list, [price_list, buy_power_list], ["price", "buy_power"], title = "Hi Web, price")
 
 
 
 df = get_df ("../../data/csv/1609029827.csv")
-sahm ="پتاير"
-#buy_sell_list = retrieve_stock_buy_sell_status_list(df, sahm)
-#show_power_price(buy_sell_list)
+sahm ="هاي وب"
+buy_sell_list = retrieve_stock_buy_sell_status_list(df, sahm)
+show_power_price(buy_sell_list)
 
-update_df(df)
-df.to_csv("../../data/Saved_CSV/1609029828.csv")
+#update_df(df)
+#df.to_csv("../../data/Saved_CSV/1609029828.csv")
 
 
 

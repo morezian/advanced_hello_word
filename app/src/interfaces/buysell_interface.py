@@ -109,6 +109,10 @@ class BuySellStatus:
 
 
     def __sub__(self, other):
+        if other.start_time_stamp == 0:
+            return self
+        if self.start_time_stamp == 0:
+            return other
         human_buy_vol = self.human_buy_vol - other.human_buy_vol
         human_buy_count = self.human_buy_count - other.human_buy_count
         human_sell_vol = self.human_sell_vol - other.human_sell_vol
@@ -133,6 +137,10 @@ class BuySellStatus:
 
 
     def __add__ (self, other):
+        if other.start_time_stamp == 0:
+            return self
+        if self.start_time_stamp == 0:
+            return other
         human_buy_vol = self.human_buy_vol + other.human_buy_vol
         human_buy_count = self.human_buy_count + other.human_buy_count
         human_sell_vol = self.human_sell_vol + other.human_sell_vol

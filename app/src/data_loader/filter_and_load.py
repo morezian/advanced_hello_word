@@ -17,40 +17,6 @@ class FiliterAndLoad:
         self.__stock2loader_list = {}
 
 
-
-    def get_score (self, f:Filter, is_real, is_interval):
-        ans = (f.human_buy_count(is_real, is_interval) + 1.5*f.avg_buy_per_code(is_real, is_interval) + \
-              2*f.buy_power_ratio(is_real, is_interval) + 0.5*f.trade_price())/5
-        return ans
-
-
-    def get_score_level (slef, score):
-        if score >= Filter.STRONG:
-            return Filter.SUPER
-        if score >= Filter.GOOD+1.2:
-            return Filter.STRONG
-        if score >= Filter.NORMAL:
-            return Filter.GOOD
-        if score >= Filter.WEAK:
-            return Filter.NORMAL
-        else:
-            return Filter.WEAK
-
-
-    def get_total_strength (self, f:Filter):
-        score_list = [self.get_score(f,False, False),
-        self.get_score(f, False, True),
-        #self.get_score(f, True, False),
-        #self.get_score(f, True, True)
-        ]
-        max_score = max(score_list)
-        score_level_list = [self.get_score_level(score) for score in score_list]
-        max_score_level = max (score_level_list)
-        avg_score_level = self.get_score_level (sum (score_list)/len (score_list))
-        return max_score_level, avg_score_level, max_score
-
-
-
     def __get_loader_list(self, stock:Stock, vip_stock_list):
         loader_list = []
         current_buy_sell_status = stock.current_buy_sell_status_dict["all"]
@@ -66,13 +32,12 @@ class FiliterAndLoad:
             if time() - last_time_stamp < self.__MIN_SECOND_BETWEEN_SENTS:
                 return []
         f = Filter(stock)
-        max_score_level, avg_score_level, max_score = self.get_total_strength(f)
-        stock.score = max_score
-        if max_score_level == Filter.SUPER:
+        score, score_level = f.get_total_strength()
+        if score_level == Filter.SUPER:
             loader_list.append (self.__super_tel_loader)
-        elif max_score_level == Filter.STRONG:
+        elif score_level == Filter.STRONG:
             loader_list.append(self.__strong_tel_loader)
-        elif max_score_level == Filter.GOOD:
+        elif score_level == Filter.GOOD:
             loader_list.append(self.__all_tel_loader)
         loader_list.append(self.__csv_loader)
         if stock in vip_stock_list:
