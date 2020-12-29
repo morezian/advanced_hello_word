@@ -36,7 +36,7 @@ class Filter:
     def buy_power_ratio (self, is_real, is_interval):
         buy_sell_status =  self.__get_buy_sell_status(is_real, is_interval)
         ratio = buy_sell_status.get_human_buy_ratio_power()
-        cmp_list = [0.7, 1, 1.15, 1.4, 1.8]
+        cmp_list = [0.7, 1, 1.25, 1.7, 2.3]
         ans = self.__filter_smaller(ratio, cmp_list)
         #print (f"buy power ration is {ans}")
         return ans
@@ -58,7 +58,7 @@ class Filter:
         time_duration_minute = time_duration_second // 60
         print (is_interval, time_duration_minute)
         if time_duration_minute <= 10:
-            cmp_list = [3, 10, 20, 35, 55]
+            cmp_list = [3, 10, 25, 40, 70]
         elif time_duration_minute <= 45:
             cmp_list = [5, 25, 40, 100, 200]
         elif time_duration_minute <= 120:
@@ -94,7 +94,7 @@ class Filter:
         board_power = board_buy_sell.get_human_buy_ratio_power()
         recent_power = recent_buy_sell.get_human_buy_ratio_power()
         input = recent_power / (board_power + 0.0000000001)
-        cmp_list = [0.4, 0.7, 1, 1.1, 1.3, 1.6]
+        cmp_list = [0.4, 0.7, 1, 1.1, 1.5, 2]
         ans = self.__filter_smaller(input, cmp_list)
         #print (f"recent power is {ans}")
         return ans
@@ -108,7 +108,7 @@ class Filter:
         board_time = board_buy_sell.end_time_stamp - board_buy_sell.start_time_stamp
         recent_time = recent_buy_sell.end_time_stamp - recent_buy_sell.start_time_stamp
         input = (recent_vol / (board_vol+0.0000001))*(board_time/(recent_time+0.00000001))
-        cmp_list = [0.4, 0.7, 0.9, 1.1, 1.5, 2.2]
+        cmp_list = [0.4, 0.7, 1, 1.5, 2.2, 3.5]
         ans = self.__filter_smaller(input, cmp_list)
         #print (f"recent vol is {ans}")
 
@@ -137,7 +137,7 @@ class Filter:
     def __get_score_level (slef, score):
         if score >= Filter.STRONG-0.2:
             return Filter.SUPER
-        if score >= Filter.GOOD+1:
+        if score >= Filter.GOOD+1.2:
             return Filter.STRONG
         if score >= Filter.NORMAL:
             return Filter.GOOD
