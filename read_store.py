@@ -1,6 +1,6 @@
 from app.src.stock.stock import *
 from app.src.data_reader.crawler import crawl_data
-from app.src.data_reader.history_crawler import get_stock_name2history
+from app.src.data_reader.history_crawler import *
 from app.src.data_loader.filter_and_load import *
 from app.src.loggers.file_logger import *
 from time import time, sleep
@@ -9,6 +9,7 @@ from app.src.data_reader.vip_stock_reader import *
 
 TESTING = True
 
+get_stock_name2history()
 
 
 while True:

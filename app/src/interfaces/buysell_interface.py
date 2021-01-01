@@ -17,7 +17,8 @@ class BuySellStatus:
     #
     def __init__(self, trade_price=0, final_price=0, vol=0, human_buy_vol=0,human_buy_count=0, human_sell_vol=0, human_sell_count=0,
                  civil_buy_vol=0, civil_buy_count=0, civil_sell_vol=0, civil_sell_count=0, first_trade = 0,
-                 start_time_stamp=0, end_time_stamp=0, min_day_price = 0, max_day_price = 0, min_day_touched_price = 0, max_day_touched_price = 0):
+                 start_time_stamp=0, end_time_stamp=0, min_day_price = 0, max_day_price = 0, min_day_touched_price = 0, max_day_touched_price = 0,
+                 human_buy_value=None,civil_buy_value=None,human_sell_value=None,civil_sell_value=None,histored_timestamp=None):
 
         self.human_buy_vol = human_buy_vol
         self.human_buy_count = human_buy_count
@@ -38,6 +39,11 @@ class BuySellStatus:
         self.min_day_touched_price = min_day_touched_price
         self.max_day_touched_price = max_day_touched_price
         self.__MIL_RIAL = 10 ** 7
+        self.human_buy_value = human_buy_value
+        self.human_sell_value = human_sell_value
+        self.civil_buy_value = civil_buy_value
+        self.civi_sell_value = civil_sell_value
+        self.histored_timestamp = histored_timestamp
 
 
 
@@ -174,3 +180,18 @@ class BuySellStatus:
         if self.civil_sell_vol + self.civil_buy_vol > 0:
             return False
         return True
+
+
+class HistoredSatus(BuySellStatus):
+    def __init__(self, trade_price, final_price, vol, human_buy_vol, human_buy_count, human_sell_vol,
+     human_sell_count, civil_buy_vol, civil_buy_count, civil_sell_vol, civil_sell_count, first_trade,
+      start_time_stamp, end_time_stamp, min_day_price, max_day_price, min_day_touched_price, max_day_touched_price):
+        super().__init__(trade_price=trade_price, final_price=final_price, vol=vol,
+                        human_buy_vol=human_buy_vol, human_buy_count=human_buy_count,
+                        human_sell_vol=human_sell_vol, human_sell_count=human_sell_count, civil_buy_vol=civil_buy_vol,
+                        civil_buy_count=civil_buy_count, civil_sell_vol=civil_sell_vol, civil_sell_count=civil_sell_count,
+                        first_trade=first_trade, start_time_stamp=start_time_stamp, end_time_stamp=end_time_stamp,
+                        min_day_price=min_day_price, max_day_price=max_day_price, min_day_touched_price=min_day_touched_price,
+                        max_day_touched_price=max_day_touched_price)
+        
+        
