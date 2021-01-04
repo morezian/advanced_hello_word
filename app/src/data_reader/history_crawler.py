@@ -2,15 +2,16 @@ from app.src.loggers.file_logger import logger
 from requests import sessions
 from app.src.interfaces.buysell_interface import BuySellStatus
 import datetime
+from app.src.interfaces.stock_history_interface import StockHistory
 session = sessions.session()
 
 class HistoryCrawler:
     def __init__(self,data):
         self.data = data
 
-    def parse_history_data(self,raw_history: str):
+    def parse_history_data(self,raw_history: str,name,latin_name):
         raw_history = raw_history.split(';')
-        buy_sell_status_list = []
+        buy_sell_status_list = StockHistory(name=name,latin_name=latin_name)
         raw_history = [i.split(',') for i in raw_history]
         [i.append(self.__get_timestamp(i[0])) for i in raw_history]
         for i in raw_history:
@@ -34,7 +35,7 @@ class HistoryCrawler:
         for symbol in self.data:
             history_data = session.get(f"http://www.tsetmc.com/tsev2/data/clienttype.aspx?i={symbol.unique_id}",
                                         )
-            histoed_buy_sell_status_dict[symbol.name] = self.parse_history_data(history_data.text)
+            histoed_buy_sell_status_dict[symbol.name] = self.parse_history_data(history_data.text,symbol.name,symbol.latin_name)
             logger.info(f"fetched {symbol.name}")
         return histoed_buy_sell_status_dict
 
