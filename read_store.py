@@ -21,11 +21,13 @@ while True:
     load_data = FiliterAndLoad()
     stock_name2history = {}
     stock_name2stock_obj = {}
-
+    cnt = 0
     while (datetime.now().hour != 13):
         start_time = time( )
         data_list = crawler.crawl_data()
         print (f"read in {time () - start_time} seconds")
+        cnt += len (data_list)
+        print (f"read {cnt} in {time () - start_time} seconds")
         #start_time = time ()
         for data in data_list:
             if data.name not in stock_name2stock_obj:

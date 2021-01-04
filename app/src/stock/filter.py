@@ -133,7 +133,7 @@ class Filter:
     def __get_score (self):
         is_real = False
         is_interval = False
-        ans = 2*(self.human_buy_count(is_real, is_interval) + 1.5*self.avg_buy_per_code(is_real, is_interval) + \
+        ans = 3*(self.human_buy_count(is_real, is_interval) + 1.5*self.avg_buy_per_code(is_real, is_interval) + \
               2*self.buy_power_ratio(is_real, is_interval))/4.5
         is_interval = True
         ans+= 3*((self.human_buy_count(is_real, is_interval) + 1.5*self.avg_buy_per_code(is_real, is_interval) + \
@@ -141,7 +141,7 @@ class Filter:
         ans += self.trade_price()
         ans += self.recent_to_board_buy_power_ratio()
         ans += self.recent_to_board_vol()
-        ans = ans / 7.5
+        ans = ans / 9
         return ans
 
 
