@@ -1,15 +1,18 @@
 from app.src.stock.stock import *
-from app.src.data_reader.crawler import crawl_data
-from app.src.data_reader.history_crawler import *
+#from app.src.data_reader.crawler import crawl_data
+#from app.src.data_reader.history_crawler import *
 from app.src.data_loader.filter_and_load import *
 from app.src.loggers.file_logger import *
 from time import time, sleep
 from datetime import datetime
 from app.src.data_reader.vip_stock_reader import *
-
+from app.src.data_reader.csv_reader import *
 TESTING = True
 
 #get_stock_name2history()
+
+
+reader = CsvReader("app/data/Saved_CSV/1609142400.csv")
 
 
 while True:
@@ -21,7 +24,7 @@ while True:
 
     while (datetime.now().hour != 13):
         start_time = time( )
-        data_list = crawl_data()
+        data_list = reader.read_next_batch()#crawl_data()
         print (f"read in {time () - start_time} seconds")
         #start_time = time ()
         for data in data_list:

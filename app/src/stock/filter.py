@@ -146,9 +146,9 @@ class Filter:
 
 
     def __get_score_level (slef, score):
-        if score >= Filter.STRONG-0.2:
+        if score >= Filter.STRONG:
             return Filter.SUPER
-        if score >= Filter.GOOD+1.2:
+        if score >= Filter.GOOD+1.5:
             return Filter.STRONG
         if score >= Filter.NORMAL:
             return Filter.GOOD
