@@ -9,7 +9,7 @@ from app.src.data_reader.vip_stock_reader import *
 
 TESTING = True
 
-get_stock_name2history()
+#get_stock_name2history()
 
 
 while True:

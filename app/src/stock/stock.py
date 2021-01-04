@@ -25,6 +25,8 @@ class Stock:
     def is_significant (self):
         return self.__is_significant
 
+    def last_second_buy_sell_status (self, is_real, last_second):
+        return self.__interval_buy.retrieve_last_second_buy_sell_status(is_real, last_second)
 
     def update(self, current_buy_sell_status):
         is_significant = self.__interval_buy.set_current_buy_sell_status(current_buy_sell_status)

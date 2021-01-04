@@ -5,6 +5,7 @@ from app.src.stock.stock import *
 from app.src.stock.filter import *
 from collections import OrderedDict
 from time import sleep
+from datetime import datetime
 
 class TelegramLoader:
     def __init__(self, token, id, is_special = False):
@@ -52,15 +53,17 @@ class TelegramLoader:
         rows = OrderedDict({
          namad_emoji + "name": f"#_{stock.name}",
         "board": self.__gp(buy_sell_status ["all"]),
-        "brecent": self.__gp(interval_buy_sell_status ["all"][-1]),
+        "recent": self.__gp(interval_buy_sell_status ["all"][-1]),
+        "now": self.__gp(stock.last_second_buy_sell_status(is_real=False,last_second=30)),
         #"real": self.__gp(buy_sell_status ["real"]),
         #"rrecent": self.__gp(interval_buy_sell_status ["real"][-1]),
         trade_em + "trade": format(trade_price, "0.2f"),
         final_em + "final": format(final_price, "0.2f"),
         "range": f"[{format(min_touched_price, '0.2f')}, {format(max_touched_price, '0.2f')}]",
         "opening": format(buy_sell_status["all"].first_trade_in_percent, "0.2f"),
-        "score": format(stock.score, "0.1f"),
-        "link": f"https://mobile.emofid.com/stock-details/{stock.latin_name}"
+        "time": (datetime.fromtimestamp(buy_sell_status ["all"].end_time_stamp)).strftime("%H:%M:%S"),
+        "link": f"https://mobile.emofid.com/stock-details/{stock.latin_name}",
+        "SCORE": format(stock.score, "0.1f"),
         })
 
         final_str = ""

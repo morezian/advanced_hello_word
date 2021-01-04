@@ -58,7 +58,7 @@ class IntervalBuy:
         for i in range(n):
             current = self.interval_buy_sell_status_queue_dict[key][n - i - 1]
             cusum += current
-            if current.start_time_stamp + self.__retrieve_previous_seconds_list [j] < time():
+            if current.start_time_stamp + self.__retrieve_previous_seconds_list [j] <= self.interval_buy_sell_status_queue_dict [key][-1].end_time_stamp:
                 ans.append(cusum)
                 j+=1
                 if j == len (self.__retrieve_previous_seconds_list):
@@ -74,3 +74,18 @@ class IntervalBuy:
             "all": self.__retrieve_interval_buy_sell_status_list(False)
         }
         return ans
+
+    def retrieve_last_second_buy_sell_status (self, is_real, last_second):
+        if is_real == True:
+            key = "real"
+        else:
+            key = "all"
+
+        cusum =  BuySellStatus()
+        n = len(self.interval_buy_sell_status_queue_dict [key])
+        for i in range(n):
+            current = self.interval_buy_sell_status_queue_dict[key][n - i - 1]
+            cusum += current
+            if current.start_time_stamp + last_second <= self.interval_buy_sell_status_queue_dict [key][-1].end_time_stamp:
+                return cusum
+        return cusum

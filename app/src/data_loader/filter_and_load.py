@@ -37,7 +37,7 @@ class FiliterAndLoad:
             loader_list.append (self.__super_tel_loader)
         elif score_level == Filter.STRONG:
             loader_list.append(self.__strong_tel_loader)
-        elif score_level == Filter.GOOD:
+        elif score_level >= Filter.NORMAL:
             loader_list.append(self.__all_tel_loader)
         loader_list.append(self.__csv_loader)
         if stock in vip_stock_list:
