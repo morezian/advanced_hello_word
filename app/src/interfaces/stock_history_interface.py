@@ -8,8 +8,9 @@ class StockHistory:
 
 
 
-
-    def get_median_human_buy_power_ratio(self, last_days):
+    @property
+    def get_median_human_buy_power_ratio(self):
+        last_days = 30
         ratio_list = []
         for i in range(last_days):
             ratio_list.append(self.__buy_sell_status_list[i].get_human_buy_ratio_power)

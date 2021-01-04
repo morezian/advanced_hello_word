@@ -9,8 +9,8 @@ from app.src.data_reader.vip_stock_reader import *
 from app.src.data_reader.crawler import DataCrawler
 TESTING = True
 
-crawler = DataCrawler(crawl_history = False,realtime=False,csv_file='app/data/data/1608974824.csv')
-# crawler = DataCrawler(crawl_history = False, realtime=True) # gets realtime data
+#crawler = DataCrawler(crawl_history = False,realtime=False,csv_file='app/data/data/1608974824.csv')
+crawler = DataCrawler(crawl_history = True, realtime=True) # gets realtime data
 
 #get_stock_name2history()
 
