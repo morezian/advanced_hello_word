@@ -5,6 +5,7 @@ from requests_futures.sessions import FuturesSession
 import time
 from app.src.data_reader.trash_symbols import trash_symbols
 from datetime import datetime
+from app.src.interfaces.symbol import Symbol
 
 session = FuturesSession()
 names = {'UNK':  3,
@@ -34,12 +35,7 @@ names = {'UNK':  3,
          'civil_sell_count': 27 ,
          'human_sell_vol': 28 ,
          'civil_sell_vol':29}
-class Symbol:
-    def __init__(self,name,latin_name,unique_id,current_buy_sell_status):
-        self.name: str = name
-        self.latin_name: str = latin_name
-        self.unique_id: str = unique_id
-        self.current_buy_sell_status:BuySellStatus = current_buy_sell_status
+
 
 def get_today_market_opening_time():
     return int(datetime(year=datetime.now().year,
