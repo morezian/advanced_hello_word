@@ -1,8 +1,10 @@
 from app.src.interfaces.buysell_interface import BuySellStatus
 import csv
 from app.src.interfaces.symbol import Symbol
+from app.src.utils.time_helpers import get_today_market_opening_time
+
 counter = 0
-from app.src.data_reader.crawler import get_today_market_opening_time
+from app.src.data_reader.crawler import *
 class CsvReader:
     def __init__(self,file: str):
         in_file = open(file, 'rt')
@@ -29,9 +31,10 @@ class CsvReader:
                                     civil_buy_vol= int(row[9]),
                                     civil_sell_count=int(row[10]),
                                     civil_sell_vol=int(row[11]),
-                                    first_trade=int(row[12]),                                                                                   start_time_stamp=get_today_market_opening_time()
+                                    first_trade=int(row[12]),
+                                    start_time_stamp=get_today_market_opening_time()
                                     )
             result.append(
-                Symbol(name=row[0],current_buy_sell_status=status,latin_name='',unique_id='')
+                Symbol(name=row[0],current_buy_sell_status=status,latin_name='',unique_id='',history=None)
             )
         return result

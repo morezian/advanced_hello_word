@@ -5,7 +5,10 @@ from requests_futures.sessions import FuturesSession
 import time
 from app.src.data_reader.trash_symbols import trash_symbols
 from datetime import datetime
+from app.src.utils.time_helpers import get_today_market_opening_time
 from app.src.interfaces.symbol import Symbol
+from app.src.data_reader.csv_reader import CsvReader
+from app.src.data_reader.history_crawler import HistoryCrawler
 
 session = FuturesSession()
 names = {'UNK':  3,
@@ -37,80 +40,90 @@ names = {'UNK':  3,
          'civil_sell_vol':29}
 
 
-def get_today_market_opening_time():
-    return int(datetime(year=datetime.now().year,
-                                    month=datetime.now().month,
-                                    day=datetime.now().day,
-                                    hour=9, minute=0, second=0).timestamp())
+class DataCrawler:
+    def __init__(self,crawl_history = False,csv_reader=False,csv_file=None):
+        self.history = dict()
+        if crawl_history == True:
+            data = self.__get_realtime_date()
+            self.history = HistoryCrawler(data).get_stock_name2history()
+        self.csv_reader = csv_reader
+        if self.csv_reader :
+            self.csv_generator = CsvReader(file=csv_file)
 
-def crawl_data ()->list:
-        table , symbols_human_civil_trading_status = __load_tables()
-        union_table = __get_union_of_two_tables(table,symbols_human_civil_trading_status)
+    def crawl_data (self)->list:
+        if self.csv_reader == False:
+            return self.__get_realtime_date()
+        else:
+            return self.csv_generator.read_next_batch()
+
+    def __get_realtime_date(self):
+        table, symbols_human_civil_trading_status = self.__load_tables()
+        union_table = self.__get_union_of_two_tables(table, symbols_human_civil_trading_status)
         symbols_list = []
-        for unique_id,content in union_table.items():
-
-            current_buy_sell = __get_buy_sell_status(content)
+        for unique_id, content in union_table.items():
+            current_buy_sell = self.__get_buy_sell_status(content)
             symbols_list.append(Symbol(unique_id=unique_id,
                                        latin_name=content[0],
                                        name=content[1],
-                                       current_buy_sell_status=current_buy_sell
+                                       current_buy_sell_status=current_buy_sell,
+                                       history=self.history.get(content[0])
                                        )
                                 )
         return symbols_list
 
-def __load_tables():
-    while True:
-        try:
-            watcher_table = session.get('http://www.tsetmc.com/tsev2/data/MarketWatchPlus.aspx?h=0&r=0',timeout=10)
-            symbols_human_civil_trading_status = session.get('http://www.tsetmc.com/tsev2/data/ClientTypeAll.aspx',timeout = 10)
-            watcher_table = watcher_table.result()
-            symbols_human_civil_trading_status = symbols_human_civil_trading_status.result()
+    def __load_tables(self):
+        while True:
             try:
-                watcher_table = watcher_table.text.split('@@')[1].split(';')
-            except:
+                watcher_table = session.get('http://www.tsetmc.com/tsev2/data/MarketWatchPlus.aspx?h=0&r=0',timeout=10)
+                symbols_human_civil_trading_status = session.get('http://www.tsetmc.com/tsev2/data/ClientTypeAll.aspx',timeout = 10)
+                watcher_table = watcher_table.result()
+                symbols_human_civil_trading_status = symbols_human_civil_trading_status.result()
                 try:
-                    watcher_table = watcher_table.text.split('0.2%,')[1].split(';')
+                    watcher_table = watcher_table.text.split('@@')[1].split(';')
                 except:
-                    watcher_table = watcher_table.text.split('@')[2].split(';')
-            symbols_human_civil_trading_status = symbols_human_civil_trading_status.text.split(';')
-            break
-        except Exception as e:
-            logger.error(e)
-    watcher_table = [x.split(',') for x in watcher_table]
-    watcher_table = [i for i in watcher_table if i[0] not in trash_symbols]
-    symbols_human_civil_trading_status = [str(x).split(',') for x in symbols_human_civil_trading_status]
-    return watcher_table,symbols_human_civil_trading_status
+                    try:
+                        watcher_table = watcher_table.text.split('0.2%,')[1].split(';')
+                    except:
+                        watcher_table = watcher_table.text.split('@')[2].split(';')
+                symbols_human_civil_trading_status = symbols_human_civil_trading_status.text.split(';')
+                break
+            except Exception as e:
+                logger.error(e)
+        watcher_table = [x.split(',') for x in watcher_table]
+        watcher_table = [i for i in watcher_table if i[0] not in trash_symbols]
+        symbols_human_civil_trading_status = [str(x).split(',') for x in symbols_human_civil_trading_status]
+        return watcher_table,symbols_human_civil_trading_status
 
-def __get_union_of_two_tables(watcher_table: list,symbols_human_civil_trading_status: list)->dict:
-    watcher_table_dict = {}
-    for x in watcher_table:
-        if x[1][0] == 'I':
-            watcher_table_dict[x[0]] = x[1:]
-    symbols_human_civil_trading_status_dict = {}
-    [symbols_human_civil_trading_status_dict.update({str(x[0]): x[1:]}) for x in symbols_human_civil_trading_status if str(x[0]) in watcher_table_dict.keys()]
-    for symbol in symbols_human_civil_trading_status_dict:
-        symbols_human_civil_trading_status_dict[symbol] = watcher_table_dict[symbol] + symbols_human_civil_trading_status_dict[symbol]
-    return symbols_human_civil_trading_status_dict
+    def __get_union_of_two_tables(self,watcher_table: list,symbols_human_civil_trading_status: list)->dict:
+        watcher_table_dict = {}
+        for x in watcher_table:
+            if x[1][0] == 'I':
+                watcher_table_dict[x[0]] = x[1:]
+        symbols_human_civil_trading_status_dict = {}
+        [symbols_human_civil_trading_status_dict.update({str(x[0]): x[1:]}) for x in symbols_human_civil_trading_status if str(x[0]) in watcher_table_dict.keys()]
+        for symbol in symbols_human_civil_trading_status_dict:
+            symbols_human_civil_trading_status_dict[symbol] = watcher_table_dict[symbol] + symbols_human_civil_trading_status_dict[symbol]
+        return symbols_human_civil_trading_status_dict
 
 
-def __get_buy_sell_status(list_of_string_numbers) -> BuySellStatus:
-    new_bss = BuySellStatus(human_buy_vol= int(list_of_string_numbers[names.get('human_buy_vol')]),
-                            human_buy_count= int(list_of_string_numbers[names.get('human_buy_count')]),
-                            human_sell_vol= int(list_of_string_numbers[names.get('human_sell_vol')]),
-                            human_sell_count= int(list_of_string_numbers[names.get('human_sell_count')]),
-                            civil_buy_vol= int(list_of_string_numbers[names.get('civil_buy_vol')]),
-                            civil_buy_count= int(list_of_string_numbers[names.get('civil_buy_count')]),
-                            civil_sell_vol= int(list_of_string_numbers[names.get('civil_sell_vol')]),
-                            civil_sell_count= int(list_of_string_numbers[names.get('civil_sell_count')]),
-                            trade_price= int(list_of_string_numbers[names.get('latest_traded_price')]),
-                            vol= int(list_of_string_numbers[names.get('vol')]),
-                            final_price= int(list_of_string_numbers[names.get('closed_price')]),
-                            first_trade= int(list_of_string_numbers[names.get('first_price')]),
-                            min_day_price=float(list_of_string_numbers[names.get('min_valid_price')]),
-                            max_day_price=float(list_of_string_numbers[names.get('max_valid_price')]),
-                            start_time_stamp= get_today_market_opening_time(),
-                            max_day_touched_price= int(list_of_string_numbers[names.get('max_traded_price')]),
-                            min_day_touched_price= int(list_of_string_numbers[names.get('min_traded_price')]),
-                            end_time_stamp= int(time.time())
-                            )
-    return new_bss
+    def __get_buy_sell_status(self,list_of_string_numbers) -> BuySellStatus:
+        new_bss = BuySellStatus(human_buy_vol= int(list_of_string_numbers[names.get('human_buy_vol')]),
+                                human_buy_count= int(list_of_string_numbers[names.get('human_buy_count')]),
+                                human_sell_vol= int(list_of_string_numbers[names.get('human_sell_vol')]),
+                                human_sell_count= int(list_of_string_numbers[names.get('human_sell_count')]),
+                                civil_buy_vol= int(list_of_string_numbers[names.get('civil_buy_vol')]),
+                                civil_buy_count= int(list_of_string_numbers[names.get('civil_buy_count')]),
+                                civil_sell_vol= int(list_of_string_numbers[names.get('civil_sell_vol')]),
+                                civil_sell_count= int(list_of_string_numbers[names.get('civil_sell_count')]),
+                                trade_price= int(list_of_string_numbers[names.get('latest_traded_price')]),
+                                vol= int(list_of_string_numbers[names.get('vol')]),
+                                final_price= int(list_of_string_numbers[names.get('closed_price')]),
+                                first_trade= int(list_of_string_numbers[names.get('first_price')]),
+                                min_day_price=float(list_of_string_numbers[names.get('min_valid_price')]),
+                                max_day_price=float(list_of_string_numbers[names.get('max_valid_price')]),
+                                start_time_stamp= get_today_market_opening_time(),
+                                max_day_touched_price= int(list_of_string_numbers[names.get('max_traded_price')]),
+                                min_day_touched_price= int(list_of_string_numbers[names.get('min_traded_price')]),
+                                end_time_stamp= int(time.time())
+                                )
+        return new_bss
