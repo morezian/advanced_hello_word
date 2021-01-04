@@ -50,11 +50,17 @@ class TelegramLoader:
 
         namad_emoji = "🏭"
 
+
+        history_avg_buy_power_ratio = 0
+        if stock.stock_history:
+            history_avg_buy_power_ratio = stock.stock_history.get_median_human_buy_power_ratio
+
         rows = OrderedDict({
          namad_emoji + "name": f"#_{stock.name}",
         "board": self.__gp(buy_sell_status ["all"]),
         "recent": self.__gp(interval_buy_sell_status ["all"][-1]),
         "now": self.__gp(stock.last_second_buy_sell_status(is_real=False,last_second=30)),
+        #"avg_buy_power": history_avg_buy_power_ratio,
         #"real": self.__gp(buy_sell_status ["real"]),
         #"rrecent": self.__gp(interval_buy_sell_status ["real"][-1]),
         trade_em + "trade": format(trade_price, "0.2f"),

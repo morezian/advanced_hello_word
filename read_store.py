@@ -7,11 +7,11 @@ from time import time, sleep
 from datetime import datetime
 from app.src.data_reader.vip_stock_reader import *
 from app.src.data_reader.crawler import DataCrawler
-TESTING = True
+TESTING = False
 
 #crawler = DataCrawler(crawl_history = False,realtime=False,csv_file='app/data/data/1608974824.csv')
-crawler = DataCrawler(crawl_history = True, realtime=True) # gets realtime data
-
+crawler = DataCrawler(crawl_history = False, realtime=True) # gets realtime data
+print ("crawler created")
 #get_stock_name2history()
 
 
@@ -27,7 +27,7 @@ while True:
         data_list = crawler.crawl_data()
         print (f"read in {time () - start_time} seconds")
         cnt += len (data_list)
-        print (f"read {cnt} in {time () - start_time} seconds")
+        #print (f"read {cnt} in {time () - start_time} seconds")
         #start_time = time ()
         for data in data_list:
             if data.name not in stock_name2stock_obj:

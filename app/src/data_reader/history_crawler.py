@@ -4,18 +4,23 @@ from app.src.interfaces.buysell_interface import BuySellStatus
 import datetime
 from app.src.interfaces.stock_history_interface import StockHistory
 session = sessions.session()
+import concurrent.futures
+
 
 class HistoryCrawler:
     def __init__(self,data):
         self.data = data
 
     def parse_history_data(self,raw_history: str,name,latin_name):
-        raw_history = raw_history.split(';')
+        raw_history = raw_history.split(';')[:50]
 
         raw_history = [i.split(',') for i in raw_history]
         [i.append(self.__get_timestamp(i[0])) for i in raw_history]
         buy_sell_status_list = []
         for i in raw_history:
+            trade_price = 0
+            if int(i[5]) != 0:
+                trade_price = round(int(i[9]) / int(i[5]))
             buy_sell_status_list.append(BuySellStatus(human_buy_count=i[1],
                                                       civil_buy_count=i[2],
                                                       human_sell_count=i[3],
@@ -24,20 +29,32 @@ class HistoryCrawler:
                                                       civil_buy_vol=i[6],
                                                       human_sell_vol=i[7],
                                                       civil_sell_vol=i[8],
-                                                      final_price= round(int(i[9]) / int(i[5])),
-                                                      trade_price= round(int(i[9]) / int(i[5])),
+                                                      final_price= trade_price,
+                                                      trade_price= trade_price,
                                                       end_time_stamp = i[13]
                                                       )
                                         )
         history = StockHistory(name=name, latin_name=latin_name, buy_sell_status_list=buy_sell_status_list)
         return history
 
+
+    def __crawl_signle_history_data(self, url):
+        history_data = session.get(url)
+        return history_data
+
+    def __get_history_data_list(self):
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            x = [f"http://www.tsetmc.com/tsev2/data/clienttype.aspx?i={symbol.unique_id}" for symbol in self.data]
+            results = executor.map(self.__crawl_signle_history_data, x)
+        return results
+
     def get_stock_name2history(self):
         histoed_buy_sell_status_dict = dict()
         for symbol in self.data:
-            history_data = session.get(f"http://www.tsetmc.com/tsev2/data/clienttype.aspx?i={symbol.unique_id}",
+            history_data = session.get(f"http://www.tsetmc.com/tsev2/data/clienttype.aspx?i={symbol.unique_id}"
                                         )
             histoed_buy_sell_status_dict[symbol.name] = self.parse_history_data(history_data.text,symbol.name,symbol.latin_name)
+            print (f"added {len (histoed_buy_sell_status_dict)}")
             logger.info(f"fetched {symbol.name}")
         return histoed_buy_sell_status_dict
 
