@@ -8,9 +8,10 @@ counter = 0
 from app.src.data_reader.crawler import *
 from app.src.data_reader.crawler import get_today_market_opening_time
 class CsvReader:
-    def __init__(self,file: str):
+    def __init__(self,file: str,history=None):
         in_file = open(file, 'rt')
         self.__data = csv.DictReader(in_file)
+        self.history = history if history != None else dict()
 
 
     def read_next_batch(self,batch_size = 500):
@@ -39,6 +40,7 @@ class CsvReader:
                 start_time_stamp=get_today_market_opening_time()
             )
             result.append(
-                Symbol(name=row["name"],current_buy_sell_status=status,latin_name='',unique_id='')
+                Symbol(name=row["name"],current_buy_sell_status=status,latin_name='',unique_id='',
+                       history=self.history.get(row["name"]))
             )
         return result

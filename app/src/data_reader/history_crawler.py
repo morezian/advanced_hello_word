@@ -34,7 +34,7 @@ class HistoryCrawler:
         for symbol in self.data:
             history_data = session.get(f"http://www.tsetmc.com/tsev2/data/clienttype.aspx?i={symbol.unique_id}",
                                         )
-            histoed_buy_sell_status_dict[symbol.latin_name] = self.parse_history_data(history_data.text)
+            histoed_buy_sell_status_dict[symbol.name] = self.parse_history_data(history_data.text)
             logger.info(f"fetched {symbol.name}")
         return histoed_buy_sell_status_dict
 

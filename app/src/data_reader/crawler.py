@@ -41,17 +41,17 @@ names = {'UNK':  3,
 
 
 class DataCrawler:
-    def __init__(self,crawl_history = False,csv_reader=False,csv_file=None):
+    def __init__(self,crawl_history = False,realtime=True,csv_file=None):
         self.history = dict()
         if crawl_history == True:
             data = self.__get_realtime_date()
             self.history = HistoryCrawler(data).get_stock_name2history()
-        self.csv_reader = csv_reader
-        if self.csv_reader :
-            self.csv_generator = CsvReader(file=csv_file)
+        self.realtime = realtime
+        if not self.realtime :
+            self.csv_generator = CsvReader(file=csv_file,history=self.history)
 
     def crawl_data (self)->list:
-        if self.csv_reader == False:
+        if self.realtime:
             return self.__get_realtime_date()
         else:
             return self.csv_generator.read_next_batch()
