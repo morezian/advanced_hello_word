@@ -18,17 +18,19 @@ class CsvReader:
             if self.data.line_num == 1:
                 continue
             status = BuySellStatus(
-                end_time_stamp= row[1],
-                trade_price= row[2],
-                final_price= row[3],
-                human_buy_count= row[4],
-                human_buy_vol= row[5],
-                human_sell_count= row[6],
-                human_sell_vol= row[7],
-                civil_buy_count= row[8],
-                civil_buy_vol= row[9],civil_sell_count=row[10],civil_sell_vol=row[11],first_trade=[12],
-                start_time_stamp=get_today_market_opening_time()
-            )
+                                    end_time_stamp= int(row[1]),
+                                    trade_price= int(row[2]),
+                                    final_price= int(row[3]),
+                                    human_buy_count= int(row[4]),
+                                    human_buy_vol= int(row[5]),
+                                    human_sell_count= int(row[6]),
+                                    human_sell_vol= int(row[7]),
+                                    civil_buy_count= int(row[8]),
+                                    civil_buy_vol= int(row[9]),
+                                    civil_sell_count=int(row[10]),
+                                    civil_sell_vol=int(row[11]),
+                                    first_trade=int(row[12]),                                                                                   start_time_stamp=get_today_market_opening_time()
+                                    )
             result.append(
                 Symbol(name=row[0],current_buy_sell_status=status,latin_name='',unique_id='')
             )
