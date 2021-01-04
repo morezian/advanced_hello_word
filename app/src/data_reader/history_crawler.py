@@ -11,11 +11,11 @@ class HistoryCrawler:
 
     def parse_history_data(self,raw_history: str,name,latin_name):
         raw_history = raw_history.split(';')
-        buy_sell_status_list = StockHistory(name=name,latin_name=latin_name)
+        history = StockHistory(name=name,latin_name=latin_name)
         raw_history = [i.split(',') for i in raw_history]
         [i.append(self.__get_timestamp(i[0])) for i in raw_history]
         for i in raw_history:
-            buy_sell_status_list.append(BuySellStatus(human_buy_count=i[1],
+            history.buy_sell_status_list.append(BuySellStatus(human_buy_count=i[1],
                                                       civil_buy_count=i[2],
                                                       human_sell_count=i[3],
                                                       civil_sell_count=i[4],
@@ -28,7 +28,7 @@ class HistoryCrawler:
                                                       end_time_stamp = i[13]
                                                       )
                                         )
-        return buy_sell_status_list
+        return history
 
     def get_stock_name2history(self):
         histoed_buy_sell_status_dict = dict()
