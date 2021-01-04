@@ -174,18 +174,3 @@ class BuySellStatus:
         if self.civil_sell_vol + self.civil_buy_vol > 0:
             return False
         return True
-
-
-class HistoredSatus(BuySellStatus):
-    def __init__(self, trade_price, final_price, vol, human_buy_vol, human_buy_count, human_sell_vol,
-     human_sell_count, civil_buy_vol, civil_buy_count, civil_sell_vol, civil_sell_count, first_trade,
-      start_time_stamp, end_time_stamp, min_day_price, max_day_price, min_day_touched_price, max_day_touched_price):
-        super().__init__(trade_price=trade_price, final_price=final_price, vol=vol,
-                        human_buy_vol=human_buy_vol, human_buy_count=human_buy_count,
-                        human_sell_vol=human_sell_vol, human_sell_count=human_sell_count, civil_buy_vol=civil_buy_vol,
-                        civil_buy_count=civil_buy_count, civil_sell_vol=civil_sell_vol, civil_sell_count=civil_sell_count,
-                        first_trade=first_trade, start_time_stamp=start_time_stamp, end_time_stamp=end_time_stamp,
-                        min_day_price=min_day_price, max_day_price=max_day_price, min_day_touched_price=min_day_touched_price,
-                        max_day_touched_price=max_day_touched_price)
-        
-        
