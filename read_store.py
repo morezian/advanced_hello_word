@@ -7,14 +7,14 @@ from time import time, sleep
 from datetime import datetime
 from app.src.data_reader.vip_stock_reader import *
 from app.src.data_reader.crawler import DataCrawler
-TESTING = True
+TESTING = False
 
 #crawler = DataCrawler(crawl_history = False,realtime=False,csv_file='app/data/data/1608974824.csv')
 crawler = DataCrawler(crawl_history = True, realtime=True) # gets realtime data
 print ("crawler created")
 #get_stock_name2history()
 
-sorted_history = [(y.get_median_human_buy_power_ratio, x) for x, y in crawler.history.items()]
+sorted_history = [(y.market_human_buy_power_ratio, x) for x, y in crawler.history.items()]
 
 sorted_history.sort(reverse=True)
 
@@ -35,7 +35,7 @@ while True:
         #start_time = time ()
         for data in data_list:
             if data.name not in stock_name2stock_obj:
-                stock = Stock(data.name, latin_name = data.latin_name, retrieve_prevois_second_list= [5*60], max_interval_list_length= 1000, stock_history=data.histored_data)
+                stock = Stock(data.name, latin_name = data.latin_name, retrieve_prevois_second_list= [5*60], max_interval_list_length= 1000, stock_history=crawler.history.get(data.name))
                 stock_name2stock_obj[data.name] = stock
             stock = stock_name2stock_obj[data.name]
             stock.update(data.current_buy_sell_status)

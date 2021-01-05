@@ -35,7 +35,6 @@ class HistoryCrawler:
                                                       )
                                         )
         history = StockHistory(name=name, latin_name=latin_name, buy_sell_status_list=buy_sell_status_list)
-        r = history.get_median_human_buy_power_ratio
         return history
 
 
@@ -54,7 +53,7 @@ class HistoryCrawler:
         return list(results)
 
     def get_stock_name2history(self):
-        self.data = self.data[:300]
+        self.data = self.data
         histoed_buy_sell_status_dict = dict()
         history_data_list = self.__get_history_data_list()
         for i in range (len (self.data)):
