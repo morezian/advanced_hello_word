@@ -7,12 +7,16 @@ from time import time, sleep
 from datetime import datetime
 from app.src.data_reader.vip_stock_reader import *
 from app.src.data_reader.crawler import DataCrawler
-TESTING = False
+TESTING = True
 
 #crawler = DataCrawler(crawl_history = False,realtime=False,csv_file='app/data/data/1608974824.csv')
-crawler = DataCrawler(crawl_history = False, realtime=True) # gets realtime data
+crawler = DataCrawler(crawl_history = True, realtime=True) # gets realtime data
 print ("crawler created")
 #get_stock_name2history()
+
+sorted_history = [(y.get_median_human_buy_power_ratio, x) for x, y in crawler.history.items()]
+
+sorted_history.sort(reverse=True)
 
 
 while True:
