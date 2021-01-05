@@ -9,7 +9,7 @@ from app.src.data_reader.vip_stock_reader import *
 from app.src.data_reader.crawler import DataCrawler
 TESTING = False
 
-#crawler = DataCrawler(crawl_history = False,realtime=False,csv_file='app/data/data/1608974824.csv')
+#crawler = DataCrawler(crawl_history = False,realtime=False,csv_file='app/data/Saved_CSV/1609142400.csv')
 crawler = DataCrawler(crawl_history = True, realtime=True) # gets realtime data
 print ("crawler created")
 #get_stock_name2history()
@@ -26,6 +26,7 @@ while True:
     stock_name2history = {}
     stock_name2stock_obj = {}
     cnt = 0
+    vip_stock_list = []
     while (datetime.now().hour != 13):
         start_time = time( )
         data_list = crawler.crawl_data()
@@ -40,7 +41,10 @@ while True:
             stock = stock_name2stock_obj[data.name]
             stock.update(data.current_buy_sell_status)
             #print("updated")
-        vip_stock_list = get_vip_stock_list(stock_name2stock_obj)
+        stored_vip_stock_list = get_vip_stock_list(stock_name2stock_obj)
+        for vip_stock in stored_vip_stock_list:
+            if vip_stock not in vip_stock_list:
+                vip_stock_list.append(vip_stock)
         for _, stock in stock_name2stock_obj.items():
             load_data.update_loader(stock, vip_stock_list)
             #print ("2update")

@@ -35,6 +35,8 @@ class FiliterAndLoad:
         score, score_level = f.get_total_strength()
         if score_level == Filter.SUPER:
             loader_list.append (self.__super_tel_loader)
+            if stock not in vip_stock_list:
+                vip_stock_list.append (stock)
         elif score_level == Filter.STRONG:
             loader_list.append(self.__strong_tel_loader)
         elif score_level >= Filter.GOOD:
