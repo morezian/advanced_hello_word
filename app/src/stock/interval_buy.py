@@ -39,9 +39,9 @@ class IntervalBuy:
 
 
     def set_current_buy_sell_status (self, current_buy_sell_status):
-        is_signigicant_real = self.__add_current_buy_sell_status(current_buy_sell_status, True)
+        #is_signigicant_real = self.__add_current_buy_sell_status(current_buy_sell_status, True)
         is_signigicant = self.__add_current_buy_sell_status(current_buy_sell_status, False)
-        return is_signigicant or is_signigicant_real
+        return is_signigicant# or is_signigicant_real
 
 
 
