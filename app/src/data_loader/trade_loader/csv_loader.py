@@ -1,14 +1,24 @@
 import csv
 from app.src.stock.stock import *
 import os
-
+from datetime import datetime
+import json
 class CsvLoader:
     def __init__(self):
-        file_path = str(int(time()))
-        dir_path = "app/data/csv2"
+        cfg = json.load(open("config"))
+        TESTING = cfg["TESTING"]
+        if TESTING == False:
+            dir_path = "app/data/csv3"
+        else:
+            dir_path = "app/data/csv_test"
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
-        in_file = open(f'{dir_path}/{file_path}.csv', 'wt')
+        now = datetime.now()  # current date and time
+        file_name = now.strftime("%d_%m_%Y")
+        file_path = f'{dir_path}/{file_name}.csv'
+        if os.path.exists(file_path):
+            file_path = f'{dir_path}/{file_name}_1.csv'
+        in_file = open(file_path,'wt')
         self._writer = csv.writer(in_file)
         col_name_list = ["name", "start_time_stamp", "end_time_stamp", "trade_price", "final_price", "human_buy_count", "human_buy_vol","human_sell_count", "human_sell_vol" ,
                          "civil_buy_count", "civil_buy_vol", "civil_sell_count", "civil_sell_vol", "first_trade", "min_day_price", "max_day_price"
