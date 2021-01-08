@@ -6,10 +6,11 @@ from app.src.stock.filter import *
 from collections import OrderedDict
 from time import sleep
 from datetime import datetime
-from io import BytesIO
+from io import BytesIO, BufferedReader
 import matplotlib.pyplot as plt
 import matplotlib
-
+import telepot
+from datetime import timedelta
 
 class TelegramLoader:
     def __init__(self, token, id, is_special = False):
@@ -17,6 +18,7 @@ class TelegramLoader:
         self.__id = id
         self.__session = FuturesSession()
         self.is_special = is_special
+        self.__bot = telepot.Bot(token)
 
 
     def __gp (self, buy_sell_status:BuySellStatus):
@@ -65,8 +67,6 @@ class TelegramLoader:
         "recent": self.__gp(interval_buy_sell_status ["all"][-1]),
         "now": self.__gp(stock.last_second_buy_sell_status(is_real=False,last_second=30)),
         "history_buy_power": format(history_avg_buy_power_ratio, "0.2f"),
-        #"real": self.__gp(buy_sell_status ["real"]),
-        #"rrecent": self.__gp(interval_buy_sell_status ["real"][-1]),
         trade_em + "trade": format(trade_price, "0.2f"),
         final_em + "final": format(final_price, "0.2f"),
         "range": f"[{format(min_touched_price, '0.2f')}, {format(max_touched_price, '0.2f')}]",
@@ -82,11 +82,6 @@ class TelegramLoader:
         return final_str
 
 
-    # def __get_string_stock_list (self, stock_list):
-    #     ans = [urllib.parse.quote(self.__get_string_stock(stock)) for stock in stock_list]
-    #     return "\n".join(ans)
-
-
     def __scale (self, value, old_max, old_min, new_max, new_min):
         value = max (value, old_min)
         value = min (value, old_max)
@@ -100,7 +95,7 @@ class TelegramLoader:
         if value < 1:
             ans = self.__scale(value, 1, 0, 0, -5)
         else:
-            ans = self.__scale(value, 5, 1, 5, 1)
+            ans = self.__scale(value, 3, 1, 5, 0)
 
         return ans
 
@@ -113,18 +108,32 @@ class TelegramLoader:
         ans = self.__scale(buy_sell_status.trade_price_in_percent,domain, -domain, 5, -5)
         return ans
 
-    def simple_plot(self, x_list, y_list_list, y_label_list, title):
+    def __simple_plot(self, x_list, y_list_list, y_label_list, title):
+        plt.style.use("fivethirtyeight")
+        plt.figure()
         for i, y_list in enumerate(y_list_list):
             plt.plot(x_list, y_list, label=y_label_list[i])
         plt.title(title)
         plt.legend()
-        plt.show()
+        plt.ylim(-5, 5)
+        #plt.show()
         buf = BytesIO()
         plt.savefig(buf, format='png')
         buf.seek(0)
-        return buf.read()
+        return buf#buf.read()
 
-    def load_stock (self, stock, buy_sell_status_list):
+    def __send_img(self, caption, photo):
+        self.__bot.sendPhoto(chat_id=self.__id, photo=photo, caption=caption)
+
+    def load_stock (self, stock, buy_sell_status_list, date):
+        if len(buy_sell_status_list) == 0:
+            text = "There is no Transaction for requested stock"
+            url = f'https://api.telegram.org/bot' + str(
+                self.__token) + '/sendMessage?text=' + text + '&chat_id=' + str(self.__id)
+            requests.get(url)
+
+        week_day = date.strftime('%A')
+        date_string = f"{week_day}, {date.strftime('%d-%m-%Y')}"
         score_list = []
         buy_power_list = []
         price_list = []
@@ -132,33 +141,13 @@ class TelegramLoader:
         max_day_score = -100000
         for buy_sell in buy_sell_status_list:
             stock.update(buy_sell)
-            max_day_score = max (max_day_score,stock.score)
+            f = Filter(stock)
+            score, score_level = f.get_total_strength()
+            max_day_score = max (max_day_score,score)
             score_list.append(self.__normal_score(stock.score))
             buy_power_list.append(self.__normal_buy_power_ratio(buy_sell))
             price_list.append(self.__normal_price(buy_sell))
-            time_list.append(buy_sell.end_time_stamp)
-        self.simple_plot(time_list,[])
-        url = f'https://api.telegram.org/bot' + str(self.__token) + '/sendMessage?text=' + string_stock + '&chat_id=' + str(self.__id)
-        #requests.get(url)
-        #self.__session = FuturesSession()
-        if self.is_special == False and 1 == 2:
-            self.__session.get(url,hooks={'response': self.response_hook})
-            #sleep(1)
-        else:
-            resp = requests.get(url)
-            #print (resp)
-        #requests.get(url)
-
-    def response_hook(self, resp, *args, **kwargs):
-        # parse the json storing the result on the response object
-        resp.data = resp.json()
-        print (str(resp.data))
-
-
-
-
-
-
-if __name__ == "__main__":
-    tl = TelegramLoader (token="1483369722:AAFQJOLnQeKZd5QjRD4wiI6pfAqoOu-m0Rk", id =  "-444966767")
-    tl.load_stock(None)
+            time_list.append((datetime.fromtimestamp(buy_sell.end_time_stamp) - timedelta(hours=2, minutes=30)))
+        buf = self.__simple_plot(time_list, [score_list, buy_power_list, price_list], ["score", "buy_power", "price"], date_string)
+        text = self.__get_string_stock(stock)
+        self.__send_img(text, ('z.png', buf))

@@ -25,7 +25,7 @@ class CsvReader:
             if batch_size == 0: break
             batch_size -= 1
             status = BuySellStatus(
-                end_time_stamp= int(row["time_stamp"]),
+                end_time_stamp= int(row["end_time_stamp"]),
                 trade_price= float(row["trade_price"]),
                 final_price= float(row["final_price"]),
                 human_buy_count= int(row["human_buy_count"]),
@@ -42,7 +42,7 @@ class CsvReader:
                 min_day_touched_price=float (row["min_day_touched_price"]),
                 max_day_touched_price=float(row["max_day_touched_price"]),
                 vol= float (row["vol"]),
-                start_time_stamp=get_today_market_opening_time()
+                start_time_stamp=int(row["start_time_stamp"])
             )
             result.append(
                 Symbol(name=row["name"],current_buy_sell_status=status,latin_name='',unique_id='',
