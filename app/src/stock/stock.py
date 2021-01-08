@@ -35,3 +35,4 @@ class Stock:
 
     def __lt__(self, other):
         return self.score < other.score
+
