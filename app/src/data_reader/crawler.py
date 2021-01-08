@@ -38,14 +38,15 @@ names = {'UNK':  3,
          'civil_sell_count': 27 ,
          'human_sell_vol': 28 ,
          'civil_sell_vol':29}
-
+history_data = dict()
 
 class DataCrawler:
     def __init__(self,crawl_history = False,realtime=True,csv_file=None):
-        self.history = dict()
+        global history_data
         if crawl_history == True:
             data = self.__get_realtime_date()
-            self.history = HistoryCrawler(data).get_stock_name2history()
+            history_data = HistoryCrawler(data).get_stock_name2history()
+        self.history = history_data
         self.realtime = realtime
         if not self.realtime :
             self.csv_generator = CsvReader(file=csv_file,history=self.history)
