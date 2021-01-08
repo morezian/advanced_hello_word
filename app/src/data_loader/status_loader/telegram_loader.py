@@ -147,7 +147,7 @@ class TelegramLoader:
             score_list.append(self.__normal_score(stock.score))
             buy_power_list.append(self.__normal_buy_power_ratio(buy_sell))
             price_list.append(self.__normal_price(buy_sell))
-            time_list.append((datetime.fromtimestamp(buy_sell.end_time_stamp) - timedelta(hours=2, minutes=30)))
+            time_list.append((datetime.fromtimestamp(buy_sell.end_time_stamp)))
         buf = self.__simple_plot(time_list, [score_list, buy_power_list, price_list], ["score", "buy_power", "price"], date_string)
         text = self.__get_string_stock(stock)
         self.__send_img(text, ('z.png', buf))
