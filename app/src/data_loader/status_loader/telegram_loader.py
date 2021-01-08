@@ -6,6 +6,10 @@ from app.src.stock.filter import *
 from collections import OrderedDict
 from time import sleep
 from datetime import datetime
+from io import BytesIO
+import matplotlib.pyplot as plt
+import matplotlib
+
 
 class TelegramLoader:
     def __init__(self, token, id, is_special = False):
@@ -78,24 +82,62 @@ class TelegramLoader:
         return final_str
 
 
-    def __get_string_stock_list (self, stock_list):
-        ans = [urllib.parse.quote(self.__get_string_stock(stock)) for stock in stock_list]
-        return "\n".join(ans)
+    # def __get_string_stock_list (self, stock_list):
+    #     ans = [urllib.parse.quote(self.__get_string_stock(stock)) for stock in stock_list]
+    #     return "\n".join(ans)
 
 
+    def __scale (self, value, old_max, old_min, new_max, new_min):
+        value = max (value, old_min)
+        value = min (value, old_max)
+        old_range = (old_max - old_min)
+        new_range = (new_max - new_min)
+        new_value = (((value - old_min) * new_range) / old_range) + new_min
+        return new_value
 
+    def __normal_buy_power_ratio(self, buy_sell_stauts):
+        value = buy_sell_stauts.get_human_buy_ratio_power()
+        if value < 1:
+            ans = self.__scale(value, 1, 0, 0, -5)
+        else:
+            ans = self.__scale(value, 5, 1, 5, 1)
 
+        return ans
 
+    def __normal_score(self, score):
+        ans = self.__scale(score, 5, -5, 5, -5)
+        return ans
+
+    def __normal_price(self, buy_sell_status:BuySellStatus):
+        domain = buy_sell_status.max_day_price_in_percent
+        ans = self.__scale(buy_sell_status.trade_price_in_percent,domain, -domain, 5, -5)
+        return ans
+
+    def simple_plot(self, x_list, y_list_list, y_label_list, title):
+        for i, y_list in enumerate(y_list_list):
+            plt.plot(x_list, y_list, label=y_label_list[i])
+        plt.title(title)
+        plt.legend()
+        plt.show()
+        buf = BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        return buf.read()
 
     def load_stock (self, stock, buy_sell_status_list):
         score_list = []
         buy_power_list = []
         price_list = []
+        time_list = []
+        max_day_score = -100000
         for buy_sell in buy_sell_status_list:
             stock.update(buy_sell)
-            score_list.append(stock.score)
-            buy_power_list.append(buy_sell.get_human_buy_ratio_power())
-            price_list.append(buy_sell.trade_price_in_percent)
+            max_day_score = max (max_day_score,stock.score)
+            score_list.append(self.__normal_score(stock.score))
+            buy_power_list.append(self.__normal_buy_power_ratio(buy_sell))
+            price_list.append(self.__normal_price(buy_sell))
+            time_list.append(buy_sell.end_time_stamp)
+        self.simple_plot(time_list,[])
         url = f'https://api.telegram.org/bot' + str(self.__token) + '/sendMessage?text=' + string_stock + '&chat_id=' + str(self.__id)
         #requests.get(url)
         #self.__session = FuturesSession()

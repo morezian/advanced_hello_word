@@ -7,16 +7,21 @@ from app.src.utils.time_helpers import get_today_market_opening_time
 counter = 0
 from app.src.data_reader.crawler import *
 from app.src.data_reader.crawler import get_today_market_opening_time
+
+
 class CsvReader:
-    def __init__(self,file: str,history=None):
+    def __init__(self,file: str,history=None, stock_name = None):
         in_file = open(file, 'rt')
         self.__data = csv.DictReader(in_file)
         self.history = history if history != None else dict()
+        self.__stock_name = stock_name
 
 
-    def read_next_batch(self,batch_size = 500):
+    def read_next_batch(self,batch_size = 10000):
         result = []
         for row in self.__data:
+            if self.__stock_name and row ["name"] != self.__stock_name:
+                continue
             if batch_size == 0: break
             batch_size -= 1
             status = BuySellStatus(
