@@ -30,8 +30,8 @@ class StatusInterface (Resource):
         input = json.loads(request.data)
         time_list = input.get ("time_list")
         persian_name = input.get ("persian_name")
-        persian_name = persian_name.remove ("#")
-        persian_name = persian_name.remove("_")
+        persian_name = persian_name.replace ("#", "")
+        persian_name = persian_name.replace("_", "")
         persian_name.strip()
         stock = self.stock_manager.get_stock(persian_name)
         if stock == None:
