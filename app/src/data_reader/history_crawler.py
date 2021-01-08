@@ -62,12 +62,10 @@ class HistoryCrawler:
         final_result = []
         i = 0
         for symbol in self.data:
-            if symbol.latin_name == 'IRO3MINZ0001':
-                with concurrent.futures.ThreadPoolExecutor() as executor:
-                    x = [f"http://cdn.tsetmc.com/Loader.aspx?ParTree=15131P&i={symbol.unique_id}&d={day}" for day in self.history_period_by_days]
-                    results = executor.map(self.__crawl_signle_history_data, x)
-                    final_result.append(results)
-                    break
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                x = [f"http://cdn.tsetmc.com/Loader.aspx?ParTree=15131P&i={symbol.unique_id}&d={day}" for day in self.history_period_by_days]
+                results = executor.map(self.__crawl_signle_history_data, x)
+                final_result.append(results)
 
         return final_result
 
