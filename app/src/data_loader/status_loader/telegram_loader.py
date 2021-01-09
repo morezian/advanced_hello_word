@@ -69,7 +69,7 @@ class TelegramLoader:
         "history_buy_power": format(history_avg_buy_power_ratio, "0.2f"),
         trade_em + "trade": format(trade_price, "0.2f"),
         final_em + "final": format(final_price, "0.2f"),
-        "vol": buy_sell_status["all"].vol,
+        "vol": f'{format(buy_sell_status["all"].vol/1000000, "0.2f")}M',
         "range": f"[{format(min_touched_price, '0.2f')}, {format(max_touched_price, '0.2f')}]",
         #"opening": format(buy_sell_status["all"].first_trade_in_percent, "0.2f"),
         "time": (datetime.fromtimestamp(buy_sell_status ["all"].end_time_stamp)).strftime("%H:%M:%S"),
