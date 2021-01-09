@@ -5,6 +5,8 @@ class StockHistory:
         self.name = name
         self.latin_name = latin_name
         self.__buy_sell_status_list = buy_sell_status_list
+        self.market_cap = 0
+        self.shares_count = 0
         self.__initialize_params()
 
     def __initialize_params (self):

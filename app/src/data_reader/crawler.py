@@ -43,10 +43,10 @@ history_data = dict()
 class DataCrawler:
     def __init__(self,crawl_history = False,realtime=True,csv_file=None,stock_name=None):
         global history_data
+        self.history = history_data
         if crawl_history == True:
             data = self.__get_realtime_date()
             history_data = HistoryCrawler(data).get_stock_name2history()
-        self.history = history_data
         self.realtime = realtime
         if not self.realtime :
             self.csv_generator = CsvReader(file=csv_file,history=self.history,stock_name=stock_name)

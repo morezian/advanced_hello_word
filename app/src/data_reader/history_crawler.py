@@ -41,6 +41,8 @@ class HistoryCrawler:
                                                           )
                                                 )
                 history = StockHistory(name=name, latin_name=latin_name, buy_sell_status_list=buy_sell_status_list)
+                history.market_cap = extracted_data['shares_count'] * buy_sell_status_list[0].final_price
+                history.shares_count = extracted_data['shares_count']
         return history
 
     def __get_list_of_past_days(self,num_days: int):
@@ -62,10 +64,12 @@ class HistoryCrawler:
         final_result = []
         i = 0
         for symbol in self.data:
-            with concurrent.futures.ThreadPoolExecutor() as executor:
-                x = [f"http://cdn.tsetmc.com/Loader.aspx?ParTree=15131P&i={symbol.unique_id}&d={day}" for day in self.history_period_by_days]
-                results = executor.map(self.__crawl_signle_history_data, x)
-                final_result.append(results)
+            if symbol.unique_id == '57944184894703821':
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                        x = [f"http://cdn.tsetmc.com/Loader.aspx?ParTree=15131P&i={symbol.unique_id}&d={day}" for day in self.history_period_by_days]
+                        results = executor.map(self.__crawl_signle_history_data, x)
+                        final_result.append(results)
+                        break
 
         return final_result
 
@@ -135,8 +139,7 @@ def extract_info_from_html_page(response)-> dict:
         # output_dict['start_timestamp'] =
         output_dict['end_timestamp'] = __get_timestamp(str(res[3][0][0]))
         output_dict['vol'] =  int(res[1][10])
-        # output_dict['market_cap'] #:TODO why market cap is not available?
-
+        output_dict['shares_count'] = round(100 / res[6][0][3] * res[6][0][2])
         return output_dict
     else:
         raise Exception("error 500")
