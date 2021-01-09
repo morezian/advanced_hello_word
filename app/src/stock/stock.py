@@ -39,6 +39,7 @@ class Stock:
     def clear(self):
         self.__interval_buy = IntervalBuy(self.__retrieve_previous_second_list,self.__max_interval_list_length)
         self.score = 0
+        self.__is_significant = False
 
 
     def __lt__(self, other):

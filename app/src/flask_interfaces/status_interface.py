@@ -36,10 +36,10 @@ class StatusInterface (Resource):
         stock = self.stock_manager.get_stock(persian_name)
         if stock == None:
             flask.abort(404, f"There is no Share Called {persian_name}")
-        stock.clear()
         file_path_list = get_file_path_list(time_list)
         date_list = get_date_list(time_list)
         for i,file_path in enumerate(file_path_list):
+            stock.clear()
             crawler = DataCrawler(crawl_history=self.crawl_history, realtime=False,csv_file=file_path,stock_name=persian_name)
             data_list = crawler.crawl_data()#batch_size is 10000 and all of them came in one result
             self.telegram_loader.load_stock(stock, [data.current_buy_sell_status for data in data_list], date_list[i])

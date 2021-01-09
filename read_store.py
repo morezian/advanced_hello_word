@@ -15,7 +15,7 @@ def is_in_bazar_time():
 
 def pause_until_hour (hour):
     while True:
-        if datetime.now().hour != hour: continue
+        if datetime.now().hour == hour: break
 
 if __name__ == "__main__":
     cfg = json.load(open("config"))
