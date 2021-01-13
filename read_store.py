@@ -9,7 +9,7 @@ CRAWLING_HOUR = 3
 
 def is_in_bazar_time():
     now_hour = datetime.now().hour
-    if now_hour >=START_BAZAR_HOUR and now_hour <=END_BAZAR_HOUR:
+    if now_hour >=START_BAZAR_HOUR and now_hour <END_BAZAR_HOUR:
         return True
     return False
 
