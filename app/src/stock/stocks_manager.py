@@ -5,8 +5,8 @@ from app.src.data_reader.crawler import DataCrawler
 
 
 class StocksManager:
-    def __init__(self, crawler:DataCrawler):
-        self.__load_data = LoadData()
+    def __init__(self, crawler:DataCrawler, loader):
+        self.__load_data = loader
         self.__stock_name2stock_obj = {}
         self.__vip_stock_list = []
         self.__crawler = crawler

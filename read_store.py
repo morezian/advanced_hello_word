@@ -32,7 +32,7 @@ if __name__ == "__main__":
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(START_BAZAR_HOUR)
 
-        manager = StocksManager(crawler)
+        manager = StocksManager(crawler, LoadData())
         while (datetime.now().hour != END_BAZAR_HOUR):
             manager.update()
             manager.load()
