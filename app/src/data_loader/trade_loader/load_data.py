@@ -3,7 +3,7 @@ from app.src.data_loader.trade_loader.telegram_loader import *
 from collections import defaultdict
 
 
-class FiliterAndLoad:
+class LoadData:
     def __init__(self):
         self.__csv_loader = CsvLoader()
         self.__all_tel_loader = TelegramLoader(token="1483369722:AAFQJOLnQeKZd5QjRD4wiI6pfAqoOu-m0Rk", id ="-444966767")
@@ -35,8 +35,7 @@ class FiliterAndLoad:
         if last_time_stamp:
             if time() - last_time_stamp < self.__MIN_SECOND_BETWEEN_SENTS:
                 return []
-        f = Filter(stock)
-        score, score_level = f.get_total_strength()
+        score_level = stock.score_level
         if score_level == Filter.SUPER:
             loader_list.append (self.__super_tel_loader)
             if stock not in vip_stock_list:

@@ -32,8 +32,7 @@ class TelegramLoader:
         em_up = "⤴️"
         em_down = "⤵️"
         trade_em = em_green
-        f = Filter(stock)
-        trade_price_filter = f.trade_price()
+        trade_price_filter = stock.filter.trade_price()
         if trade_price_filter >= Filter.STRONG:
             trade_em = em_blue
         elif trade_price_filter >= Filter.GOOD:

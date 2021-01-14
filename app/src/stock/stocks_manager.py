@@ -1,4 +1,4 @@
-from app.src.data_loader.trade_loader.filter_and_load import *
+from app.src.data_loader.trade_loader.load_data import *
 from time import time
 from app.src.data_reader.vip_stock_reader import *
 from app.src.data_reader.crawler import DataCrawler
@@ -6,7 +6,7 @@ from app.src.data_reader.crawler import DataCrawler
 
 class StocksManager:
     def __init__(self, crawler:DataCrawler):
-        self.__load_data = FiliterAndLoad()
+        self.__load_data = LoadData()
         self.__stock_name2stock_obj = {}
         self.__vip_stock_list = []
         self.__crawler = crawler
@@ -14,7 +14,7 @@ class StocksManager:
     def __get_stock(self, data):
         if data.name not in self.__stock_name2stock_obj:
             stock = Stock(data.name, latin_name=data.latin_name, retrieve_prevois_second_list=[5 * 60],
-                          max_interval_list_length=1000, stock_history=self.__crawler.history.get(data.name))
+                           max_interval_list_length=1000, stock_history=self.__crawler.history.get(data.name))
             self.__stock_name2stock_obj[data.name] = stock
         stock = self.__stock_name2stock_obj[data.name]
         return stock

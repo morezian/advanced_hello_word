@@ -22,11 +22,12 @@ if __name__ == "__main__":
     TESTING = cfg ["TESTING"]
     crawl_history = cfg ["crawl_history"]
     real_time = cfg ["realtime"]
+    csv_file_path = cfg.get("csv_file_path")
 
     while True:
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(CRAWLING_HOUR)
-        crawler = DataCrawler(crawl_history=crawl_history, realtime=real_time)
+        crawler = DataCrawler(crawl_history=crawl_history, realtime=real_time, csv_file=csv_file_path)
         print("crawler created")
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(START_BAZAR_HOUR)
