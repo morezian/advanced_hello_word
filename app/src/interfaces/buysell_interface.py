@@ -174,3 +174,14 @@ class BuySellStatus:
         if self.civil_sell_vol + self.civil_buy_vol > 0:
             return False
         return True
+    
+    def to_dict(self):
+        ans = {
+            'human_buy_count' : self.human_buy_count
+#every public
+        }
+
+        return ans
+
+    #def to_list(self):
+     #   pass
