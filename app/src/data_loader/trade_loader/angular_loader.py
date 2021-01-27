@@ -62,9 +62,14 @@ class AngularLoader():
         #WebSocketUtility.getInstance().set_send_status(True)
         #WebSocketUtility.getInstance().set_stock_list(stock_list)
         print('signaled')
-        if USERS:  # asyncio.wait doesn't accept an empty list
-            #message = users_event()
-            asyncio.wait([user.send(stock_list) for user in USERS])
+        print(len(WebSocketUtility.getInstance().Users))
+        if WebSocketUtility.getInstance().Users:  # asyncio.wait doesn't accept an empty list
+            print('is sending')
+            #asyncio.wait([user.send('GHASEM') for user in WebSocketUtility.getInstance().Users])
+            
+            #await WebSocketUtility.getInstance().Users[0].send('OLAGH')
+            for wws in WebSocketUtility.getInstance().Users:
+                wws.send('ishalla')
         
         #self.__signal = stock_list
         #self.__signal_detected = True

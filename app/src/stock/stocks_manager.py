@@ -26,7 +26,7 @@ class StocksManager:
     def update (self):
         start_time = time( )
         data_list = self.__crawler.crawl_data()
-        print (f"read in {time () - start_time} seconds")
+        #print (f"read in {time () - start_time} seconds")
         for data in data_list:
             stock = self.__get_stock(data)
             stock.update(data.current_buy_sell_status)

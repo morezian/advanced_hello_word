@@ -8,6 +8,7 @@ class WebSocketUtility:
     #__users = None
     __should_send = False
     __message = None
+    Users = set()
     
     @staticmethod
     def getInstance():
@@ -24,7 +25,7 @@ class WebSocketUtility:
             #start_server = websockets.serve(self.notify_all, "localhost", 6789)
             #asyncio.get_event_loop().run_until_complete(start_server)
             #asyncio.get_event_loop().run_forever()
-    
+
     async def notify_all(self, websocket, path):
         #self.register(websocket)
         while True:
