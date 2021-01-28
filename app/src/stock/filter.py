@@ -69,7 +69,7 @@ class Filter:
         count = buy_sell_status.human_buy_count
         time_duration_second = buy_sell_status.end_time_stamp - buy_sell_status.start_time_stamp
         time_duration_minute = time_duration_second // 60
-        #print (is_interval, time_duration_minute)
+        print (is_interval, time_duration_minute)
         if time_duration_minute <= 10:
             cmp_list = [3, 10, 25, 40, 70, 150]
         elif time_duration_minute <= 45:

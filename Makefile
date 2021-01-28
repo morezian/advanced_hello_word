@@ -1,2 +1,2 @@
 freeze:
-	pip3 freeze | grep -v "pkg-resources" > req.txt
+	pip freeze | grep -v "pkg-resources" > req.txt
