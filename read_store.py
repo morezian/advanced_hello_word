@@ -1,7 +1,6 @@
 from app.src.stock.stocks_manager import *
 import json
 from datetime import *
-#import _thread
 import threading
 from app.src.data_loader.trade_loader.websocket_utility import *
 #sorted_history = [(y.market_human_buy_power_ratio, x) for x, y in crawler.history.items()]
@@ -24,24 +23,12 @@ def pause_until_hour (hour):
     while True:
         if datetime.now().hour == hour: break
 
-
-def start_srv(thread_name, delay):
-    start_server = websockets.serve(handle, "localhost", 4000)
-    
-    loop.run_until_complete(start_server)
-    #loop.run_forever()
-
-async def register(websocket):
-    WebSocketUtility.getInstance().Users.add(websocket)
-    #USERS.add(websocket)
-
 def main_process():
     sleep(5)
     while True:
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(CRAWLING_HOUR)
         crawler = DataCrawler(crawl_history=crawl_history, realtime=real_time, csv_file=csv_file_path)
-        #print("crawler created")
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(START_BAZAR_HOUR)
 
@@ -51,13 +38,13 @@ def main_process():
             manager.load()
 
 async def handle(websocket, path):
-    #name = await websocket.recv()
-    #while True:
-    print('ghasem')
-    WebSocketUtility.getInstance().Users.add(websocket)
-    for wws in WebSocketUtility.getInstance().Users:
-        await wws.send('ishalla')
-    #await register(websocket)
+    WebSocketUtility.getInstance().WebSocketDict[websocket] = False
+    while True:
+        if WebSocketUtility.getInstance().WebSocketDict[websocket]:
+            print('before sending')
+            mm = WebSocketUtility.getInstance().get_stock_list()
+            await websocket.send(str(type(mm)))
+            WebSocketUtility.getInstance().WebSocketDict[websocket] = False
 
 if __name__ == "__main__":
     cfg = json.load(open("config"))
@@ -65,8 +52,7 @@ if __name__ == "__main__":
     crawl_history = cfg ["crawl_history"]
     real_time = cfg ["realtime"]
     csv_file_path = cfg.get("csv_file_path")
-    
-    #_thread.start_new_thread(main_process, ())
+
     x = threading.Thread(target=main_process)
     x.start()
     
@@ -74,10 +60,3 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(start_server)
     loop.run_forever()
-    print('salam')
-    
-    
-#    start_server = websockets.serve(WebSocketUtility.getInstance().notify_all, "localhost", 6789)
-#    asyncio.get_event_loop().run_until_complete(start_server)
-#    asyncio.get_event_loop().run_forever()
-
