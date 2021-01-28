@@ -5,22 +5,26 @@ from websockets import *
 
 logging.basicConfig(level=logging.INFO)
 
+
 async def consumer_handler(websocket: WebSocketClientProtocol) -> None:
     print('handler consume')
     async for message in websocket:
         log_message(message)
         print('r: ' + message)
 
+
 async def consume(hostname: str, port: int) -> None:
-    print('p:' + hostname )
+    print('p:' + hostname)
     print(port)
     websocket_resource_url = f"ws://{hostname}:{port}"
     async with websockets.connect(websocket_resource_url) as websocket:
         print('hello')
         await consumer_handler(websocket)
 
+
 def log_message(message: str) -> None:
     logging.info(f"Message: {message}")
+
 
 async def produce(message: str, hostname: str, port: int) -> None:
     async with websockets.connect(f"ws://{hostname}:{port}") as ws:
