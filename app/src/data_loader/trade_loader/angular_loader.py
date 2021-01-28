@@ -17,7 +17,7 @@ class AngularLoader():
         print('Server Started')
 
     def load_stock_list(self, stock_list):
-        WebSocketUtility.get_instance().set_send_status(True)
+        #WebSocketUtility.get_instance().set_send_status(True)
         for i in WebSocketUtility.get_instance().WebSocketDict:
             WebSocketUtility.get_instance().WebSocketDict[i] = True
         WebSocketUtility.get_instance().set_stock_list(stock_list)
