@@ -53,12 +53,13 @@ async def handle(websocket, path):
         if WebSocketUtility.get_instance().WebSocketDict[websocket]:
             print('before sending')
             mm = WebSocketUtility.get_instance().get_stock_list()
-            result = '{ "response" : "' + str(WebSocketUtility.get_instance().get_stock_list()) + '" }'
+            #result = '{ "response" : "' + str(WebSocketUtility.get_instance().get_stock_list()) + '" }'
+            result = WebSocketUtility.get_instance().get_stock_list()
             await websocket.send(result)
             WebSocketUtility.get_instance().WebSocketDict[websocket] = False
 
 if __name__ == "__main__":
-   
+    
     x = threading.Thread(target=main_process)
     x.start()
     try:
