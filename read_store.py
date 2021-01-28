@@ -53,7 +53,9 @@ async def handle(websocket, path):
         if WebSocketUtility.get_instance().WebSocketDict[websocket]:
             print('before sending')
             mm = WebSocketUtility.get_instance().get_stock_list()
-            result = '{ "response" : ' + WebSocketUtility.get_instance().get_stock_list() + '}'
+            dict1 = {}
+            dict1["response"] = mm
+            result = json.dumps(dict1)
             print(result)
             #result = WebSocketUtility.get_instance().get_stock_list()
             await websocket.send(result)
