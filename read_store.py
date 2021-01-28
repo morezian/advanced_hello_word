@@ -55,7 +55,7 @@ async def handle(websocket, path):
             mm = WebSocketUtility.get_instance().get_stock_list()
             dict1 = {}
             dict1["response"] = mm 
-            result = json.dumps(dict1)
+            result = json.dumps(mm)
             print(result)
             #result = WebSocketUtility.get_instance().get_stock_list()
             await websocket.send(result)
