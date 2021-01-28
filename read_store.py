@@ -61,7 +61,7 @@ if __name__ == "__main__":
     x = threading.Thread(target=main_process)
     x.start()
     try:
-        start_server = websockets.serve(handle, "79.175.176.165", 4001)
+        start_server = websockets.serve(handle, "127.0.0.1", 4001)
         loop = asyncio.get_event_loop()
         loop.run_until_complete(start_server)
         loop.run_forever()
