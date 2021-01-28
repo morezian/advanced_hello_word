@@ -22,11 +22,11 @@ class AngularLoader():
         for stock in stock_list:
             dict1 = {}
             
-            dict1['company'] = stock.name
-            dict1['board power'] = stock.current_buy_sell_status_dict['all'].get_human_buy_ratio_power()
-            dict1['score'] = stock.score
-            a = json.dumps(dict1)
-            res_dict.append(a)
+            dict1["company"] = stock.name
+            dict1["board power"] = stock.current_buy_sell_status_dict['all'].get_human_buy_ratio_power()
+            dict1["score"] = stock.score
+            #a = json.dumps(dict1)
+            res_dict.append(dict1)
         #WebSocketUtility.get_instance().set_send_status(True)
         for i in WebSocketUtility.get_instance().WebSocketDict:
             WebSocketUtility.get_instance().WebSocketDict[i] = True
