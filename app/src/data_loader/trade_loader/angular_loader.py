@@ -29,5 +29,5 @@ class AngularLoader():
         #WebSocketUtility.get_instance().set_send_status(True)
         for i in WebSocketUtility.get_instance().WebSocketDict:
             WebSocketUtility.get_instance().WebSocketDict[i] = True
-        WebSocketUtility.get_instance().set_stock_list(res_dict)
+        WebSocketUtility.get_instance().set_stock_list(str(res_dict))
         print('signaled')
