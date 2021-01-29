@@ -52,7 +52,6 @@ class Stock:
             "name": self.name,
             "latin_name": self.latin_name,
             "score": self.score,
-            "score_level": self.filter.score_level_to_string(self.score_level),
             "5m_buy_sell_status": self.last_second_buy_sell_status(False, 5 * 60).to_dict(),
             "30s_buy_sell_status": self.last_second_buy_sell_status(False, 30).to_dict(),
             "board_buy_sell_status": self.current_buy_sell_status_dict['all'].to_dict()

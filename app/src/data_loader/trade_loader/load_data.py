@@ -19,10 +19,10 @@ class LoadData:
             #asyncio.get_event_loop().run_until_complete(start_server)
             #asyncio.get_event_loop().run_forever()
             self.__all_tel_loader = self.__csv_loader #AngularLoader(signal_type = "all")
-            self.__super_tel_loader = AngularLoader(signal_type = "all")
+            self.__super_tel_loader = AngularLoader(signal_type = "SUPER")
             #self.__super_tel_loader.start()
-            self.__strong_tel_loader = self.__super_tel_loader #AngularLoader(signal_type = "all")
-            self.__vip_loader = self.__super_tel_loader #AngularLoader (signal_type = "all")
+            self.__strong_tel_loader = AngularLoader(signal_type = "STRONG")
+            self.__vip_loader = AngularLoader(signal_type = "VIP")
         self.__stock_name2last_sent_timestamp = {}
         self.__stock_name2last_sent_buy_sell_status = {}
         cfg = json.load(open("config"))
