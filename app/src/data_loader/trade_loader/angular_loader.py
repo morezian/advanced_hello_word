@@ -15,10 +15,15 @@ class AngularLoader():
         self.__signal_detected = False
         self.__signal = None
         self.__signal_type = signal_type
+        self.__signal_count = 0
         print('Server Started')
+        
+    def get_signal_count(self):
+        return self.__signal_count
 
     def load_stock_list(self, stock_list):
         print(stock_list)
+        self.__signal_count += len(stock_list)
         res_dict = []
         for stock in stock_list:
             response_stock = {**stock.to_dict(), **{"score_level": self.__signal_type}}

@@ -88,6 +88,6 @@ class LoadData:
                     loader.load_stock_list (tmp_list)
                 #for stock in stock_list:
                 #    loader.load_stock(stock)
-
+        print('#signals Detected: ' + str(self.__super_tel_loader.get_signal_count() + self.__strong_tel_loader.get_signal_count() + self.__strong_tel_loader.get_signal_count()))
         self.__stock2loader_list = {}
         
