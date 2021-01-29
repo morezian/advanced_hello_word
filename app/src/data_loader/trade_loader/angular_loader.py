@@ -30,7 +30,7 @@ class AngularLoader():
             res_dict.append(response_stock)
         #WebSocketUtility.get_instance().set_send_status(True)
         for i in WebSocketUtility.get_instance().WebSocketDict:
-            i.send(json.dumps(stock_list, sort_keys=True, indent=4))
+            i.send(json.dumps(res_dict, sort_keys=True, indent=4))
             #WebSocketUtility.get_instance().WebSocketDict[i] = True
         WebSocketUtility.get_instance().set_stock_list(res_dict)
         print('signaled')
