@@ -169,10 +169,25 @@ class BuySellStatus:
 
     def to_dict(self):
         ans = {
-            'human_buy_count': self.human_buy_count
-            # every public
+            "human_buy_vol": self.human_buy_vol, 
+            "human_buy_count":self.human_buy_count,
+            "human_sell_vol": self.human_sell_vol,
+            "human_sell_count": self.human_sell_count,
+            "civil_buy_vol": self.civil_buy_vol,
+            "civil_buy_count": self.civil_buy_count,
+            "civil_sell_vol": self.civil_sell_vol,
+            "civil_sell_count": self.civil_sell_count,
+            "trade_price": self.trade_price,
+            "vol": self.vol,
+            "first_trade": self.first_trade,
+            "final_price": self.final_price,
+            "start_time_stamp": self.start_time_stamp,
+            "end_time_stamp": self.end_time_stamp,
+            "min_day_price": self.min_day_price,
+            "max_day_price": self.max_day_price,
+            "min_day_touched_price": self.min_day_touched_price,
+            "max_day_touched_price": self.max_day_touched_price
         }
-
         return ans
 
     # def to_list(self):
