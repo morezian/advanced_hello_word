@@ -51,8 +51,18 @@ async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
     print('new Connection')
     try:
-        """while True:
-            #print('new Con')
+        while True:
+            pass
+        """if WebSocketUtility.get_instance().WebSocketDict[websocket]:
+                print('before sending')
+                mm = WebSocketUtility.get_instance().get_stock_list()
+                dict1 = {}
+                dict1["response"] = mm 
+                result = json.dumps(mm, sort_keys=True, indent=4)
+                #print(result)
+                await websocket.send(result) 
+                WebSocketUtility.get_instance().WebSocketDict[websocket] = False"""
+        """    #print('new Con')
             for ws in WebSocketUtility.get_instance().WebSocketDict.keys(): 
                 if WebSocketUtility.get_instance().WebSocketDict[ws]:
                     print('before sending')
@@ -64,7 +74,7 @@ async def handle(websocket, path):
                     await ws.send(result) 
                     WebSocketUtility.get_instance().WebSocketDict[ws] = False
         """
-        pass
+        
     finally:
         print('delete websocket key')
         del WebSocketUtility.get_instance().WebSocketDict[websocket]
