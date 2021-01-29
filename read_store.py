@@ -51,7 +51,7 @@ async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
     print('new Connection')
     try:
-        while True:
+        """while True:
             #print('new Con')
             for ws in WebSocketUtility.get_instance().WebSocketDict.keys(): 
                 if WebSocketUtility.get_instance().WebSocketDict[ws]:
@@ -63,6 +63,8 @@ async def handle(websocket, path):
                     #print(result)
                     await ws.send(result) 
                     WebSocketUtility.get_instance().WebSocketDict[ws] = False
+        """
+        pass
     finally:
         print('delete websocket key')
         del WebSocketUtility.get_instance().WebSocketDict[websocket]
