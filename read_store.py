@@ -65,7 +65,7 @@ async def handle(websocket, path):
     print(str(websocket))
     print('new Connection')
     try:
-        y = threading.Thread(target=send_message, args=(websocket))
+        y = threading.Thread(target=send_message, args=(websocket,))
         y.start()
 
         """if WebSocketUtility.get_instance().WebSocketDict[websocket]:
