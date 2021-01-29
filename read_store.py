@@ -7,7 +7,7 @@ from app.src.data_loader.trade_loader.websocket_utility import *
 # sorted_history.sort(reverse=True)
 
 START_BAZAR_HOUR = 9
-END_BAZAR_HOUR = 22
+END_BAZAR_HOUR = 23
 CRAWLING_HOUR = 3
 cfg = json.load(open("config"))
 TESTING = cfg["TESTING"]
