@@ -46,6 +46,9 @@ def main_process():
             manager.update()
             manager.load()
 
+async def send_message():
+    sleep(5)
+    print('start sending messages to clients')
 
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
@@ -82,6 +85,8 @@ if __name__ == "__main__":
     
     x = threading.Thread(target=main_process)
     x.start()
+    y = threading.Thread(target=send_message)
+    y.start()
     try:
         start_server = websockets.serve(handle, "0.0.0.0", 4001)
         loop = asyncio.get_event_loop()
