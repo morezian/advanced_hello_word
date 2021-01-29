@@ -52,7 +52,7 @@ async def handle(websocket, path):
     print('new Connection')
     try:
         while True:
-            print('new Con')
+            #print('new Con')
             for ws in WebSocketUtility.get_instance().WebSocketDict.keys(): 
                 if WebSocketUtility.get_instance().WebSocketDict[ws]:
                     print('before sending')
