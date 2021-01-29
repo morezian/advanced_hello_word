@@ -62,11 +62,18 @@ async def send_message(ws):
 
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
-    print(str(websocket))
     print('new Connection')
     try:
-        y = threading.Thread(target=send_message, args=(websocket,))
-        y.start()
+        while True:
+            if WebSocketUtility.get_instance().WebSocketDict[websocket]:
+                print('before sending')
+                mm = WebSocketUtility.get_instance().get_stock_list()
+                dict1 = {}
+                dict1["response"] = mm 
+                result = json.dumps(mm, sort_keys=True, indent=4)
+                #print(result)
+                await websocket.send(result) 
+                WebSocketUtility.get_instance().WebSocketDict[websocket] = False
 
         """if WebSocketUtility.get_instance().WebSocketDict[websocket]:
                 print('before sending')
