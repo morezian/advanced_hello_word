@@ -51,8 +51,7 @@ async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
     print('new Connection')
     try:
-        while True:
-            pass
+        pass
         """if WebSocketUtility.get_instance().WebSocketDict[websocket]:
                 print('before sending')
                 mm = WebSocketUtility.get_instance().get_stock_list()
@@ -77,7 +76,7 @@ async def handle(websocket, path):
         
     finally:
         print('delete websocket key')
-        del WebSocketUtility.get_instance().WebSocketDict[websocket]
+        #del WebSocketUtility.get_instance().WebSocketDict[websocket]
 
 if __name__ == "__main__":
     
