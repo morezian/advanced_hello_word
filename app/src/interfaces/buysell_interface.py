@@ -186,15 +186,15 @@ class BuySellStatus:
             "min_day_price": self.min_day_price,
             "max_day_price": self.max_day_price,
             "min_day_touched_price": self.min_day_touched_price,
-            "max_day_touched_price": self.max_day_touched_price
+            "max_day_touched_price": self.max_day_touched_price,
             "get_average_buy_per_code_in_million_base": self.get_average_buy_per_code_in_million_base(),
             "get_human_buy_ratio_power": self.get_human_buy_ratio_power(),
             "trade_price_in_percent": self.trade_price_in_percent,
-            "final_price_in_percent", self,final_price_in_percent,
-            "max_day_price_in_percent", self.max_day_price_in_percent ,
-            "first_trade_in_percent", self.first_trade_in_percent ,
-            "max_day_touced_in_percent", self.max_day_touced_in_percent ,
-            "min_day_touced_in_percent", self.min_day_touced_in_percent
+            "final_price_in_percent": self.final_price_in_percent,
+            "max_day_price_in_percent": self.max_day_price_in_percent,
+            "first_trade_in_percent": self.first_trade_in_percent,
+            "max_day_touced_in_percent": self.max_day_touced_in_percent,
+            "min_day_touced_in_percent": self.min_day_touced_in_percent
         }
         return ans
 
