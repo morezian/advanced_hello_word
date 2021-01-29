@@ -60,7 +60,7 @@ async def handle(websocket, path):
                     dict1 = {}
                     dict1["response"] = mm 
                     result = json.dumps(mm, sort_keys=True, indent=4)
-                    print(result)
+                    #print(result)
                     await ws.send(result) 
                     WebSocketUtility.get_instance().WebSocketDict[ws] = False
     finally:
