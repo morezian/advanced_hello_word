@@ -49,17 +49,23 @@ def main_process():
 
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
-    while True:
-        if WebSocketUtility.get_instance().WebSocketDict[websocket]:
-            print('before sending')
-            mm = WebSocketUtility.get_instance().get_stock_list()
-            dict1 = {}
-            dict1["response"] = mm 
-            result = json.dumps(mm, sort_keys=True, indent=4)
-            print(result)
-            #result = WebSocketUtility.get_instance().get_stock_list()
-            await websocket.send(result)
-            WebSocketUtility.get_instance().WebSocketDict[websocket] = False
+    print('new Connection')
+    try:
+        while True:
+            print('new Con')
+            for ws in WebSocketUtility.get_instance().WebSocketDict.keys(): 
+                if WebSocketUtility.get_instance().WebSocketDict[ws]:
+                    print('before sending')
+                    mm = WebSocketUtility.get_instance().get_stock_list()
+                    dict1 = {}
+                    dict1["response"] = mm 
+                    result = json.dumps(mm, sort_keys=True, indent=4)
+                    print(result)
+                    await ws.send(result) 
+                    WebSocketUtility.get_instance().WebSocketDict[ws] = False
+    finally:
+        print('delete websocket key')
+        del WebSocketUtility.get_instance().WebSocketDict[websocket]
 
 if __name__ == "__main__":
     
