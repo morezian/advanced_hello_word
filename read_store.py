@@ -46,27 +46,28 @@ def main_process():
             manager.update()
             manager.load()
 
-async def send_message():
+async def send_message(ws):
     sleep(5)
     print('start sending messages to clients')
     while True:
-        for ws in WebSocketUtility.get_instance().WebSocketDict: 
-                if WebSocketUtility.get_instance().WebSocketDict[ws]:
-                    print('before sending')
-                    mm = WebSocketUtility.get_instance().get_stock_list()
-                    dict1 = {}
-                    dict1["response"] = mm 
-                    result = json.dumps(mm, sort_keys=True, indent=4)
-                    #print(result)
-                    await ws.send(result) 
-                    WebSocketUtility.get_instance().WebSocketDict[ws] = False
+        if WebSocketUtility.get_instance().WebSocketDict[ws]:
+            print('before sending')
+            mm = WebSocketUtility.get_instance().get_stock_list()
+            dict1 = {}
+            dict1["response"] = mm 
+            result = json.dumps(mm, sort_keys=True, indent=4)
+            #print(result)
+            await ws.send(result) 
+            WebSocketUtility.get_instance().WebSocketDict[ws] = False
 
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
     print(str(websocket))
     print('new Connection')
     try:
-        pass
+        y = threading.Thread(target=send_message, args=(websocket))
+        y.start()
+
         """if WebSocketUtility.get_instance().WebSocketDict[websocket]:
                 print('before sending')
                 mm = WebSocketUtility.get_instance().get_stock_list()
@@ -97,9 +98,7 @@ if __name__ == "__main__":
     
     x = threading.Thread(target=main_process)
     x.start()
-    y = threading.Thread(target=send_message)
-    y.start()
-    #asyncio.run(send_message())
+       #asyncio.run(send_message())
     try:
         start_server = websockets.serve(handle, "0.0.0.0", 4001)
         loop = asyncio.get_event_loop()
