@@ -21,19 +21,6 @@ class AngularLoader():
         res_dict = []
         for stock in stock_list:
             response_stock = stock.to_dict()
-            
-            #response_stock["stock_info"] = 
-            #response_stock["5 minute"] = stock.last_second_buy_sell_status(False, 5 * 60).to_dict()
-            #response_stock["30 seconds"] = stock.last_second_buy_sell_status(False, 30).to_dict()
-            #response_stock["board"] = stock.current_buy_sell_status_dict['all'].to_dict()
-            #get_average_buy_per_code_in_million_base
-            #human_buy_count
-            #trade_price
-            #trade_price_in_percent
-            # type = score_level 
-            #dict1["score"] = stock.score
-            #a = json.dumps(dict1)
-            
             res_dict.append(response_stock)
         #WebSocketUtility.get_instance().set_send_status(True)
         for i in WebSocketUtility.get_instance().WebSocketDict:

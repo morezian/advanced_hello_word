@@ -14,8 +14,17 @@ class Filter:
     def score_level_to_string(self, score_level):
         if score_level == Filter.BAD:
             return "BAD"
-        # TODO
-        
+        if score_level == Filter.WEAK:
+            return "WDEAK"
+        if score_level == Filter.NORMAL:
+            return "NORMAL"
+        if score_level == Filter.GOOD:
+            return "GOOD"
+        if score_level == Filter.STRONG:
+            return "STRONG"
+        if score_level == Filter.SUPER:
+            return "SUPER"
+
     def __get_key (self, is_real):
         if is_real == True:
             return "real"
