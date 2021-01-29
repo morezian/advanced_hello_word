@@ -7,7 +7,7 @@ from app.src.data_loader.trade_loader.websocket_utility import *
 # sorted_history.sort(reverse=True)
 
 START_BAZAR_HOUR = 9
-END_BAZAR_HOUR = 23
+END_BAZAR_HOUR = 24
 CRAWLING_HOUR = 3
 cfg = json.load(open("config"))
 TESTING = cfg["TESTING"]
@@ -49,9 +49,11 @@ def main_process():
 async def send_message():
     sleep(5)
     print('start sending messages to clients')
+    await WebSocketUtility.get_instance().WebSocketDict[0].send('result') 
 
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
+    print(str(websocket))
     print('new Connection')
     try:
         pass
@@ -85,8 +87,9 @@ if __name__ == "__main__":
     
     x = threading.Thread(target=main_process)
     x.start()
-    y = threading.Thread(target=send_message)
-    y.start()
+    #y = threading.Thread(target=send_message)
+    #y.start()
+    #asyncio.run(send_message())
     try:
         start_server = websockets.serve(handle, "0.0.0.0", 4001)
         loop = asyncio.get_event_loop()
