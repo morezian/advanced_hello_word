@@ -67,6 +67,9 @@ async def send_message():
                 await ws.send('[{"sss": "ttt"}]')
                 WebSocketUtility.get_instance().WebSocketDict[ws] = False
 
+async def check_condition():
+    print('sapa')
+
 """async def send_message(ws):
     sleep(5)
     print('start sending messages to clients')
@@ -140,7 +143,8 @@ if __name__ == "__main__":
         start_server = websockets.serve(handle, "0.0.0.0", 4001)
         loop = asyncio.get_event_loop()
         loop.run_until_complete(start_server)
-        
+        print('sss')
+        loop.create_task(check_condition())
         loop.run_forever()
     except Exception as e:
         print(' Exception', str(e))
