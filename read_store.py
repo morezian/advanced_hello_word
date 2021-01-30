@@ -7,7 +7,7 @@ from app.src.data_loader.trade_loader.websocket_utility import *
 # sorted_history.sort(reverse=True)
 
 START_BAZAR_HOUR = 9
-END_BAZAR_HOUR = 13
+END_BAZAR_HOUR = 24
 CRAWLING_HOUR = 3
 cfg = json.load(open("config"))
 TESTING = cfg["TESTING"]
@@ -64,7 +64,9 @@ async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
     print('new Connection')
     try:
-        while True:
+        y = threading.Thread(target=send_message, args=(websocket,))
+        y.start()
+        """while True:
             if WebSocketUtility.get_instance().WebSocketDict[websocket]:
                 print('before sending')
                 mm = WebSocketUtility.get_instance().get_stock_list()
@@ -74,7 +76,7 @@ async def handle(websocket, path):
                 #print(result)
                 await websocket.send(result) 
                 WebSocketUtility.get_instance().WebSocketDict[websocket] = False
-
+"""
         """if WebSocketUtility.get_instance().WebSocketDict[websocket]:
                 print('before sending')
                 mm = WebSocketUtility.get_instance().get_stock_list()
