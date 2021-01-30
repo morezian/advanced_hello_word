@@ -2,6 +2,7 @@ from app.src.stock.stocks_manager import *
 import json
 from datetime import *
 import threading
+import asyncio
 from app.src.data_loader.trade_loader.websocket_utility import *
 #sorted_history = [(y.market_human_buy_power_ratio, x) for x, y in crawler.history.items()]
 # sorted_history.sort(reverse=True)
