@@ -48,7 +48,7 @@ def main_process():
 
 def send_message_thread():
     print('in send_message_thread')
-    asyncio.run(send_message)
+    asyncio.run(send_message())
 
 async def send_message():
     sleep(5)
