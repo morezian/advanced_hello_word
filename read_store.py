@@ -59,12 +59,12 @@ async def send_message():
             #print('There is at least one websocket')
             if WebSocketUtility.get_instance().WebSocketDict[ws]:
                 print(' \n Before sending \n')
-                mm = WebSocketUtility.get_instance().get_stock_list()
+                """mm = WebSocketUtility.get_instance().get_stock_list()
                 dict1 = {}
                 dict1["response"] = mm 
-                result = json.dumps(mm, sort_keys=True, indent=4)
+                result = json.dumps(mm, sort_keys=True, indent=4)"""
                 #print(result)
-                await ws.send(result) 
+                await ws.send('salam salam')
                 WebSocketUtility.get_instance().WebSocketDict[ws] = False
 
 """async def send_message(ws):
