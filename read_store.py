@@ -55,7 +55,8 @@ async def send_message():
     sleep(5)
     print('\n Start sending messages to clients \n')
     while True:
-        for ws in WebSocketUtility.get_instance().WebSocketDict: 
+        for ws in WebSocketUtility.get_instance().WebSocketDict:
+            print('There is at least one websocket')
             if WebSocketUtility.get_instance().WebSocketDict[ws]:
                 print(' \n Before sending \n')
                 mm = WebSocketUtility.get_instance().get_stock_list()
