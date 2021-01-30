@@ -115,4 +115,4 @@ if __name__ == "__main__":
         print('exception')
     finally:
         print('finally')
-        start_server.wait_closed()
+        #start_server.wait_closed()
