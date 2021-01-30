@@ -111,8 +111,8 @@ if __name__ == "__main__":
         loop = asyncio.get_event_loop()
         loop.run_until_complete(start_server)
         loop.run_forever()
-    except:
-        print('exception')
+    except Exception as e:
+        print('exception', str(e))
     finally:
         print('finally')
         #start_server.wait_closed()
