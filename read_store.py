@@ -38,7 +38,7 @@ def main_process():
             pause_until_hour(CRAWLING_HOUR)
         crawler = DataCrawler(crawl_history=crawl_history,
                               realtime=real_time, csv_file=csv_file_path)
-        print("crawler created")
+        print("Crawler created")
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(START_BAZAR_HOUR)
 
@@ -48,16 +48,16 @@ def main_process():
             manager.load()
 
 def send_message_thread():
-    print('in send_message_thread')
+    print('\n In send_message_thread ... \n')
     asyncio.run(send_message())
 
 async def send_message():
     sleep(5)
-    print('start sending messages to clients')
+    print('\n Start sending messages to clients \n')
     while True:
         for ws in WebSocketUtility.get_instance().WebSocketDict: 
             if WebSocketUtility.get_instance().WebSocketDict[ws]:
-                print('before sending')
+                print(' \n Before sending \n')
                 mm = WebSocketUtility.get_instance().get_stock_list()
                 dict1 = {}
                 dict1["response"] = mm 
@@ -82,7 +82,7 @@ async def send_message():
 
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
-    print('new Connection')
+    print('\n New Connection \n')
     try:
         #y = threading.Thread(target=send_message, args=(websocket,))
         #y.start()
@@ -132,12 +132,13 @@ if __name__ == "__main__":
     y.start()
        #asyncio.run(send_message())
     try:
+        print('\n Before handle... \n')
         start_server = websockets.serve(handle, "0.0.0.0", 4001)
         loop = asyncio.get_event_loop()
         loop.run_until_complete(start_server)
         loop.run_forever()
     except Exception as e:
-        print('exception', str(e))
+        print(' Exception', str(e))
     finally:
-        print('finally')
+        print(' Finally')
         #start_server.wait_closed()
