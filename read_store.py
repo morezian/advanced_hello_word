@@ -64,7 +64,7 @@ async def send_message():
                 dict1["response"] = mm 
                 result = json.dumps(mm, sort_keys=True, indent=4)"""
                 #print(result)
-                await ws.send('salam salam')
+                await ws.send('{"sss": "ttt"}')
                 WebSocketUtility.get_instance().WebSocketDict[ws] = False
 
 """async def send_message(ws):
