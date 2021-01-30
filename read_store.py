@@ -56,7 +56,7 @@ async def send_message():
     print('\n Start sending messages to clients \n')
     while True:
         for ws in WebSocketUtility.get_instance().WebSocketDict:
-            print('There is at least one websocket')
+            #print('There is at least one websocket')
             if WebSocketUtility.get_instance().WebSocketDict[ws]:
                 print(' \n Before sending \n')
                 mm = WebSocketUtility.get_instance().get_stock_list()
@@ -82,7 +82,7 @@ async def send_message():
             WebSocketUtility.get_instance().WebSocketDict[ws] = False"""
 
 async def handle(websocket, path):
-    WebSocketUtility.get_instance().WebSocketDict[websocket] = False
+    WebSocketUtility.get_instance().WebSocketDict[websocket] = True # TODO set False
     print('\n New Connection \n')
     try:
         #y = threading.Thread(target=send_message, args=(websocket,))
