@@ -46,7 +46,26 @@ def main_process():
             manager.update()
             manager.load()
 
-async def send_message(ws):
+def send_message_thread():
+    print('in send_message_thread')
+    asyncio.run(send_message)
+
+async def send_message():
+    sleep(5)
+    print('start sending messages to clients')
+    while True:
+        for ws in WebSocketUtility.get_instance().WebSocketDict: 
+            if WebSocketUtility.get_instance().WebSocketDict[ws]:
+                print('before sending')
+                mm = WebSocketUtility.get_instance().get_stock_list()
+                dict1 = {}
+                dict1["response"] = mm 
+                result = json.dumps(mm, sort_keys=True, indent=4)
+                #print(result)
+                await ws.send(result) 
+                WebSocketUtility.get_instance().WebSocketDict[ws] = False
+
+"""async def send_message(ws):
     sleep(5)
     print('start sending messages to clients')
     while True:
@@ -58,14 +77,14 @@ async def send_message(ws):
             result = json.dumps(mm, sort_keys=True, indent=4)
             #print(result)
             await ws.send(result) 
-            WebSocketUtility.get_instance().WebSocketDict[ws] = False
+            WebSocketUtility.get_instance().WebSocketDict[ws] = False"""
 
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = False
     print('new Connection')
     try:
-        y = threading.Thread(target=send_message, args=(websocket,))
-        y.start()
+        #y = threading.Thread(target=send_message, args=(websocket,))
+        #y.start()
         """while True:
             if WebSocketUtility.get_instance().WebSocketDict[websocket]:
                 print('before sending')
@@ -107,6 +126,9 @@ if __name__ == "__main__":
     
     x = threading.Thread(target=main_process)
     x.start()
+    
+    y = threading.Thread(target=send_message_thread)
+    y.start()
        #asyncio.run(send_message())
     try:
         start_server = websockets.serve(handle, "0.0.0.0", 4001)
