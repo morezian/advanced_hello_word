@@ -69,6 +69,9 @@ async def send_message():
 
 async def check_condition():
     print('sapa')
+    #loop = asyncio.get_running_loop()
+    #with concurrent.futures.ThreadPoolExecutor() as pool:
+    #    result = await loop.run_in_executor(pool, )
 
 """async def send_message(ws):
     sleep(5)
@@ -87,8 +90,8 @@ async def check_condition():
 async def handle(websocket, path):
     WebSocketUtility.get_instance().WebSocketDict[websocket] = True # TODO set False
     print('\n New Connection \n')
-    task1 = asyncio.create_task(send_message())
-    await task1
+    #task1 = asyncio.create_task(send_message())
+    #await task1
     try:
         #y = threading.Thread(target=send_message, args=(websocket,))
         #y.start()
@@ -135,8 +138,8 @@ if __name__ == "__main__":
     x = threading.Thread(target=main_process)
     x.start()
     
-    #y = threading.Thread(target=send_message_thread, ())
-    #y.start()
+    y = threading.Thread(target=send_message_thread, ())
+    y.start()
        #asyncio.run(send_message())
     try:
         print('\n Before handle... \n')
@@ -144,7 +147,7 @@ if __name__ == "__main__":
         loop = asyncio.get_event_loop()
         loop.run_until_complete(start_server)
         print('sss')
-        loop.create_task(check_condition())
+        #loop.create_task(check_condition())
         loop.run_forever()
     except Exception as e:
         print(' Exception', str(e))
