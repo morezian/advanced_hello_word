@@ -47,9 +47,9 @@ def main_process():
             manager.update()
             manager.load()
 
-def send_message_thread(loop, start_server):
+def send_message_thread(loop):
     print('\n In send_message_thread ... \n')
-    loop.run_until_complete(start_server)
+    asyncio.set_event_loop(loop)
     asyncio.run(send_message())
 
 async def send_message():
@@ -146,7 +146,9 @@ if __name__ == "__main__":
         start_server = websockets.serve(handle, "0.0.0.0", 4001)
         
         loop = asyncio.get_event_loop()
-        y = threading.Thread(target=send_message_thread, args=(loop, start_server))
+        
+        loop.run_until_complete(start_server)
+        y = threading.Thread(target=send_message_thread, args=(loop,))
         y.start()
         print('sss')
         #loop.create_task(check_condition())
