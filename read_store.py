@@ -138,7 +138,7 @@ if __name__ == "__main__":
     x = threading.Thread(target=main_process)
     x.start()
     
-    y = threading.Thread(target=send_message_thread, ())
+    y = threading.Thread(target=send_message_thread)
     y.start()
        #asyncio.run(send_message())
     try:
