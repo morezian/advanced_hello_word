@@ -37,14 +37,14 @@ class AngularLoader():
         #WebSocketUtility.get_instance().set_stock_list(res_dict)
         
         with self.connection:
-            with self.connection.cursor() as cursor:
+            """with self.connection.cursor() as cursor:
                 # Create a new record
                 sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
                 cursor.execute(sql, ('webmaster@python.org', 'very-secret'))
 
                 # connection is not autocommit by default. So you must commit to save
                 # your changes.
-                self.connection.commit()
+                self.connection.commit()"""
                 
             with self.connection.cursor() as cursor:
                 # Read a single record
