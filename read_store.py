@@ -31,8 +31,11 @@ def pause_until_hour(hour):
             break
 
 
-def main_process():
-    sleep(5)
+
+if __name__ == "__main__":
+    
+   # x = threading.Thread(target=main_process)
+    #x.start()
     while True:
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(CRAWLING_HOUR)
@@ -46,115 +49,3 @@ def main_process():
         while (datetime.now().hour != END_BAZAR_HOUR):
             manager.update()
             manager.load()
-
-def send_message_thread(loop):
-    print('\n In send_message_thread ... \n')
-    asyncio.set_event_loop(loop)
-    asyncio.run(send_message())
-
-async def send_message():
-    sleep(5)
-    print('\n Start sending messages to clients \n')
-    while True:
-        for ws in WebSocketUtility.get_instance().WebSocketDict:
-            #print('There is at least one websocket')
-            if WebSocketUtility.get_instance().WebSocketDict[ws]:
-                print(' \n Before sending \n')
-                """mm = WebSocketUtility.get_instance().get_stock_list()
-                dict1 = {}
-                dict1["response"] = mm 
-                result = json.dumps(mm, sort_keys=True, indent=4)"""
-                #print(result)
-                await ws.send('[{"sss": "ttt"}]')
-                WebSocketUtility.get_instance().WebSocketDict[ws] = False
-
-async def check_condition():
-    print('sapa')
-    #loop = asyncio.get_running_loop()
-    #with concurrent.futures.ThreadPoolExecutor() as pool:
-    #    result = await loop.run_in_executor(pool, )
-
-"""async def send_message(ws):
-    sleep(5)
-    print('start sending messages to clients')
-    while True:
-        if WebSocketUtility.get_instance().WebSocketDict[ws]:
-            print('before sending')
-            mm = WebSocketUtility.get_instance().get_stock_list()
-            dict1 = {}
-            dict1["response"] = mm 
-            result = json.dumps(mm, sort_keys=True, indent=4)
-            #print(result)
-            await ws.send(result) 
-            WebSocketUtility.get_instance().WebSocketDict[ws] = False"""
-
-async def handle(websocket, path):
-    WebSocketUtility.get_instance().WebSocketDict[websocket] = True # TODO set False
-    print('\n New Connection \n')
-    #task1 = asyncio.create_task(send_message())
-    #await task1
-    try:
-        #y = threading.Thread(target=send_message, args=(websocket,))
-        #y.start()
-        pass
-        """while True:
-            if WebSocketUtility.get_instance().WebSocketDict[websocket]:
-                print('before sending')
-                mm = WebSocketUtility.get_instance().get_stock_list()
-                dict1 = {}
-                dict1["response"] = mm 
-                result = json.dumps(mm, sort_keys=True, indent=4)
-                #print(result)
-                await websocket.send(result) 
-                WebSocketUtility.get_instance().WebSocketDict[websocket] = False
-"""
-        """if WebSocketUtility.get_instance().WebSocketDict[websocket]:
-                print('before sending')
-                mm = WebSocketUtility.get_instance().get_stock_list()
-                dict1 = {}
-                dict1["response"] = mm 
-                result = json.dumps(mm, sort_keys=True, indent=4)
-                #print(result)
-                await websocket.send(result) 
-                WebSocketUtility.get_instance().WebSocketDict[websocket] = False"""
-        """    #print('new Con')
-            for ws in WebSocketUtility.get_instance().WebSocketDict.keys(): 
-                if WebSocketUtility.get_instance().WebSocketDict[ws]:
-                    print('before sending')
-                    mm = WebSocketUtility.get_instance().get_stock_list()
-                    dict1 = {}
-                    dict1["response"] = mm 
-                    result = json.dumps(mm, sort_keys=True, indent=4)
-                    #print(result)
-                    await ws.send(result) 
-                    WebSocketUtility.get_instance().WebSocketDict[ws] = False
-        """
-        
-    finally:
-        print('delete websocket key')
-        #del WebSocketUtility.get_instance().WebSocketDict[websocket]
-
-if __name__ == "__main__":
-    
-    x = threading.Thread(target=main_process)
-    x.start()
-    
-    
-       #asyncio.run(send_message())
-    try:
-        print('\n Before handle... \n')
-        start_server = websockets.serve(handle, "0.0.0.0", 4001)
-        
-        loop = asyncio.get_event_loop()
-        
-        loop.run_until_complete(start_server)
-        y = threading.Thread(target=send_message_thread, args=(loop,))
-        y.start()
-        print('sss')
-        #loop.create_task(check_condition())
-        loop.run_forever()
-    except Exception as e:
-        print(' Exception', str(e))
-    finally:
-        print(' Finally')
-        #start_server.wait_closed()
