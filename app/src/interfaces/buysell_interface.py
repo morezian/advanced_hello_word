@@ -193,8 +193,8 @@ class BuySellStatus:
             "final_price_in_percent": self.final_price_in_percent,
             "max_day_price_in_percent": self.max_day_price_in_percent,
             "first_trade_in_percent": self.first_trade_in_percent,
-            "max_day_touced_in_percent": self.max_day_touced_in_percent,
-            "min_day_touced_in_percent": self.min_day_touced_in_percent
+            "max_day_touched_in_percent": self.max_day_touced_in_percent,
+            "min_day_touched_in_percent": self.min_day_touced_in_percent
         }
         return ans
 

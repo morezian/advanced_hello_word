@@ -4,6 +4,7 @@ import asyncio
 import websockets
 import threading
 import pymysql
+from datetime import datetime
 from app.src.data_loader.trade_loader.websocket_utility import *
 
 
@@ -18,23 +19,73 @@ class AngularLoader():
     def get_signal_count(self):
         return self.__signal_count
     
+    def __to_string_date(self, ts):
+        return datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    
     def __insert_into_db(self, connection, stock_dict):
         #with self.connection:
         with connection.cursor() as cursor:
             # Create a new record
-            sql = "INSERT INTO `daily_trades` (`name`) VALUES (%s)"
+            sql = """INSERT INTO daily_trades ( latinName, name, score,
+            score_level,
+            5m_human_buy_vol,
+            5m_human_buy_count,
+            5m_human_sell_vol,
+            5m_human_sell_count,
+            5m_civil_buy_vol,
+            5m_civil_buy_count,
+            5m_civil_sell_vol,
+            5m_civil_sell_count,
+            5m_trade_price,
+            5m_vol,
+            5m_first_trade,
+            5m_final_price,
+            5m_start_time_stamp,
+            5m_end_time_stamp,
+            5m_min_day_price,
+            5m_max_day_price,
+            5m_min_day_touched_price,
+            5m_max_day_touched_price,
+            5m_get_average_buy_per_code_in_million_base,
+            5m_get_human_buy_ratio_power,
+            5m_trade_price_in_percent,
+            5m_final_price_in_percent,
+            5m_max_day_price_in_percent,
+            5m_first_trade_in_percent,
+            5m_max_day_touched_in_percent,
+            5m_min_day_touched_in_percent) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
             print('name ', stock_dict["name"])
-            cursor.execute(sql, (stock_dict["name"]))
-
+            cursor.execute(sql, (stock_dict["latin_name"], stock_dict["name"], stock_dict["score"], 
+                                 stock_dict["score_level"],
+                                 stock_dict["5m_buy_sell_status"]["human_buy_vol"],
+                                 stock_dict["5m_buy_sell_status"]["human_buy_count"],
+                                 stock_dict["5m_buy_sell_status"]["human_sell_vol"],
+                                 stock_dict["5m_buy_sell_status"]["human_sell_count"],
+                                 stock_dict["5m_buy_sell_status"]["civil_buy_vol"],
+                                 stock_dict["5m_buy_sell_status"]["civil_buy_count"],
+                                 stock_dict["5m_buy_sell_status"]["civil_sell_vol"],
+                                 stock_dict["5m_buy_sell_status"]["civil_sell_count"],
+                                 stock_dict["5m_buy_sell_status"]["trade_price"],
+                                 int(stock_dict["5m_buy_sell_status"]["vol"]),stock_dict["5m_buy_sell_status"]["first_trade"],
+                                 stock_dict["5m_buy_sell_status"]["final_price"],
+                                 self.__to_string_date(stock_dict["5m_buy_sell_status"]["start_time_stamp"]),stock_dict["5m_buy_sell_status"]["end_time_stamp"],
+                                 stock_dict["5m_buy_sell_status"]["min_day_price"],stock_dict["5m_buy_sell_status"]["max_day_price"],
+                                 stock_dict["5m_buy_sell_status"]["min_day_touched_price"],stock_dict["5m_buy_sell_status"]["max_day_touched_price"],
+                                 stock_dict["5m_buy_sell_status"]["get_average_buy_per_code_in_million_base"],
+                                 stock_dict["5m_buy_sell_status"]["get_human_buy_ratio_power"],stock_dict["5m_buy_sell_status"]["trade_price_in_percent"],
+                                 stock_dict["5m_buy_sell_status"]["final_price_in_percent"],stock_dict["5m_buy_sell_status"]["max_day_price_in_percent"],
+                                 stock_dict["5m_buy_sell_status"]["first_trade_in_percent"],stock_dict["5m_buy_sell_status"]["max_day_touched_in_percent"],
+                                 stock_dict["5m_buy_sell_status"]["min_day_touched_in_percent"]))
             # connection is not autocommit by default. So you must commit to save
             # your changes.
+            print("inserted")
             connection.commit()
 
     def load_stock_list(self, stock_list):
         print(stock_list)
         self.__signal_count += len(stock_list)
         res_dict = []
-        connection = pymysql.connect(host='localhost', #79.175.176.165
+        connection = pymysql.connect(host='79.175.176.165', #79.175.176.165
                              user='admin',
                              password='vwB75K',
                              database='trade_db',
