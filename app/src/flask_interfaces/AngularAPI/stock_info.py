@@ -11,3 +11,6 @@ class StockInfo(Resource):
     def post(self):
         start_time = time()
         input = json.loads(request.data)
+        start_timestamp = input.get ("StartTimeStamp")
+        count = input.get ("Count")
+        signal_type_list = input.get("SignalTypeList")

@@ -15,15 +15,15 @@ class AngularLoader():
         self.__signal_type = signal_type
         self.__signal_count = 0
         print('Server Started')
-        
+
     def get_signal_count(self):
         return self.__signal_count
-    
+
     def __to_string_date(self, ts):
         return datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    
+
     def __insert_into_db(self, connection, stock_dict):
-        #with self.connection:
+        # with self.connection:
         with connection.cursor() as cursor:
             # Create a new record
             sql = """INSERT INTO daily_trades ( latinName, name, score,
@@ -107,9 +107,9 @@ class AngularLoader():
             board_max_day_touched_in_percent,
             board_min_day_touched_in_percent
             ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-            
+
             print('name ', stock_dict["name"])
-            cursor.execute(sql, (stock_dict["latin_name"], stock_dict["name"], stock_dict["score"], 
+            cursor.execute(sql, (stock_dict["latin_name"], stock_dict["name"], stock_dict["score"],
                                  stock_dict["score_level"],
                                  stock_dict["5m_buy_sell_status"]["human_buy_vol"],
                                  stock_dict["5m_buy_sell_status"]["human_buy_count"],
@@ -120,48 +120,68 @@ class AngularLoader():
                                  stock_dict["5m_buy_sell_status"]["civil_sell_vol"],
                                  stock_dict["5m_buy_sell_status"]["civil_sell_count"],
                                  stock_dict["5m_buy_sell_status"]["trade_price"],
-                                 int(stock_dict["5m_buy_sell_status"]["vol"]),stock_dict["5m_buy_sell_status"]["first_trade"],
+                                 int(stock_dict["5m_buy_sell_status"]["vol"]
+                                     ), stock_dict["5m_buy_sell_status"]["first_trade"],
                                  stock_dict["5m_buy_sell_status"]["final_price"],
-                                 self.__to_string_date(stock_dict["5m_buy_sell_status"]["start_time_stamp"]),
-                                 self.__to_string_date(stock_dict["5m_buy_sell_status"]["end_time_stamp"]),
-                                 stock_dict["5m_buy_sell_status"]["min_day_price"],stock_dict["5m_buy_sell_status"]["max_day_price"],
-                                 stock_dict["5m_buy_sell_status"]["min_day_touched_price"],stock_dict["5m_buy_sell_status"]["max_day_touched_price"],
+                                 self.__to_string_date(
+                                     stock_dict["5m_buy_sell_status"]["start_time_stamp"]),
+                                 self.__to_string_date(
+                                     stock_dict["5m_buy_sell_status"]["end_time_stamp"]),
+                                 stock_dict["5m_buy_sell_status"]["min_day_price"], stock_dict["5m_buy_sell_status"]["max_day_price"],
+                                 stock_dict["5m_buy_sell_status"]["min_day_touched_price"], stock_dict[
+                                     "5m_buy_sell_status"]["max_day_touched_price"],
                                  stock_dict["5m_buy_sell_status"]["get_average_buy_per_code_in_million_base"],
-                                 stock_dict["5m_buy_sell_status"]["get_human_buy_ratio_power"],stock_dict["5m_buy_sell_status"]["trade_price_in_percent"],
-                                 stock_dict["5m_buy_sell_status"]["final_price_in_percent"],stock_dict["5m_buy_sell_status"]["max_day_price_in_percent"],
-                                 stock_dict["5m_buy_sell_status"]["first_trade_in_percent"],stock_dict["5m_buy_sell_status"]["max_day_touched_in_percent"],
+                                 stock_dict["5m_buy_sell_status"]["get_human_buy_ratio_power"], stock_dict[
+                                     "5m_buy_sell_status"]["trade_price_in_percent"],
+                                 stock_dict["5m_buy_sell_status"]["final_price_in_percent"], stock_dict[
+                                     "5m_buy_sell_status"]["max_day_price_in_percent"],
+                                 stock_dict["5m_buy_sell_status"]["first_trade_in_percent"], stock_dict[
+                                     "5m_buy_sell_status"]["max_day_touched_in_percent"],
                                  stock_dict["5m_buy_sell_status"]["min_day_touched_in_percent"],
                                  stock_dict["30s_buy_sell_status"]["human_buy_vol"],
-                                 stock_dict["30s_buy_sell_status"]["human_buy_count"],stock_dict["30s_buy_sell_status"]["human_sell_vol"],
-                                 stock_dict["30s_buy_sell_status"]["human_sell_count"],stock_dict["30s_buy_sell_status"]["civil_buy_vol"],
-                                 stock_dict["30s_buy_sell_status"]["civil_buy_count"],stock_dict["30s_buy_sell_status"]["civil_sell_vol"],
-                                 stock_dict["30s_buy_sell_status"]["civil_sell_count"],stock_dict["30s_buy_sell_status"]["trade_price"],
-                                 int(stock_dict["30s_buy_sell_status"]["vol"]),stock_dict["30s_buy_sell_status"]["first_trade"],
+                                 stock_dict["30s_buy_sell_status"]["human_buy_count"], stock_dict["30s_buy_sell_status"]["human_sell_vol"],
+                                 stock_dict["30s_buy_sell_status"]["human_sell_count"], stock_dict["30s_buy_sell_status"]["civil_buy_vol"],
+                                 stock_dict["30s_buy_sell_status"]["civil_buy_count"], stock_dict["30s_buy_sell_status"]["civil_sell_vol"],
+                                 stock_dict["30s_buy_sell_status"]["civil_sell_count"], stock_dict["30s_buy_sell_status"]["trade_price"],
+                                 int(stock_dict["30s_buy_sell_status"]["vol"]
+                                     ), stock_dict["30s_buy_sell_status"]["first_trade"],
                                  stock_dict["30s_buy_sell_status"]["final_price"],
-                                 self.__to_string_date(stock_dict["30s_buy_sell_status"]["start_time_stamp"]),
-                                 self.__to_string_date(stock_dict["30s_buy_sell_status"]["end_time_stamp"]),
+                                 self.__to_string_date(
+                                     stock_dict["30s_buy_sell_status"]["start_time_stamp"]),
+                                 self.__to_string_date(
+                                     stock_dict["30s_buy_sell_status"]["end_time_stamp"]),
                                  stock_dict["30s_buy_sell_status"]["min_day_price"],
-                                 stock_dict["30s_buy_sell_status"]["max_day_price"],stock_dict["30s_buy_sell_status"]["min_day_touched_price"],
+                                 stock_dict["30s_buy_sell_status"]["max_day_price"], stock_dict["30s_buy_sell_status"]["min_day_touched_price"],
                                  stock_dict["30s_buy_sell_status"]["max_day_touched_price"],
                                  stock_dict["30s_buy_sell_status"]["get_average_buy_per_code_in_million_base"],
                                  stock_dict["30s_buy_sell_status"]["get_human_buy_ratio_power"],
-                                 stock_dict["30s_buy_sell_status"]["trade_price_in_percent"],stock_dict["30s_buy_sell_status"]["final_price_in_percent"],
-                                 stock_dict["30s_buy_sell_status"]["max_day_price_in_percent"],stock_dict["30s_buy_sell_status"]["first_trade_in_percent"],
-                                 stock_dict["30s_buy_sell_status"]["max_day_touched_in_percent"],stock_dict["30s_buy_sell_status"]["min_day_touched_in_percent"],
-                                 stock_dict["board_buy_sell_status"]["human_buy_vol"],stock_dict["board_buy_sell_status"]["human_buy_count"],
-                                 stock_dict["board_buy_sell_status"]["human_sell_vol"],stock_dict["board_buy_sell_status"]["human_sell_count"],
-                                 stock_dict["board_buy_sell_status"]["civil_buy_vol"],stock_dict["board_buy_sell_status"]["civil_buy_count"],
-                                 stock_dict["board_buy_sell_status"]["civil_sell_vol"],stock_dict["board_buy_sell_status"]["civil_sell_count"],
-                                 stock_dict["board_buy_sell_status"]["trade_price"],int(stock_dict["board_buy_sell_status"]["vol"]),
-                                 stock_dict["board_buy_sell_status"]["first_trade"],stock_dict["board_buy_sell_status"]["final_price"],
-                                 self.__to_string_date(stock_dict["board_buy_sell_status"]["start_time_stamp"]),
-                                 self.__to_string_date(stock_dict["board_buy_sell_status"]["end_time_stamp"]),
-                                 stock_dict["board_buy_sell_status"]["min_day_price"],stock_dict["board_buy_sell_status"]["max_day_price"],
-                                 stock_dict["board_buy_sell_status"]["min_day_touched_price"],stock_dict["board_buy_sell_status"]["max_day_touched_price"],
+                                 stock_dict["30s_buy_sell_status"]["trade_price_in_percent"], stock_dict[
+                                     "30s_buy_sell_status"]["final_price_in_percent"],
+                                 stock_dict["30s_buy_sell_status"]["max_day_price_in_percent"], stock_dict[
+                                     "30s_buy_sell_status"]["first_trade_in_percent"],
+                                 stock_dict["30s_buy_sell_status"]["max_day_touched_in_percent"], stock_dict[
+                                     "30s_buy_sell_status"]["min_day_touched_in_percent"],
+                                 stock_dict["board_buy_sell_status"]["human_buy_vol"], stock_dict["board_buy_sell_status"]["human_buy_count"],
+                                 stock_dict["board_buy_sell_status"]["human_sell_vol"], stock_dict["board_buy_sell_status"]["human_sell_count"],
+                                 stock_dict["board_buy_sell_status"]["civil_buy_vol"], stock_dict["board_buy_sell_status"]["civil_buy_count"],
+                                 stock_dict["board_buy_sell_status"]["civil_sell_vol"], stock_dict["board_buy_sell_status"]["civil_sell_count"],
+                                 stock_dict["board_buy_sell_status"]["trade_price"], int(
+                                     stock_dict["board_buy_sell_status"]["vol"]),
+                                 stock_dict["board_buy_sell_status"]["first_trade"], stock_dict["board_buy_sell_status"]["final_price"],
+                                 self.__to_string_date(
+                                     stock_dict["board_buy_sell_status"]["start_time_stamp"]),
+                                 self.__to_string_date(
+                                     stock_dict["board_buy_sell_status"]["end_time_stamp"]),
+                                 stock_dict["board_buy_sell_status"]["min_day_price"], stock_dict["board_buy_sell_status"]["max_day_price"],
+                                 stock_dict["board_buy_sell_status"]["min_day_touched_price"], stock_dict[
+                                     "board_buy_sell_status"]["max_day_touched_price"],
                                  stock_dict["board_buy_sell_status"]["get_average_buy_per_code_in_million_base"],
-                                 stock_dict["board_buy_sell_status"]["get_human_buy_ratio_power"],stock_dict["board_buy_sell_status"]["trade_price_in_percent"],
-                                 stock_dict["board_buy_sell_status"]["final_price_in_percent"],stock_dict["board_buy_sell_status"]["max_day_price_in_percent"],
-                                 stock_dict["board_buy_sell_status"]["first_trade_in_percent"],stock_dict["board_buy_sell_status"]["max_day_touched_in_percent"],
+                                 stock_dict["board_buy_sell_status"]["get_human_buy_ratio_power"], stock_dict[
+                                     "board_buy_sell_status"]["trade_price_in_percent"],
+                                 stock_dict["board_buy_sell_status"]["final_price_in_percent"], stock_dict[
+                                     "board_buy_sell_status"]["max_day_price_in_percent"],
+                                 stock_dict["board_buy_sell_status"]["first_trade_in_percent"], stock_dict[
+                                     "board_buy_sell_status"]["max_day_touched_in_percent"],
                                  stock_dict["board_buy_sell_status"]["min_day_touched_in_percent"]))
             # connection is not autocommit by default. So you must commit to save
             # your changes.
@@ -172,23 +192,24 @@ class AngularLoader():
         print(stock_list)
         self.__signal_count += len(stock_list)
         res_dict = []
-        connection = pymysql.connect(host='79.175.176.165', #79.175.176.165
-                             user='admin',
-                             password='vwB75K',
-                             database='trade_db',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+        connection = pymysql.connect(host='79.175.176.165',  # 79.175.176.165
+                                     user='admin',
+                                     password='vwB75K',
+                                     database='trade_db',
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         with connection:
             for stock in stock_list:
-                response_stock = {**stock.to_dict(), **{"score_level": self.__signal_type}}
+                response_stock = {
+                    **stock.to_dict(), **{"score_level": self.__signal_type}}
                 self.__insert_into_db(connection, response_stock)
                 res_dict.append(response_stock)
-        #WebSocketUtility.get_instance().set_send_status(True)
-        #for i in WebSocketUtility.get_instance().WebSocketDict:
+        # WebSocketUtility.get_instance().set_send_status(True)
+        # for i in WebSocketUtility.get_instance().WebSocketDict:
         #    #i.send(json.dumps(res_dict, sort_keys=True, indent=4))
         #    WebSocketUtility.get_instance().WebSocketDict[i] = True
-        #WebSocketUtility.get_instance().set_stock_list(res_dict)
-        
+        # WebSocketUtility.get_instance().set_stock_list(res_dict)
+
         """ with self.connection.cursor() as cursor:
                 # Read a single record
                 sql = "SELECT version()"
