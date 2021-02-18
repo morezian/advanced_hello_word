@@ -136,4 +136,4 @@ class StockInfo(Resource):
                     res_dict.append(ans)
                 #print(result)
         #return json.dumps(res_dict, default = self.myconverter)
-        return { "resp" : res_dict}
+        return res_dict
