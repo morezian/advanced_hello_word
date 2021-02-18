@@ -18,6 +18,7 @@ class StockInfo(Resource):
         start_time = time()
         input = json.loads(request.data)
         start_timestamp = input.get("StartTimeStamp")
+        end_timestamp = input.get("EndTimeStamp")
         count = input.get("Count")
         signal_type_list = input.get("SignalTypeList")
         connection = pymysql.connect(host='79.175.176.165',  # 79.175.176.165
@@ -29,8 +30,8 @@ class StockInfo(Resource):
         with connection:
             with connection.cursor() as cursor:
                 # Read a single record
-                sql = "SELECT * FROM `daily_trades` WHERE `score_level`=%s"
-                cursor.execute(sql, (signal_type_list,))
+                sql = "SELECT * FROM `daily_trades` WHERE `score_level` in %s and `created_at` >= %s and `created_at` < %s"
+                cursor.execute(sql, (signal_type_list, start_timestamp, end_timestamp))
                 result = cursor.fetchall()
                 #ans = {
                 #    "name": result["name"]
@@ -41,6 +42,7 @@ class StockInfo(Resource):
                         "name": r["name"],
                         "latin_name": r["latinName"],
                         "score": r["score"],
+                        "score_level" : r["score_level"],
                         "5m_buy_sell_status": {
                             "al": r["5m_human_buy_vol"]
                         },
@@ -49,9 +51,10 @@ class StockInfo(Resource):
                         },
                         "board_buy_sell_status": {
                             "al": r["board_human_buy_vol"]
-                        }
+                        },
+                        "created_at": str(r["created_at"])
                     }
                     res_dict.append(ans)
                 #print(result)
-        # return json.dumps(result, default = self.myconverter)
+        #return json.dumps(res_dict, default = self.myconverter)
         return res_dict
