@@ -5,7 +5,8 @@ from app.src.flask_interfaces.AngularAPI.stock_info import *
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 api = Api(app)
 
 #api.add_resource(StatusInterface, '/status')
