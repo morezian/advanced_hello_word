@@ -7,8 +7,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 #cors = CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
 
-
-cors = CORS(app, resources={r"/*": {"origins":["http://localhost:4200"]}},supports_credentials=True)
+cors = CORS(app, resources={r"*": {"origins": "*"}})
+#cors = CORS(app, resources={r"/*": {"origins":["http://localhost:4200"]}},supports_credentials=True)
 
 api = Api(app)
 
