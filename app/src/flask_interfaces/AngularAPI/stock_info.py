@@ -14,6 +14,7 @@ class StockInfo(Resource):
         if isinstance(o, datetime):
             return o.__str__()
 
+    @cross_origin()
     def post(self):
         start_time = time()
         input = json.loads(request.data)
