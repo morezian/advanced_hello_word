@@ -6,7 +6,7 @@ from app.src.data_reader.crawler import *
 from app.src.data_loader.status_loader.telegram_loader import *
 from datetime import timedelta
 import pymysql
-
+from flask_cors import CORS, cross_origin
 
 class StockInfo(Resource):
 
