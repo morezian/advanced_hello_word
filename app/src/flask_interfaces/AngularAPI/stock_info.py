@@ -31,8 +31,12 @@ class StockInfo(Resource):
         with connection:
             with connection.cursor() as cursor:
                 # Read a single record
-                sql = "SELECT * FROM `daily_trades` WHERE `score_level` in %s and `created_at` >= %s and `created_at` < %s limit %s"
-                cursor.execute(sql, (signal_type_list, start_timestamp, end_timestamp, rowCount))
+                if rowCount == -1:
+                    sql = "SELECT * FROM `daily_trades` WHERE `score_level` in %s and `created_at` >= %s and `created_at` < %s"
+                    cursor.execute(sql, (signal_type_list, start_timestamp, end_timestamp))
+                else:
+                    sql = "SELECT * FROM `daily_trades` WHERE `score_level` in %s and `created_at` >= %s and `created_at` < %s limit %s"
+                    cursor.execute(sql, (signal_type_list, start_timestamp, end_timestamp, rowCount))
                 result = cursor.fetchall()
                 #ans = {
                 #    "name": result["name"]
