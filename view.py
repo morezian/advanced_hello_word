@@ -5,7 +5,7 @@ from app.src.flask_interfaces.AngularAPI.stock_info import *
 from flask_cors import CORS
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "localhost:4200"}})
+cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0:4200"}})
 
 api = Api(app)
 
