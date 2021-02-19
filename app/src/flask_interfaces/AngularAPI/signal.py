@@ -7,7 +7,7 @@ from app.src.data_loader.status_loader.telegram_loader import *
 from datetime import timedelta
 import pymysql
 
-class StockInfo(Resource):
+class Signal(Resource):
 
     def myconverter(self, o):
         if isinstance(o, datetime):
