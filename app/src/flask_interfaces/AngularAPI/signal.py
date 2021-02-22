@@ -1,6 +1,7 @@
 import json
 import flask
 from flask_restful import Resource, Api, request
+from flask import Response
 from app.src.stock.stocks_manager import *
 from app.src.data_reader.crawler import *
 from app.src.data_loader.status_loader.telegram_loader import *
@@ -136,4 +137,11 @@ class Signal(Resource):
                     res_dict.append(ans)
                 #print(result)
         #return json.dumps(res_dict, default = self.myconverter)
-        return res_dict
+        #flask.return
+        #return Response(res_dict, mimetype='text/json')
+        result = { "result" : res_dict }
+        response = flask.make_response(result)
+        response.headers['Content-Type'] = 'application/json'
+        #response.headers['AAA'] = 'aaaa'
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
