@@ -138,10 +138,11 @@ class Signal(Resource):
                 #print(result)
         #return json.dumps(res_dict, default = self.myconverter)
         #flask.return
+        return res_dict
         #return Response(res_dict, mimetype='text/json')
-        result = { "result" : res_dict }
+        """result = { "result" : res_dict }
         response = flask.make_response(result)
         response.headers['Content-Type'] = 'application/json'
         #response.headers['AAA'] = 'aaaa'
         response.headers["Access-Control-Allow-Origin"] = "*"
-        return response
+        return response"""
