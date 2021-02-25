@@ -9,7 +9,7 @@ from app.src.utils.time_helpers import get_today_market_opening_time
 from app.src.interfaces.symbol import Symbol
 from app.src.data_reader.csv_reader import CsvReader
 from app.src.data_reader.history_crawler import HistoryCrawler
-
+from app.src.data_loader.history_loader.database_loader import HistoryMysqlLoader
 session = FuturesSession()
 names = {'UNK':  3,
          'first_price': 4 ,
@@ -47,6 +47,8 @@ class DataCrawler:
         if crawl_history == True:
             data = self.__get_realtime_date()
             history_data = HistoryCrawler(data).get_stock_name2history()
+            loader = HistoryMysqlLoader(host="168.119.202.175",port=3306,username='admin',password='5}w:3M6%Wtv5sDe(',database='stock')
+            loader.insert_stock_history_list_to_db(history_data)
         self.realtime = realtime
         if not self.realtime :
             self.csv_generator = CsvReader(file=csv_file,history=self.history,stock_name=stock_name)

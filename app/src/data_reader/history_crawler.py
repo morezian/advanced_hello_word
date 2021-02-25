@@ -43,6 +43,7 @@ class HistoryCrawler:
                 history = StockHistory(name=name, latin_name=latin_name, buy_sell_status_list=buy_sell_status_list)
                 history.market_cap = extracted_data['shares_count'] * buy_sell_status_list[0].final_price
                 history.shares_count = extracted_data['shares_count']
+
         return history
 
     def __get_list_of_past_days(self,num_days: int):
@@ -54,7 +55,7 @@ class HistoryCrawler:
     def __crawl_signle_history_data(self, url):
         global xxx
         while True:
-            history_data = session.get(url,timeout = 10)
+            history_data = session.get(url,timeout = 20)
             if history_data.status_code == 200: break
         print (f"feteched {xxx}")
         xxx += 1

@@ -174,3 +174,6 @@ class BuySellStatus:
         if self.civil_sell_vol + self.civil_buy_vol > 0:
             return False
         return True
+
+    def __getitem__(self, name):
+        return getattr(self, name)
