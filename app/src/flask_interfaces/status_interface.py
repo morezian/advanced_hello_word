@@ -16,7 +16,7 @@ def get_date_list(time_list):
 
 def get_stock_manager (crawl_history):
     crawler = DataCrawler(crawl_history=crawl_history,realtime=True)
-    stock_manager = StocksManager(crawler)
+    stock_manager = StocksManager(crawler, LoadData())
     stock_manager.update()
     return stock_manager
 

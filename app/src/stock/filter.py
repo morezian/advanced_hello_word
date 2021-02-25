@@ -1,4 +1,3 @@
-from .stock import *
 from datetime import datetime
 class Filter:
     BAD = -20
@@ -7,8 +6,9 @@ class Filter:
     GOOD = 2
     STRONG = 5
     SUPER = 8
-    def __init__(self, stock:Stock):
-        self.__stock = stock
+    def __init__(self, current_buy_sell_status_dict, current_interval_buy_sell_status_dict):
+        self.__current_buy_sell_status_dict = current_buy_sell_status_dict
+        self.__current_interval_buy_sell_status_dict = current_interval_buy_sell_status_dict
         self.__filter_name = [Filter.BAD, Filter.WEAK, Filter.NORMAL, Filter.GOOD, Filter.STRONG, Filter.SUPER]
 
     def __get_key (self, is_real):
@@ -19,9 +19,9 @@ class Filter:
     def __get_buy_sell_status (self, is_real, is_interval):
         key = self.__get_key(is_real)
         if is_interval == True:
-            buy_sell_status = self.__stock.current_interval_buy_sell_status_dict[key][-1]  # 5mins
+            buy_sell_status = self.__current_interval_buy_sell_status_dict[key][-1]  # 5mins
         else:
-            buy_sell_status = self.__stock.current_buy_sell_status_dict[key]
+            buy_sell_status = self.__current_buy_sell_status_dict[key]
         return buy_sell_status
 
 
@@ -69,7 +69,7 @@ class Filter:
         count = buy_sell_status.human_buy_count
         time_duration_second = buy_sell_status.end_time_stamp - buy_sell_status.start_time_stamp
         time_duration_minute = time_duration_second // 60
-        print (is_interval, time_duration_minute)
+        #print (is_interval, time_duration_minute)
         if time_duration_minute <= 10:
             cmp_list = [3, 10, 25, 40, 70, 150]
         elif time_duration_minute <= 45:
@@ -161,7 +161,6 @@ class Filter:
     def get_total_strength (self):
         score = self.__get_score()
         score_level = self.__get_score_level(score)
-        self.__stock.score = score
         #print (f"total score is {score}")
         return score, score_level
 
@@ -169,6 +168,6 @@ class Filter:
 
     def filter_event (self, is_real, is_interval):
         key = self.__get_key(is_real)
-        interval_list = self.__stock.interval_list_dict [key]
+        #interval_list = self.__stock.interval_list_dict [key]
         #TODO implement event detection on interval list.
         return 0

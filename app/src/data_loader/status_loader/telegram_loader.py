@@ -2,7 +2,6 @@ import requests
 import urllib.parse
 from requests_futures.sessions import FuturesSession
 from app.src.stock.stock import *
-from app.src.stock.filter import *
 from collections import OrderedDict
 from time import sleep
 from datetime import datetime
@@ -38,8 +37,7 @@ class TelegramLoader:
         em_up = "⤴️"
         em_down = "⤵️"
         trade_em = em_green
-        f = Filter(stock)
-        trade_price_filter = f.trade_price()
+        trade_price_filter = stock.filter.trade_price()
         if trade_price_filter >= Filter.STRONG:
             trade_em = em_blue
         elif trade_price_filter >= Filter.GOOD:
@@ -142,8 +140,7 @@ class TelegramLoader:
         max_day_score = -100000
         for buy_sell in buy_sell_status_list:
             stock.update(buy_sell)
-            f = Filter(stock)
-            score, score_level = f.get_total_strength()
+            score, score_level = stock.score, stock.score_level
             max_day_score = max (max_day_score,score)
             score_list.append(self.__normal_score(stock.score))
             buy_power_list.append(self.__normal_buy_power_ratio(buy_sell))
