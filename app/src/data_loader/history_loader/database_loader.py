@@ -11,7 +11,6 @@ class MysqlConnector:
     def get_instance(self):
         return self.connector.cursor()
 
-
 def _extract_db_format_data(datalist: Dict[str, StockHistory]):
     extracted_data_list = []
     for symbol in datalist.values():
@@ -20,10 +19,11 @@ def _extract_db_format_data(datalist: Dict[str, StockHistory]):
         for key in history_table_schema.keys():
             try:
                 symbol_dict[key] = symbol[key]
-            except KeyError:
+            except AttributeError:
                 buy_sells = {**buy_sells, **{key: item[key] for item in symbol.buy_sell_status_list}}
-        for day in buy_sells:
-            extracted_data_list.append({**symbol_dict, **day})
+        extracted_data_list.append({**symbol_dict, **buy_sells})
+        # for day in buy_sells:
+        #     extracted_data_list.append({**symbol_dict, **day})
     # extracted_data_list += [{**symbol_dict, **row} for row in buy_sells]
     return extracted_data_list
 
@@ -33,7 +33,6 @@ class HistoryMysqlLoader:
         self.curser = MysqlConnector(host=host, password=password, database=database, port=port,
                                      username=username).get_instance()
         self.history_tbl = history_table
-
     def insert_stock_history_list_to_db(self, datalist: Dict[str, StockHistory], batch_size=1000):
         datalist = _extract_db_format_data(datalist)
         for items in range(0, len(datalist), batch_size):

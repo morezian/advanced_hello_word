@@ -47,7 +47,7 @@ class DataCrawler:
         if crawl_history == True:
             data = self.__get_realtime_date()
             history_data = HistoryCrawler(data).get_stock_name2history()
-            loader = HistoryMysqlLoader(host="168.119.202.175",port=3306,username='admin',password='5}w:3M6%Wtv5sDe(',database='stock')
+            loader = HistoryMysqlLoader(host="79.175.176.165",port=3306,username='admin',password='vwB75K',database='trade_db')
             loader.insert_stock_history_list_to_db(history_data)
         self.realtime = realtime
         if not self.realtime :

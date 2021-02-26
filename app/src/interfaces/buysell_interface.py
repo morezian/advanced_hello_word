@@ -174,6 +174,8 @@ class BuySellStatus:
         }
 
         return ans
+    def __getitem__(self, name):
+        return getattr(self, name)
 
     # def to_list(self):
      #   pass
