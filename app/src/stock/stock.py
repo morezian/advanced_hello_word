@@ -15,7 +15,6 @@ class Stock:
         self.score_level = 0
 
 
-
     @property
     def current_buy_sell_status_dict (self):
         return self.__interval_buy.current_buy_sell_status_dict
@@ -30,7 +29,7 @@ class Stock:
     @property
     def is_significant (self):
         return self.__is_significant
-
+    #30 second; real false
     def last_second_buy_sell_status (self, is_real, last_second):
         return self.__interval_buy.retrieve_last_second_buy_sell_status(is_real, last_second)
 
@@ -47,6 +46,14 @@ class Stock:
     def clear(self):
         self.__interval_buy = IntervalBuy(self.__retrieve_previous_second_list,self.__max_interval_list_length)
         self.__is_significant = False
-
-
-
+        
+    def to_dict(self):
+        ans = {
+            "name": self.name,
+            "latin_name": self.latin_name,
+            "score": self.score,
+            "5m_buy_sell_status": self.last_second_buy_sell_status(False, 5 * 60).to_dict(),
+            "30s_buy_sell_status": self.last_second_buy_sell_status(False, 30).to_dict(),
+            "board_buy_sell_status": self.current_buy_sell_status_dict['all'].to_dict()
+        }
+        return ans

@@ -10,6 +10,20 @@ class Filter:
         self.__current_buy_sell_status_dict = current_buy_sell_status_dict
         self.__current_interval_buy_sell_status_dict = current_interval_buy_sell_status_dict
         self.__filter_name = [Filter.BAD, Filter.WEAK, Filter.NORMAL, Filter.GOOD, Filter.STRONG, Filter.SUPER]
+    
+    def score_level_to_string(self, score_level):
+        if score_level == Filter.BAD:
+            return "BAD"
+        if score_level == Filter.WEAK:
+            return "WDEAK"
+        if score_level == Filter.NORMAL:
+            return "NORMAL"
+        if score_level == Filter.GOOD:
+            return "GOOD"
+        if score_level == Filter.STRONG:
+            return "STRONG"
+        if score_level == Filter.SUPER:
+            return "SUPER"
 
     def __get_key (self, is_real):
         if is_real == True:

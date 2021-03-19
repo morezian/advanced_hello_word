@@ -169,10 +169,33 @@ class BuySellStatus:
 
     def to_dict(self):
         ans = {
-            'human_buy_count': self.human_buy_count
-            # every public
+            "human_buy_vol": self.human_buy_vol, 
+            "human_buy_count":self.human_buy_count,
+            "human_sell_vol": self.human_sell_vol,
+            "human_sell_count": self.human_sell_count,
+            "civil_buy_vol": self.civil_buy_vol,
+            "civil_buy_count": self.civil_buy_count,
+            "civil_sell_vol": self.civil_sell_vol,
+            "civil_sell_count": self.civil_sell_count,
+            "trade_price": self.trade_price,
+            "vol": self.vol,
+            "first_trade": self.first_trade,
+            "final_price": self.final_price,
+            "start_time_stamp": self.start_time_stamp,
+            "end_time_stamp": self.end_time_stamp,
+            "min_day_price": self.min_day_price,
+            "max_day_price": self.max_day_price,
+            "min_day_touched_price": self.min_day_touched_price,
+            "max_day_touched_price": self.max_day_touched_price,
+            "get_average_buy_per_code_in_million_base": self.get_average_buy_per_code_in_million_base(),
+            "get_human_buy_ratio_power": self.get_human_buy_ratio_power(),
+            "trade_price_in_percent": self.trade_price_in_percent,
+            "final_price_in_percent": self.final_price_in_percent,
+            "max_day_price_in_percent": self.max_day_price_in_percent,
+            "first_trade_in_percent": self.first_trade_in_percent,
+            "max_day_touched_in_percent": self.max_day_touced_in_percent,
+            "min_day_touched_in_percent": self.min_day_touced_in_percent
         }
-
         return ans
     def __getitem__(self, name):
         return getattr(self, name)
