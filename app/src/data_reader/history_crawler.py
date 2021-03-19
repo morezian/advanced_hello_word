@@ -18,7 +18,7 @@ class HistoryCrawler:
     def parse_history_data(self,raw_history ,name,latin_name):
         buy_sell_status_list = []
         for single_day in raw_history:
-            extracted_data = extract_info_from_html_page(single_day)
+            extracted_data = self.extract_info_from_html_page(single_day)
             if extracted_data:
                 buy_sell_status_list.append(BuySellStatus(human_buy_count=int(extracted_data['human_buy_count']),
                                                           civil_buy_count=int(extracted_data['civil_buy_count']),
