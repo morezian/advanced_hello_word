@@ -18,7 +18,7 @@ class HistoryCrawler:
     def parse_history_data(self,raw_history ,name,latin_name):
         buy_sell_status_list = []
         for single_day in raw_history:
-            extracted_data = self.extract_info_from_html_page(single_day)
+            extracted_data = extract_info_from_html_page(single_day)
             if extracted_data:
                 buy_sell_status_list.append(BuySellStatus(human_buy_count=int(extracted_data['human_buy_count']),
                                                           civil_buy_count=int(extracted_data['civil_buy_count']),
@@ -89,59 +89,59 @@ class HistoryCrawler:
         #     logger.info(f"fetched {symbol.name}")
         return histoed_buy_sell_status_dict
 
-    def __get_timestamp(input_date):
-        return int(datetime.datetime(year=int(input_date[0:4]),
-                                    month=int(input_date[4:6]),
-                                    day=int(input_date[6:]),
-                                    hour=20, minute=30, second=0, tzinfo=datetime.timezone.utc).timestamp()
-                )
+def __get_timestamp(input_date):
+    return int(datetime.datetime(year=int(input_date[0:4]),
+                                month=int(input_date[4:6]),
+                                day=int(input_date[6:]),
+                                hour=20, minute=30, second=0, tzinfo=datetime.timezone.utc).timestamp()
+            )
 
-    def extract_info_from_html_page(response)-> dict:
-        res = []
-        output_dict = dict()
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.text)
-            page_variables = soup.findAll('script')
+def extract_info_from_html_page(response)-> dict:
+    res = []
+    output_dict = dict()
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text)
+        page_variables = soup.findAll('script')
+        try:
+            BestLimitData = str(page_variables[6].contents[0]).split('=')[1].split(';')[0]
+            BestLimitData = eval(BestLimitData)[-1]
+        except:
+            return None
+        page_variables = str(page_variables[5].contents[0]).split(';')
+        for idx,x in enumerate(page_variables):
+            v = x.split('=')
             try:
-                BestLimitData = str(page_variables[6].contents[0]).split('=')[1].split(';')[0]
-                BestLimitData = eval(BestLimitData)[-1]
+                res.append(eval(v[1]))
             except:
-                return None
-            page_variables = str(page_variables[5].contents[0]).split(';')
-            for idx,x in enumerate(page_variables):
-                v = x.split('=')
-                try:
-                    res.append(eval(v[1]))
-                except:
-                    pass
-            res[1] = res[1][-1]
-            res[2] = res[2][-1]
-            res[4] = res[4][-1]
-            res.append(BestLimitData)
-            output_dict['human_buy_count'] = res[7][0]
-            output_dict['human_sell_count'] = res[7][2]
-            output_dict['human_buy_vol'] = res[7][4]
-            output_dict['human_sell_vol'] = res[7][6]
-            output_dict['civil_buy_count'] = res[7][1]
-            output_dict['civil_sell_count'] = res[7][3]
-            output_dict['civil_buy_vol'] = res[7][5]
-            output_dict['civil_sell_vol'] = res[7][7]
-            output_dict['human_buy_price'] = res[7][16]
-            output_dict['civil_buy_price'] = res[7][17]
-            output_dict['human_sell_price'] = res[7][18]
-            output_dict['civil_sell_price'] = res[7][19]
-            output_dict['min_valid_price'] = res[0][1][2]
-            output_dict['max_valid_price'] = res[0][1][1]
-            output_dict['min_traded_price'] = int(res[1][7])
-            output_dict['max_traded_price'] = int(res[1][6])
-            output_dict['first_traded_price'] = int(res[1][4])
-            output_dict['final_price'] = int(res[1][3])
-            output_dict['last_traded_price'] = int(res[1][2])
-            # output_dict['start_timestamp'] =
-            output_dict['end_timestamp'] = __get_timestamp(str(res[3][0][0]))
-            output_dict['vol'] =  int(res[1][10])
-            output_dict['shares_count'] = round(100 / res[6][0][3] * res[6][0][2])
-            return output_dict
-        else:
-            raise Exception("error 500")
+                pass
+        res[1] = res[1][-1]
+        res[2] = res[2][-1]
+        res[4] = res[4][-1]
+        res.append(BestLimitData)
+        output_dict['human_buy_count'] = res[7][0]
+        output_dict['human_sell_count'] = res[7][2]
+        output_dict['human_buy_vol'] = res[7][4]
+        output_dict['human_sell_vol'] = res[7][6]
+        output_dict['civil_buy_count'] = res[7][1]
+        output_dict['civil_sell_count'] = res[7][3]
+        output_dict['civil_buy_vol'] = res[7][5]
+        output_dict['civil_sell_vol'] = res[7][7]
+        output_dict['human_buy_price'] = res[7][16]
+        output_dict['civil_buy_price'] = res[7][17]
+        output_dict['human_sell_price'] = res[7][18]
+        output_dict['civil_sell_price'] = res[7][19]
+        output_dict['min_valid_price'] = res[0][1][2]
+        output_dict['max_valid_price'] = res[0][1][1]
+        output_dict['min_traded_price'] = int(res[1][7])
+        output_dict['max_traded_price'] = int(res[1][6])
+        output_dict['first_traded_price'] = int(res[1][4])
+        output_dict['final_price'] = int(res[1][3])
+        output_dict['last_traded_price'] = int(res[1][2])
+        # output_dict['start_timestamp'] =
+        output_dict['end_timestamp'] = __get_timestamp(str(res[3][0][0]))
+        output_dict['vol'] =  int(res[1][10])
+        output_dict['shares_count'] = round(100 / res[6][0][3] * res[6][0][2])
+        return output_dict
+    else:
+        raise Exception("error 500")
 
