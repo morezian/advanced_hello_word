@@ -91,10 +91,10 @@ class HistoryCrawler:
 
 def __get_timestamp(input_date):
     return int(datetime.datetime(year=int(input_date[0:4]),
-                                 month=int(input_date[4:6]),
-                                 day=int(input_date[6:]),
-                                 hour=20, minute=30, second=0, tzinfo=datetime.timezone.utc).timestamp()
-               )
+                                month=int(input_date[4:6]),
+                                day=int(input_date[6:]),
+                                hour=20, minute=30, second=0, tzinfo=datetime.timezone.utc).timestamp()
+            )
 
 def extract_info_from_html_page(response)-> dict:
     res = []
