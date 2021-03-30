@@ -41,13 +41,13 @@ names = {'UNK':  3,
 history_data = dict()
 
 class DataCrawler:
-    def __init__(self,crawl_history = False,realtime=True,csv_file=None,stock_name=None):
+    def __init__(self,crawl_history = False,realtime=True,csv_file=None,stock_name=None,host="0.0.0.0",history_period_by_days=5):
         global history_data
         self.history = history_data
         if crawl_history == True:
             data = self.__get_realtime_date()
-            history_data = HistoryCrawler(data).get_stock_name2history()
-            loader = HistoryMysqlLoader(host="79.175.176.165",port=3306,username='admin',password='vwB75K',database='trade_db')
+            history_data = HistoryCrawler(data,history_period_by_days=history_period_by_days).get_stock_name2history()
+            loader = HistoryMysqlLoader(host=host,port=3306,username='admin',password='vwB75K',database='trade_db')
             loader.insert_stock_history_list_to_db(history_data)
         self.realtime = realtime
         if not self.realtime :

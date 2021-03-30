@@ -15,7 +15,8 @@ TESTING = cfg["TESTING"]
 crawl_history = cfg["crawl_history"]
 real_time = cfg["realtime"]
 csv_file_path = cfg.get("csv_file_path")
-
+host = cfg.get("host","0.0.0.0")
+history_period_by_days = cfg.get("history_period_by_days",5)
 
 def is_in_bazar_time():
     now_hour = datetime.now().hour
@@ -40,7 +41,8 @@ if __name__ == "__main__":
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(CRAWLING_HOUR)
         crawler = DataCrawler(crawl_history=crawl_history,
-                              realtime=real_time, csv_file=csv_file_path)
+                              realtime=real_time, csv_file=csv_file_path, host=host,
+                              history_period_by_days=history_period_by_days)
         print("Crawler created")
         if not is_in_bazar_time() and not TESTING:
             pause_until_hour(START_BAZAR_HOUR)
