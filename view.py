@@ -10,4 +10,4 @@ cors = CORS(app, resources={r"*": {"origins": "*"}})
 api = Api(app)
 
 #api.add_resource(StatusInterface, '/status')
-api.add_resource(Signal, '/stockInfo')
+api.add_resource(Signal, '/signals')
