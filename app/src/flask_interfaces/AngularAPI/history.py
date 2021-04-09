@@ -33,11 +33,11 @@ class History(Resource):
             with connection.cursor() as cursor:
                 # Read a single record
                 if rowCount == -1:
-                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s and `created_at` >= %s and `created_at` < %s"
-                    cursor.execute(sql, (name, , ))
+                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s"
+                    ## cursor.execute(sql, (name, , ))
                 else:
-                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s and `created_at` >= %s and `created_at` < %s limit %s"
-                    cursor.execute(sql, (name, , , ))
+                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s"
+                    ## cursor.execute(sql, (name, , , ))
                 result = cursor.fetchall()
                 #ans = {
                 #    "name": result["name"]
