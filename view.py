@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Resource, Api, request
 from app.src.flask_interfaces.status_interface import *
 from app.src.flask_interfaces.AngularAPI.signal import *
+from app.src.flask_interfaces.AngularAPI.history import *
 from flask_cors import CORS
 
 app = Flask(__name__)
