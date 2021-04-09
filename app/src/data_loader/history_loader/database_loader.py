@@ -68,9 +68,9 @@ history_table_schema = {
     "first_trade": "%d",
     "final_price": "%d",
     "trade_price": "%d",
-    "end_time_stamp": "%d",
+    "end_time_stamp": "%s",
     "vol": "%d",
     "shares_count": "%d",
-    "start_time_stamp": "%d",
+    "start_time_stamp": "%s",
 }
 history_table_schema = {k: v for k, v in sorted(history_table_schema.items(), key=lambda item: item[0])}
