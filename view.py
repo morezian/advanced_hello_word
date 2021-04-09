@@ -11,3 +11,4 @@ api = Api(app)
 
 #api.add_resource(StatusInterface, '/status')
 api.add_resource(Signal, '/signals')
+api.add_resource(History, '/history')
