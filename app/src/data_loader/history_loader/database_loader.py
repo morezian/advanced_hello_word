@@ -34,7 +34,7 @@ class HistoryMysqlLoader:
         row = []
         curser = self.connection.cursor()
         for items in range(0, len(datalist), batch_size):
-            query = f"""INSERT INTO history_tbl (`latin_name`, `name`, `market_cap`, `human_buy_count`, `human_sell_count`, `human_buy_vol`, `human_sell_vol`, `civil_buy_count`, `civil_sell_count`, `civil_buy_vol`, `civil_sell_vol`, `civil_buy_price`, `human_sell_price`, `civil_sell_price`, `min_day_price`, `max_day_price`, `max_day_touched_price`, `min_day_touched_price`, `first_trade`, `final_price`, `trade_price`, `end_time_stamp`, `vol`, `shares_count`, `start_time_stamp`)
+            query = f"""INSERT INTO history_tbl (`civil_buy_count`, `civil_buy_price`, `civil_buy_vol`, `civil_sell_count`, `civil_sell_price`, `civil_sell_vol`,`end_time_stamp`, `final_price`, `first_trade`, `human_buy_count`, `human_buy_vol`, `human_sell_count`, `human_sell_price`, `human_sell_vol`, `latin_name`, `market_cap`, `max_day_price`, `max_day_touched_price`, `min_day_price`, `min_day_touched_price`, `name`, `shares_count`, `start_time_stamp`, `trade_price`, `vol`)
                                       value (%s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             for i in datalist:
                 d = {k: v for k, v in sorted(i.items(), key=lambda item: item[0])}
