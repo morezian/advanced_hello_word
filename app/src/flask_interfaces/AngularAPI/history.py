@@ -6,6 +6,7 @@ from app.src.stock.stocks_manager import *
 from app.src.data_reader.crawler import *
 from app.src.data_loader.status_loader.telegram_loader import *
 from datetime import timedelta
+import datetime
 import pymysql
 
 class History(Resource):
@@ -13,17 +14,24 @@ class History(Resource):
     def myconverter(self, o):
         if isinstance(o, datetime):
             return o.__str__()
+            
+    def get_timestamp(self,input_date):
+        return int(datetime.datetime(year=int(input_date[0:4]),
+                                    month=int(input_date[5:7]),
+                                    day=int(input_date[8:10]),
+                                    hour=20, minute=30, second=0, tzinfo=datetime.timezone.utc).timestamp()
+                )
 
     def post(self):
         start_time = time()
         input = json.loads(request.data)
         name = input.get("Name")
-        #end_timestamp = input.get("EndTimeStamp")
+        end_timestamp = input.get("EndTimeStamp")
         #rowCount = input.get("Count")
         #rowCount = int(rowCount)
         #signal_type_list = input.get("SignalTypeList")
 
-        connection = pymysql.connect(host='localhost',  # 79.175.176.165
+        connection = pymysql.connect(host='79.175.176.165',  # 79.175.176.165
                                      user='admin',
                                      password='vwB75K',
                                      database='trade_db',
@@ -32,11 +40,11 @@ class History(Resource):
         with connection:
             with connection.cursor() as cursor:
                 # Read a single record
-                if rowCount == -1:
-                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s"
-                    ## cursor.execute(sql, (name, , ))
-                else:
-                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s"
+                #if rowCount == -1:
+                sql = "SELECT * FROM `history_tbl` WHERE `name` = %s and `end_time_stamp` >= %s"
+                cursor.execute(sql, (name, self.get_timestamp(end_timestamp)))
+                #else:
+                #    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s"
                     ## cursor.execute(sql, (name, , , ))
                 result = cursor.fetchall()
                 #ans = {
@@ -44,106 +52,32 @@ class History(Resource):
                 #}
                 res_dict = []
                 for r in result:
+                    buy_sell_status = BuySellStatus(human_buy_vol= float(r["human_buy_vol"]),
+                                human_buy_count= int(r["human_buy_count"]),
+                                human_sell_vol= float(r["human_sell_vol"]),
+                                human_sell_count= int(r["human_sell_count"]),
+                                civil_buy_vol= float(r["civil_buy_vol"]),
+                                civil_buy_count= int(r["civil_buy_count"]),
+                                civil_sell_vol= float(r["civil_sell_vol"]),
+                                civil_sell_count= int(r["civil_sell_count"]),
+                                trade_price= int(r["trade_price"]),
+                                vol= float(r["vol"]),
+                                final_price= int(r["final_price"]),
+                                first_trade= int(r["first_trade"]),
+                                min_day_price=float(r["min_day_price"]),
+                                max_day_price=float(r["max_day_price"]),
+                                start_time_stamp= r["start_time_stamp"],
+                                max_day_touched_price= int(r["max_day_touched_price"]),
+                                min_day_touched_price= int(r["min_day_touched_price"]),
+                                end_time_stamp= r["end_time_stamp"]
+                                )
                     ans = {
                         "name": r["name"],
-                        "latin_name": r["latinName"],
-                        "score": r["score"],
-                        "score_level" : r["score_level"],
-                        "5m_buy_sell_status": {
-                            "5m_human_buy_vol": r["5m_human_buy_vol"],
-                            "5m_human_buy_count": r["5m_human_buy_count"],
-                            "5m_human_sell_vol": r["5m_human_sell_vol"],
-                            "5m_human_sell_count": r["5m_human_sell_count"],
-                            "5m_civil_buy_vol": r["5m_civil_buy_vol"],
-                            "5m_civil_buy_count": r["5m_civil_buy_count"],
-                            "5m_civil_sell_vol": r["5m_civil_sell_vol"],
-                            "5m_civil_sell_count": r["5m_civil_sell_count"],
-                            "5m_trade_price": r["5m_trade_price"],
-                            "5m_vol": r["5m_vol"],
-                            "5m_first_trade": r["5m_first_trade"],
-                            "5m_final_price": r["5m_final_price"],
-                            "5m_start_time_stamp": str(r["5m_start_time_stamp"]),
-                            "5m_end_time_stamp": str(r["5m_end_time_stamp"]),
-                            "5m_min_day_price": r["5m_min_day_price"],
-                            "5m_max_day_price": r["5m_max_day_price"],
-                            "5m_min_day_touched_price": r["5m_min_day_touched_price"],
-                            "5m_max_day_touched_price": r["5m_max_day_touched_price"],
-                            "5m_get_average_buy_per_code_in_million_base": r["5m_get_average_buy_per_code_in_million_base"],
-                            "5m_get_human_buy_ratio_power": r["5m_get_human_buy_ratio_power"],
-                            "5m_trade_price_in_percent": r["5m_trade_price_in_percent"],
-                            "5m_final_price_in_percent": r["5m_final_price_in_percent"],
-                            "5m_max_day_price_in_percent": r["5m_max_day_price_in_percent"],
-                            "5m_first_trade_in_percent": r["5m_first_trade_in_percent"],
-                            "5m_max_day_touched_in_percent": r["5m_max_day_touched_in_percent"],
-                            "5m_min_day_touched_in_percent": r["5m_min_day_touched_in_percent"]
-                        },
-                        "30s_buy_sell_status": {
-                            "30s_human_buy_vol": r["30s_human_buy_vol"],
-                            "30s_human_buy_count": r["30s_human_buy_count"],
-                            "30s_human_sell_vol": r["30s_human_sell_vol"],
-                            "30s_human_sell_count": r["30s_human_sell_count"],
-                            "30s_civil_buy_vol": r["30s_civil_buy_vol"],
-                            "30s_civil_buy_count": r["30s_civil_buy_count"],
-                            "30s_civil_sell_vol": r["30s_civil_sell_vol"],
-                            "30s_civil_sell_count": r["30s_civil_sell_count"],
-                            "30s_trade_price": r["30s_trade_price"],
-                            "30s_vol": r["30s_vol"],
-                            "30s_first_trade": r["30s_first_trade"],
-                            "30s_final_price": r["30s_final_price"],
-                            "30s_start_time_stamp": str(r["30s_start_time_stamp"]),
-                            "30s_end_time_stamp": str(r["30s_end_time_stamp"]),
-                            "30s_min_day_price": r["30s_min_day_price"],
-                            "30s_max_day_price": r["30s_max_day_price"],
-                            "30s_min_day_touched_price": r["30s_min_day_touched_price"],
-                            "30s_max_day_touched_price": r["30s_max_day_touched_price"],
-                            "30s_get_average_buy_per_code_in_million_base": r["30s_get_average_buy_per_code_in_million_base"],
-                            "30s_get_human_buy_ratio_power": r["30s_get_human_buy_ratio_power"],
-                            "30s_trade_price_in_percent": r["30s_trade_price_in_percent"],
-                            "30s_final_price_in_percent": r["30s_final_price_in_percent"],
-                            "30s_max_day_price_in_percent": r["30s_max_day_price_in_percent"],
-                            "30s_first_trade_in_percent": r["30s_first_trade_in_percent"],
-                            "30s_max_day_touched_in_percent": r["30s_max_day_touched_in_percent"],
-                            "30s_min_day_touched_in_percent": r["30s_min_day_touched_in_percent"]
-                        },
-                        "board_buy_sell_status": {
-                            "board_human_buy_vol": r["board_human_buy_vol"],
-                            "board_human_buy_count": r["board_human_buy_count"],
-                            "board_human_sell_vol": r["board_human_sell_vol"],
-                            "board_human_sell_count": r["board_human_sell_count"],
-                            "board_civil_buy_vol": r["board_civil_buy_vol"],
-                            "board_civil_buy_count": r["board_civil_buy_count"],
-                            "board_civil_sell_vol": r["board_civil_sell_vol"],
-                            "board_civil_sell_count": r["board_civil_sell_count"],
-                            "board_trade_price": r["board_trade_price"],
-                            "board_vol": r["board_vol"],
-                            "board_first_trade": r["board_first_trade"],
-                            "board_final_price": r["board_final_price"],
-                            "board_start_time_stamp": str(r["board_start_time_stamp"]),
-                            "board_end_time_stamp": str(r["board_end_time_stamp"]),
-                            "board_min_day_price": r["board_min_day_price"],
-                            "board_max_day_price": r["board_max_day_price"],
-                            "board_min_day_touched_price": r["board_min_day_touched_price"],
-                            "board_max_day_touched_price": r["board_max_day_touched_price"],
-                            "board_get_average_buy_per_code_in_million_base": r["board_get_average_buy_per_code_in_million_base"],
-                            "board_get_human_buy_ratio_power": r["board_get_human_buy_ratio_power"],
-                            "board_trade_price_in_percent": r["board_trade_price_in_percent"],
-                            "board_final_price_in_percent": r["board_final_price_in_percent"],
-                            "board_max_day_price_in_percent": r["board_max_day_price_in_percent"],
-                            "board_first_trade_in_percent": r["board_first_trade_in_percent"],
-                            "board_max_day_touched_in_percent": r["board_max_day_touched_in_percent"],
-                            "board_min_day_touched_in_percent": r["board_min_day_touched_in_percent"]
-                        },
-                        "created_at": str(r["created_at"])
+                        "latin_name": r["latin_name"],
+                        "market_cap": r["market_cap"],
+                        "shares_count" : r["shares_count"],
+                        "buy_sell_status": buy_sell_status.to_dict()
                     }
                     res_dict.append(ans)
-                #print(result)
-        #return json.dumps(res_dict, default = self.myconverter)
-        #flask.return
+
         return res_dict
-        #return Response(res_dict, mimetype='text/json')
-        """result = { "result" : res_dict }
-        response = flask.make_response(result)
-        response.headers['Content-Type'] = 'application/json'
-        #response.headers['AAA'] = 'aaaa'
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response"""
