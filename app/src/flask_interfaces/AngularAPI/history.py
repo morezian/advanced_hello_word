@@ -76,6 +76,7 @@ class History(Resource):
                         "latin_name": r["latin_name"],
                         "market_cap": r["market_cap"],
                         "shares_count" : r["shares_count"],
+                        "score": -1,
                         "buy_sell_status": buy_sell_status.to_dict()
                     }
                     res_dict.append(ans)
