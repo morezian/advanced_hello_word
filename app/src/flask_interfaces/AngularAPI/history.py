@@ -31,7 +31,7 @@ class History(Resource):
         #rowCount = int(rowCount)
         #signal_type_list = input.get("SignalTypeList")
 
-        connection = pymysql.connect(host='79.175.176.165',  # 79.175.176.165
+        connection = pymysql.connect(host='localhost',  # 79.175.176.165
                                      user='admin',
                                      password='vwB75K',
                                      database='trade_db',
