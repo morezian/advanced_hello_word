@@ -3,10 +3,11 @@ from flask_restful import Resource, Api, request
 from app.src.flask_interfaces.status_interface import *
 from app.src.flask_interfaces.AngularAPI.signal import *
 from app.src.flask_interfaces.AngularAPI.history import *
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"*": {"origins": "*"}})
+CORS(app, support_credentials=True)
+#cors = CORS(app, resources={r"*": {"origins": "*"}})
 
 api = Api(app)
 
