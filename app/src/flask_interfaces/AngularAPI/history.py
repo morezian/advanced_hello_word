@@ -27,9 +27,6 @@ class History(Resource):
         input = json.loads(request.data)
         name = input.get("Name")
         end_timestamp = input.get("EndTimeStamp")
-        #rowCount = input.get("Count")
-        #rowCount = int(rowCount)
-        #signal_type_list = input.get("SignalTypeList")
 
         connection = pymysql.connect(host='localhost',  # 79.175.176.165
                                      user='admin',
@@ -41,15 +38,15 @@ class History(Resource):
             with connection.cursor() as cursor:
                 # Read a single record
                 #if rowCount == -1:
-                sql = "SELECT * FROM `history_tbl` WHERE `name` = %s and `end_time_stamp` >= %s"
-                cursor.execute(sql, (name, self.get_timestamp(end_timestamp)))
-                #else:
-                #    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s"
-                    ## cursor.execute(sql, (name, , , ))
+                
+                if name == '*':
+                    sql = "SELECT * FROM `history_tbl` WHERE `end_time_stamp` >= %s"
+                    cursor.execute(sql, (self.get_timestamp(end_timestamp)))
+                else:
+                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s and `end_time_stamp` >= %s"
+                    cursor.execute(sql, (name, self.get_timestamp(end_timestamp)))
+
                 result = cursor.fetchall()
-                #ans = {
-                #    "name": result["name"]
-                #}
                 res_dict = []
                 for r in result:
                     buy_sell_status = BuySellStatus(human_buy_vol= float(r["human_buy_vol"]),
