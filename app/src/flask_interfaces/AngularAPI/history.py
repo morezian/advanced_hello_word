@@ -43,7 +43,7 @@ class History(Resource):
                     sql = "SELECT * FROM `history_tbl` WHERE `end_time_stamp` >= %s"
                     cursor.execute(sql, (self.get_timestamp(end_timestamp)))
                 else:
-                    sql = "SELECT * FROM `history_tbl` WHERE `name` = %s and `end_time_stamp` >= %s"
+                    sql = "SELECT * FROM `history_tbl` WHERE `latinName` = %s and `end_time_stamp` >= %s"
                     cursor.execute(sql, (name, self.get_timestamp(end_timestamp)))
 
                 result = cursor.fetchall()
